@@ -19,7 +19,7 @@
 	
 {% block upload %}
 <form enctype="multipart/form-data" method="post" class="well" id="myForm">
-   <table>
+	<table>
        {{form.as_table}}
     </table>
     <input type="submit" value="Submit" id="submitBtn" class="btn" />
@@ -33,7 +33,8 @@
 	</div>
 	{% else %}
 	<div class="alert alert-success">
-		<a href="download/form{{ dir }}/{{ name }}" class="btn btn-success">Download</a>
+		<a href="download/form{{ dir }}/{{ name }}" class="btn btn-success">Download JSON Template</a>
+		<a href="static/formDrawer.html?jsonUrl={{ dir }}/{{ name }}" class="btn btn-success">Generate Image</a>
 		<a href="static/form{{ dir }}/{{ name }}" class="btn btn-success">Preview</a>
 	</div>
 	{% endif %}

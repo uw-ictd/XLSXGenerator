@@ -13,14 +13,6 @@ SERVER_TMP_DIR = '/tmp'
 class UploadFileForm(forms.Form):
     file  = forms.FileField()
 
-#def handle_uploaded_file(f, temp_dir):
-#    xls_path = os.path.join(temp_dir, f.name)
-#    destination = open(xls_path, 'wb+')
-#    for chunk in f.chunks():
-#        destination.write(chunk)
-#    destination.close()
-#    return xls_path
-
 def index(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -32,14 +24,14 @@ def index(request):
             
             #Make a randomly generated directory to prevent name collisions
             temp_dir = tempfile.mkdtemp(dir=SERVER_TMP_DIR)
-            out_path = os.path.join(temp_dir, filename + '.html')
+            out_path = os.path.join(temp_dir, filename + '.json')
             #Init the output xml file.
             fo = open(out_path, "wb+")
             fo.close()
             
             try:
                 warnings = []
-                xlsform2.spreadsheet_to_form(request.FILES['file'], out_path)
+                xlsform2.spreadsheet_to_json(request.FILES['file'], out_path)
                 
             except Exception as e:
                 error = 'Error: ' + str(e)
@@ -47,7 +39,7 @@ def index(request):
             return render_to_response('upload.html', {
                 'form': UploadFileForm(),#Create a new empty form
                 'dir': os.path.split(temp_dir)[-1],
-                'name' : filename + '.html',
+                'name' : filename + '.json',
                 'error': error,
                 'warnings': warnings,
             })

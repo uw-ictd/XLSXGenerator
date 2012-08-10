@@ -179,6 +179,11 @@ def process_spreadsheet(path_or_file):
             
     return workbook
 
+def spreadsheet_to_json(path_or_file, output_path):
+    fp = codecs.open(output_path, mode="w", encoding="utf-8")
+    json.dump(process_spreadsheet(path_or_file), fp=fp, ensure_ascii=False, indent=4)
+    fp.close()
+
 def spreadsheet_to_form(path_or_file, output_path):
     """
     Convert a spreadsheet to a Collect form by processing it into JSON
