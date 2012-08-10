@@ -33,9 +33,9 @@
 	</div>
 	{% else %}
 	<div class="alert alert-success">
-		<a href="download/form{{ dir }}/{{ name }}" class="btn btn-success">Download JSON Template</a>
-		<a href="static/formDrawer.html?jsonUrl={{ dir }}/{{ name }}" class="btn btn-success">Generate Image</a>
-		<a href="static/form{{ dir }}/{{ name }}" class="btn btn-success">Preview</a>
+		<a href="download/{{ dir }}/{{ name }}" class="btn btn-success">Download JSON Template</a>
+		<a href="serve_json/{{ dir }}/{{ name }}" class="btn btn-success">View JSON Template</a>
+		<a href="static/formDrawer.html?jsonUrl=serve_json/{{ dir }}/{{ name }}" class="btn btn-success">Generate Image</a>
 	</div>
 	{% endif %}
 	
@@ -46,7 +46,6 @@
 	{% endfor %}
 {% endif %}
 
-<div id="output">
-</div>
+<div id="output"></div>
 </body>
 </html> 

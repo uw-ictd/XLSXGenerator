@@ -63,14 +63,14 @@ def download(request, path):
     response = HttpResponse(mimetype='application/octet-stream')
     response.write(data)
     return response
-
-def preview(request, dir, name):
+    
+def serve_json(request, path):
     """
-    Serve the file as a webpage
+    Serve a downloadable file
     """
-    fo = open(os.path.join(SERVER_TMP_DIR, dir, name))
+    fo = open(os.path.join(SERVER_TMP_DIR, path))
     data = fo.read()
     fo.close()
-    response = HttpResponse()
+    response = HttpResponse(mimetype="application/json")
     response.write(data)
     return response
