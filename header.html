@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html><!-- manifest="../collect/manifest.appcache" -->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Collect</title>
+    <script type="text/javascript" src="../collect/js/LAB.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../collect/css/apple.css">
+	<link rel="stylesheet" type="text/css" href="../collect/css/odk-boilerplate.css">
+</head>
+<body>
+<div class="survey-container"></div>
+<script type='text/javascript'>//<![CDATA[
+    'use strict';
+    
+    function inheritFrom(a,b){
+        //This might be an unusual way to do inheritance.
+        //It's my way of using ECMAScript5's Object.create instead of the classical jso pattern.
+        //This way new is not required.
+        //see: http://ejohn.org/blog/ecmascript-5-objects-and-properties/
+        var p = Object.create(a);
+        $.each(b, function(k,v){
+            p[k] = v;
+        });
+        return p;
+    }
+    
+    function initializePrompts(form, prompts){
+        var initializedPrompts = [];
+        $.each(prompts, function(idx, item){
+            var baseType;
+            if(!('type' in item)){
+                console.log('no type specified');
+                console.log(item);
+                return;
+            } else if(item.type in form.widgets){
+                baseType = form.widgets[item.type];
+            } else if(item.type in promptTypes){
+                baseType = promptTypes[item.type];
+            } else {
+                console.log('unknown type');
+                console.log(item);
+                baseType = promptTypes['text'];
+            }
+            var newPrompt = $.extend(
+                Object.create(baseType),
+                {
+                    form: form,
+                    promptIdx: idx
+                },
+                item);
+            newPrompt.initialize();
+            initializedPrompts.push(newPrompt)
+        });
+        return initializedPrompts;
+    }
+    
+    function buildSurvey(surveyJson){
+        //Load all the necessairy JavaScript:
+        $LAB
+        .script("../collect/js/zepto-1.0rc1-dt.js").wait()
+        .script("../collect/js/jqtouch-1.0-b4-rc.js")
+        .wait(function(){jQT = new $.jQTouch({});})
+        .script("../collect/js/odk-boilerplate.js")
+        .script("../collect/js/collect.js").wait()
+        .script("../collect/js/prompts.js")
+        .script("../collect/js/controller.js")
+        .wait(function(){
+            console.log('scripts loaded');
+            var settings = {
+                formId : 'lgform',
+                version : null,
+                instanceId : collect.getInstanceId()
+            };
+            if('settings' in surveyJson){
+                $.extend(settings, surveyJson.settings);
+            }
+            var widgets = {};
+            //Load scripts specified in settings somewhere after this point
+            if('widgets' in surveyJson){
+                $.extend(widgets, surveyJson.widgets);
+            }
+            var column_types = {
+                validate: 'formula'
+            };
+            //Load scripts specified in settings somewhere after this point
+            if('column_types' in surveyJson){
+                $.extend(column_types, surveyJson.column_types);
+            }
+            var form = {
+                initialize: function(){
+                    this.prompts = initializePrompts(this, this.prompts);
+                },
+                prompts: surveyJson.survey,
+                settings: settings,
+                widgets: widgets,
+                column_types: column_types
+            };
+            /*
+            function recursiveExtend(base, obby){
+                $.each(obby, function(key, property) {
+                    if (key in base) {
+                        if($.isPlainObject(property) && $.isPlainObject(base[key])){
+                            recursiveExtend(base[key], property);
+                            return;
+                        }
+                    }
+                    base[key] = property;
+                }
+            }
+            var form = {
+                initialize: function(){
+                    initializePrompts(this, this.prompts);
+                },
+                prompts: [],
+                settings: {
+                    formId : 'lgform',
+                    version : null,
+                    instanceId : collect.getInstanceId()
+                },
+                widgets: {},
+                var column_types = {
+                    validate: 'formula'
+                }
+            }
+            recursiveExtend(form, surveyJson);
+            form.prompts = form.survey;
+            delete form.survey;
+            */
+            console.log('initializing');
+            form.initialize();
+            console.log('starting');
+            controller.prompts = form.prompts;
+            controller.start($('.survey-container'));
+            console.log(form);
+        });
+    }
+    //]]>
+</script>
+<script type='text/javascript'>//<![CDATA[
+buildSurvey(
