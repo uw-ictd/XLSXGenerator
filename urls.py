@@ -9,8 +9,8 @@ import os
 APP_NAME = os.path.split(os.path.dirname(__file__))[-1]
 urlpatterns = patterns(APP_NAME,
     url(r'^$', 'views.index'),
-    (r'^download/form(?P<path>.*)$', 'views.download'),
-    (r'^static/form(?P<dir>.*?)/(?P<name>.*)$', 'views.preview'),
+    (r'^download/(?P<path>.*)$', 'views.download'),
+    (r'^view/(?P<path>.*)$', 'views.serve_json'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
