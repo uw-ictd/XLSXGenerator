@@ -1,0 +1,179 @@
+{
+     "image_filename": "example.jpg",
+     "height": 1176,
+     "width": 832,
+     "fields": [
+          {
+               "name": "square_checkboxes",
+               "label": "square checkboxes",
+               "segments": [
+                    {
+                         "segment_x": 120,
+                         "segment_y": 100,
+                         "segment_width": 100,
+                         "segment_height": 100,
+                         "items": [
+                              {
+                                   "item_x": 50,
+                                   "item_y": 20
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 50
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 80
+                              }
+                         ],
+                         "align_segment": false
+                    },
+                    {
+                         "segment_x": 230,
+                         "segment_y": 100,
+                         "segment_width": 100,
+                         "segment_height": 100,
+                         "items": [
+                              {
+                                   "item_x": 50,
+                                   "item_y": 20
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 50
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 80
+                              }
+                         ],
+                         "align_segment": false
+                    },
+                    {
+                         "segment_x": 340,
+                         "segment_y": 100,
+                         "segment_width": 100,
+                         "segment_height": 100,
+                         "items": [
+                              {
+                                   "item_x": 50,
+                                   "item_y": 20
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 50
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 80
+                              }
+                         ],
+                         "align_segment": false
+                    },
+                    {
+                         "segment_x": 450,
+                         "segment_y": 100,
+                         "segment_width": 100,
+                         "segment_height": 100,
+                         "items": [
+                              {
+                                   "item_x": 50,
+                                   "item_y": 20
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 50
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 80
+                              }
+                         ],
+                         "align_segment": false
+                    },
+                    {
+                         "segment_x": 560,
+                         "segment_y": 100,
+                         "segment_width": 100,
+                         "segment_height": 100,
+                         "items": [
+                              {
+                                   "item_x": 50,
+                                   "item_y": 20
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 50
+                              },
+                              {
+                                   "item_x": 50,
+                                   "item_y": 80
+                              }
+                         ],
+                         "align_segment": false
+                    }
+               ],
+               "classifier": {
+                    "classification_map": {
+                         "empty": false
+                    },
+                    "default_classification": true,
+                    "training_data_uri": "checkboxes",
+                    "classifier_height": 24,
+                    "classifier_width": 24,
+                    "advanced": {
+                         "flip_training_data": true
+                    }
+               },
+               "type": "input"
+          },
+          {
+               "name": "bubbles",
+               "label": "bubbles",
+               "segment_width": 80,
+               "segment_height": 101,
+               "segments": [
+                    {
+                         "segment_x": 302,
+                         "segment_y": 905,
+                         "segment_height": 50,
+                         "segment_width": 200,
+                         "items": [
+                              {
+                                   "item_x": 30,
+                                   "item_y": 25,
+                                   "label": "A",
+                                   "value": "A"
+                              },
+                              {
+                                   "item_x": 70,
+                                   "item_y": 25,
+                                   "label": "B",
+                                   "value": "B"
+                              },
+                              {
+                                   "item_x": 110,
+                                   "item_y": 25,
+                                   "label": "C",
+                                   "value": "C"
+                              }
+                         ],
+                         "align_segment": false
+                    }
+               ],
+               "classifier": {
+                    "classification_map": {
+                         "empty": false
+                    },
+                    "default_classification": true,
+                    "training_data_uri": "bubbles",
+                    "classifier_height": 14,
+                    "classifier_width": 16,
+                    "advanced": {
+                         "flip_training_data": true
+                    }
+               },
+               "type": "select"
+          }
+     ]
+}

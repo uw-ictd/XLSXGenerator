@@ -10,7 +10,7 @@ APP_NAME = os.path.split(os.path.dirname(__file__))[-1]
 urlpatterns = patterns(APP_NAME,
     url(r'^$', 'views.index'),
     (r'^download/(?P<path>.*)$', 'views.download'),
-    (r'^view/(?P<path>.*)$', 'views.serve_json'),
+    (r'^serve_json/(?P<path>.*)$', 'views.serve_json'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
