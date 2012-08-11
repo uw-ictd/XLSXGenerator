@@ -88,7 +88,7 @@ function createForm(form) {
     });
     ///////Draw form:
     $.each(form.fields, function(field_idx, field) {
-        var classifier = field.classifier;
+        field = $.extend({}, form, field);
         progress += 90 / numFields;
         $bar.css('width', progress + '%');
 
@@ -110,6 +110,9 @@ function createForm(form) {
         var textLayer = $canvas.addLayer(markup_object);
 
         $.each(field.segments, function(segment_idx, segment) {
+            var classifier;
+            segment = $.extend({}, field, segment);
+            classifier = segment.classifier;
             $canvas.addLayer({
                 method: 'drawRect',
                 strokeStyle: "#000000",
@@ -120,35 +123,37 @@ function createForm(form) {
                 width: segment.segment_width,
                 height: segment.segment_height
             });
-            classifier = segment.classifier || classifier;
-
-            $.each(segment.items, function(item_idx, item) {
-                $canvas.addLayer({
-                    method: classifier.training_data_uri === "bubbles" ? "drawEllipse" : "drawRect",
-                    strokeStyle: "#55d",
-                    strokeWidth: 2,
-                    fromCenter: true,
-                    name: "myBox",
-                    group: "myBoxes",
-                    x: segment.segment_x + item.item_x,
-                    y: segment.segment_y + item.item_y,
-                    width: classifier.classifier_width,
-                    height: classifier.classifier_height
-                });
-                if('label' in item) {
-                    var itemLabelObj = {
-                        method: "drawText",
-                        fillStyle: "#000",
-                        opacity: 0.7,
-                        x: segment.segment_x + item.item_x - classifier.classifier_width,
+            if('items' in segment){
+                $.each(segment.items, function(item_idx, item) {
+                    $canvas.addLayer({
+                        method: classifier.training_data_uri === "bubbles" ? "drawEllipse" : "drawRect",
+                        strokeStyle: "#55d",
+                        strokeWidth: 2,
+                        fromCenter: true,
+                        name: "myBox",
+                        group: "myBoxes",
+                        x: segment.segment_x + item.item_x,
                         y: segment.segment_y + item.item_y,
-                        align: "right",
-                        font: "12pt Verdana, sans-serif",
-                        text: item.label
-                    };
-                    $canvas.addLayer(itemLabelObj);
-                }
-            });
+                        width: classifier.classifier_width,
+                        height: classifier.classifier_height
+                    });
+                    if('label' in item) {
+                        var itemLabelObj = {
+                            method: "drawText",
+                            fillStyle: "#000",
+                            opacity: 0.7,
+                            x: segment.segment_x + item.item_x - classifier.classifier_width,
+                            y: segment.segment_y + item.item_y,
+                            align: "right",
+                            font: "12pt Verdana, sans-serif",
+                            text: item.label
+                        };
+                        $canvas.addLayer(itemLabelObj);
+                    }
+                });
+            } else {
+                
+            }
         });
         if (progress == 100) {
             window.setTimeout(function() {

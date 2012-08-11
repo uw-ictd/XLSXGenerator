@@ -1,192 +1,206 @@
-<!DOCTYPE html>
-<html><!-- manifest="../collect/manifest.appcache" -->
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>Collect</title>
-    <script type="text/javascript" src="../collect/js/LAB.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../collect/css/apple.css">
-	<link rel="stylesheet" type="text/css" href="../collect/css/odk-boilerplate.css">
-</head>
-<body>
-<div class="survey-container"></div>
-<script type='text/javascript'>//<![CDATA[
-    'use strict';
-    
-    function inheritFrom(a,b){
-        //This might be an unusual way to do inheritance.
-        //It's my way of using ECMAScript5's Object.create instead of the classical jso pattern.
-        //This way new is not required.
-        //see: http://ejohn.org/blog/ecmascript-5-objects-and-properties/
-        var p = Object.create(a);
-        $.each(b, function(k,v){
-            p[k] = v;
-        });
-        return p;
-    }
-    
-    function initializePrompts(form, prompts){
-        var initializedPrompts = [];
-        $.each(prompts, function(idx, item){
-            var baseType;
-            if(!('type' in item)){
-                console.log('no type specified');
-                console.log(item);
-                return;
-            } else if(item.type in form.widgets){
-                baseType = form.widgets[item.type];
-            } else if(item.type in promptTypes){
-                baseType = promptTypes[item.type];
-            } else {
-                console.log('unknown type');
-                console.log(item);
-                baseType = promptTypes['text'];
-            }
-            var newPrompt = $.extend(
-                Object.create(baseType),
-                {
-                    form: form,
-                    promptIdx: idx
-                },
-                item);
-            newPrompt.initialize();
-            initializedPrompts.push(newPrompt)
-        });
-        return initializedPrompts;
-    }
-    
-    function buildSurvey(surveyJson){
-        //Load all the necessairy JavaScript:
-        $LAB
-        .script("../collect/js/zepto-1.0rc1-dt.js").wait()
-        .script("../collect/js/jqtouch-1.0-b4-rc.js")
-        .wait(function(){jQT = new $.jQTouch({});})
-        .script("../collect/js/odk-boilerplate.js")
-        .script("../collect/js/collect.js").wait()
-        .script("../collect/js/prompts.js")
-        .script("../collect/js/controller.js")
-        .wait(function(){
-            console.log('scripts loaded');
-            var settings = {
-                formId : 'lgform',
-                version : null,
-                instanceId : collect.getInstanceId()
-            };
-            if('settings' in surveyJson){
-                $.extend(settings, surveyJson.settings);
-            }
-            var widgets = {};
-            //Load scripts specified in settings somewhere after this point
-            if('widgets' in surveyJson){
-                $.extend(widgets, surveyJson.widgets);
-            }
-            var column_types = {
-                validate: 'formula'
-            };
-            //Load scripts specified in settings somewhere after this point
-            if('column_types' in surveyJson){
-                $.extend(column_types, surveyJson.column_types);
-            }
-            var form = {
-                initialize: function(){
-                    this.prompts = initializePrompts(this, this.prompts);
-                },
-                prompts: surveyJson.survey,
-                settings: settings,
-                widgets: widgets,
-                column_types: column_types
-            };
-            /*
-            function recursiveExtend(base, obby){
-                $.each(obby, function(key, property) {
-                    if (key in base) {
-                        if($.isPlainObject(property) && $.isPlainObject(base[key])){
-                            recursiveExtend(base[key], property);
-                            return;
-                        }
-                    }
-                    base[key] = property;
-                }
-            }
-            var form = {
-                initialize: function(){
-                    initializePrompts(this, this.prompts);
-                },
-                prompts: [],
-                settings: {
-                    formId : 'lgform',
-                    version : null,
-                    instanceId : collect.getInstanceId()
-                },
-                widgets: {},
-                var column_types = {
-                    validate: 'formula'
-                }
-            }
-            recursiveExtend(form, surveyJson);
-            form.prompts = form.survey;
-            delete form.survey;
-            */
-            console.log('initializing');
-            form.initialize();
-            console.log('starting');
-            controller.prompts = form.prompts;
-            controller.start($('.survey-container'));
-            console.log(form);
-        });
-    }
-    //]]>
-</script>
-<script type='text/javascript'>//<![CDATA[
-buildSurvey({
-    "settings": [], 
-    "survey": [
+{
+    "width": 832, 
+    "classifier": {
+        "training_data_uri": "bubbles", 
+        "classifier_height": 16, 
+        "classifier_width": 14, 
+        "default_classification": true, 
+        "classification_map": {
+            "empty": false
+        }, 
+        "advanced": {
+            "flip_training_data": true
+        }
+    }, 
+    "fields": [
         {
-            "prompts": [
+            "segments": [
                 {
-                    "validate": true, 
-                    "type": "text", 
-                    "name": "name", 
-                    "label": {
-                        "english": "Enter your name:"
-                    }
-                }, 
-                {
-                    "validate": "function(value, onSuccessfulValidate){\n    this.valid = !isNaN(value);\n    if(this.valid){\n        console.log('valid');\n        OnSuccessfulValidate();\n    }\n}", 
-                    "type": "int", 
-                    "name": "age", 
-                    "label": {
-                        "english": "Enter your age:"
-                    }
-                }, 
-                {
-                    "validate": 444, 
-                    "type": "text", 
-                    "name": "gender", 
-                    "label": {
-                        "english": "Enter your gender:"
-                    }
+                    "segment_y": 150, 
+                    "segment_x": 40, 
+                    "segment_height": 160, 
+                    "segment_width": 752
                 }
             ], 
-            "blocktype": "x", 
-            "type": "block", 
-            "name": "asdf"
+            "type": "string", 
+            "name": "name", 
+            "label": "Enter your name:"
+        }, 
+        {
+            "segments": [
+                {
+                    "segment_y": 350, 
+                    "segment_x": 40, 
+                    "segment_height": 160, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "int", 
+            "name": "age", 
+            "label": "Enter your age:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 30, 
+                    "item_x": 70, 
+                    "value": "male", 
+                    "label": "male"
+                }, 
+                {
+                    "item_y": 30, 
+                    "item_x": 170, 
+                    "value": "female", 
+                    "label": "female"
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 550, 
+                    "segment_x": 40, 
+                    "segment_height": 160, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "select1 genders", 
+            "name": "gender", 
+            "label": "Enter your gender:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 30, 
+                    "item_x": 70, 
+                    "value": "fish", 
+                    "label": "fish"
+                }, 
+                {
+                    "item_y": 30, 
+                    "item_x": 170, 
+                    "value": "dog", 
+                    "label": "dog"
+                }, 
+                {
+                    "item_y": 30, 
+                    "item_x": 270, 
+                    "value": "cat", 
+                    "label": "cat"
+                }, 
+                {
+                    "item_y": 30, 
+                    "item_x": 370, 
+                    "value": "horse", 
+                    "label": "horse"
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 750, 
+                    "segment_x": 40, 
+                    "segment_height": 160, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "select pets", 
+            "name": "pets", 
+            "label": "Why kind of pets do you have:"
+        }, 
+        {
+            "name": "random_number", 
+            "default": 22, 
+            "items": [
+                {
+                    "item_x": 20, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 60, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 100, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 140, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 180, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 220, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 260, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 300, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 340, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 380, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 420, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 460, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 500, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 540, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 580, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 620, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 660, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 700, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 740, 
+                    "item_y": 30
+                }, 
+                {
+                    "item_x": 20, 
+                    "item_y": 70
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 950, 
+                    "segment_x": 40, 
+                    "segment_height": 160, 
+                    "segment_width": 752
+                }
+            ], 
+            "label": "Enter a number:", 
+            "type": "int"
         }
     ], 
-    "choices": {
-        "gender": [
-            {
-                "name": "male", 
-                "label": "male"
-            }, 
-            {
-                "name": "female", 
-                "label": "female"
-            }
-        ]
-    }
-});
-    //]]>
-</script>
-</body>
-</html>
+    "height": 1176
+}

@@ -6,7 +6,7 @@ import datetime
 import tempfile
 import os
 
-import xlsform2
+import form_creator
 
 SERVER_TMP_DIR = '/tmp'
 
@@ -31,7 +31,7 @@ def index(request):
             
             try:
                 warnings = []
-                xlsform2.spreadsheet_to_json(request.FILES['file'], out_path)
+                form_creator.create_form(request.FILES['file'], out_path)
                 
             except Exception as e:
                 error = 'Error: ' + str(e)
