@@ -162,4 +162,5 @@ function createForm(form) {
         }
     });
     $canvas.drawLayers();
+    $('.viewAsImage').click();
 }
