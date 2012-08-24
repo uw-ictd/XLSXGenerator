@@ -7,7 +7,6 @@ import xlsform2
 
 #TODO: add aliases for types and choice values to standard XLSForms work
 #TODO: make the layout more "dynamic" (i.e. make bigger segments when there are more choices)
-#TODO: make it possible to set the number of bubbles used by a tally type
 
 def choices2items(choice_list,
                   segment,
@@ -88,6 +87,7 @@ def make_json_template(xlsform_obj,
     Create a json template from the xlsform json
     by adding location information to the fields.
     """
+    form_title = xlsform_obj.get('settings', {})[0].get('form_title', '')
     y_offset = y_initial_offset
     choice_lists = xlsform_obj['choices']
     fields = []
@@ -105,6 +105,7 @@ def make_json_template(xlsform_obj,
         fields.append(field_json)
 
     return {
+                "form_title": form_title,
                 "height": height,
                 "width": width,
                 "fields": fields,

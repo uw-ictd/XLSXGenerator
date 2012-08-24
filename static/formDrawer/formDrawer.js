@@ -62,7 +62,7 @@ function createForm(form) {
     var fiducials = [{
         source: "fiducials/cs.jpg",
         x: 50,
-        y: 50
+        y: 40
     }, {
         source: "fiducials/villagereach.jpg",
         x: form.width - 50,
@@ -74,7 +74,7 @@ function createForm(form) {
     }, {
         source: "fiducials/change.jpg",
         x: form.width - 50,
-        y: 50
+        y: 40
     }];
     if ('fiducials' in form) {
         fiducials = form.fiducials;
@@ -86,6 +86,18 @@ function createForm(form) {
             fromCenter: true //I think this has to be true if there is no height/width
         }, fiducial));
     });
+    
+    var title = $canvas.addLayer({
+        x: form.width/2,
+        y: 50,
+        method: "drawText",
+        fillStyle: "#000",
+        align: "center",
+        baseline: "middle",
+        font: "12pt Verdana, sans-serif",
+        text: form.form_title
+    });
+    
     ///////Draw form:
     $.each(form.fields, function(field_idx, field) {
         field = $.extend({}, form, field);
