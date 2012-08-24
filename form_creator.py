@@ -48,6 +48,7 @@ def make_field_json(field, segment, choice_lists):
         parse_dict = select_parse.groupdict()
         select_type = parse_dict.get("select_type")
         if select_type:
+            field['type'] = select_type
             list_name = parse_dict["list_name"]
             if list_name not in choice_lists:
                 raise Exception("List name not in choices sheet: " +
