@@ -23,8 +23,8 @@ function computeMarkupLocation(field) {
         }
     });
     return {
-        x: minX,
-        y: minY - 20
+        x: minX + 5,
+        y: minY + 5
     };
 }
 
@@ -99,6 +99,7 @@ function createForm(form) {
             x: 0,
             y: 0,
             align: "left",
+            baseline: "top",
             font: "12pt Verdana, sans-serif",
             text: field.label || field.name
         };

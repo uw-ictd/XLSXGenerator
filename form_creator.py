@@ -10,72 +10,100 @@ import xlsform2
 #TODO: make it possible to set the number of bubbles used by a tally type
 
 def choices2items(choice_list,
-                  segment_width,
-                  segment_height,
-                  x_offset = 70,
-                  y_offset = 30,
-                  item_width = 100,
-                  item_height = 40,
-                  item_idx = 0,
+                  segment,
+                  item_width = 30,
+                  item_height = 30,
+                  row_one_left_margin = 400,
+                  base_margin = 20,
                   ):
-    for y in range(y_offset,segment_height,item_height):
-        for x in range(x_offset,segment_width,item_width):
-            if item_idx >= len(choice_list): return choice_list
-            choice_list[item_idx].update({
+    left_margin = row_one_left_margin
+    y_offset = 0
+    out_choice_list = []
+    while len(choice_list) > 0:
+        y_offset += item_height
+        segment['segment_height'] = y_offset + item_height
+        for x in range(segment['segment_x'] + left_margin,
+                       segment['segment_width'] - base_margin,
+                       item_width):
+            if len(choice_list) == 0: return out_choice_list
+            choice = choice_list.pop()
+            choice.update({
                   "item_x": x,
-                  "item_y": y
+                  "item_y": y_offset
             })
-            item_idx+=1
-    return choice_list #TODO In this case, all the choices probably weren't included
+            out_choice_list.append(choice)
+        left_margin = base_margin
+    return out_choice_list
 
-def make_json_template(xlsform_obj):
+select_regexp = re.compile(r"^(?P<select_type>("
+                       + 'select(1)?'
+                       + r")) (?P<list_name>\S+)( (?P<specify_other>(or specify other|or_other|or other)))?$",
+                       flags=re.IGNORECASE)
+tally_regexp = re.compile(r"^tally( )?(?P<amount>\d*)$", flags=re.IGNORECASE)
+
+def make_field_json(field, segment, choice_lists):
+    field_type = field['type']
+    select_parse = select_regexp.search(field_type)
+    tally_parse = tally_regexp.search(field_type)
+    if select_parse:
+        parse_dict = select_parse.groupdict()
+        select_type = parse_dict.get("select_type")
+        if select_type:
+            list_name = parse_dict["list_name"]
+            if list_name not in choice_lists:
+                raise Exception("List name not in choices sheet: " +
+                                list_name +
+                                " Error on row: " +
+                                str(row_number))
+            field['items'] = choices2items(choice_lists[list_name],
+                                           segment,
+                                           item_width=80)
+    elif tally_parse:
+        parse_dict = tally_parse.groupdict()
+        amount_str = parse_dict.get("amount")
+        amount = 40
+        try:
+            amount = int(amount_str)
+        except:
+            pass
+        field['type'] = 'int'
+        field['items'] = choices2items([{} for x in range(amount)],
+                                       segment,
+                                       item_width=30)
+    elif field_type == "string" or field_type == "int":
+        pass
+    else:
+        pass
+    field['segments'] = [segment]
+    return field
+
+def make_json_template(xlsform_obj,
+                       height = 1176, #TODO: What is a good height?
+                       width = 832,
+                       y_initial_offset=100,
+                       margin_y = 10,
+                       margin_x = 40,
+                       ):
     """
     Create a json template from the xlsform json
     by adding location information to the fields.
     """
-    select_regexp = re.compile(r"^(?P<select_type>("
-                           + 'select(1)?'
-                           + r")) (?P<list_name>\S+)( (?P<specify_other>(or specify other|or_other|or other)))?$")
-    
-    
-    height = 1176 #TODO: What is a good height?
-    width = 832
-    y_offset = 150 #non-static
-    y_incr = 200
-    margin_y = 40
-    margin_x = 40
+    y_offset = y_initial_offset
     choice_lists = xlsform_obj['choices']
     fields = []
     for field in xlsform_obj['survey']:
-        field_type = field['type']
-        field['segments'] = [{
-              "segment_x": margin_x,
-              "segment_y": y_offset,
-              "segment_width": width - margin_x * 2,
-              "segment_height": y_incr - margin_y
-        }]
-        select_parse = select_regexp.search(field_type)
-        if select_parse:
-            parse_dict = select_parse.groupdict()
-            select_type = parse_dict.get("select_type")
-            if select_type:
-                list_name = parse_dict["list_name"]
-                if list_name not in choice_lists:
-                    raise Exception("List name not in choices sheet: " + list_name + " Error on row: " + str(row_number))
-                field['items'] = choices2items(choice_lists[list_name], width - margin_x*2, y_incr - margin_y)
-        elif field_type == "tally":
-            field['type'] = 'int'
-            field['items'] = choices2items([{} for x in range(40)],
-                                           width - margin_x*2,
-                                           y_incr - margin_y,
-                                           x_offset=20,
-                                           item_width=40)
-        elif field_type == "string" or field_type == "int":
-            pass
-        else:
+        segment = {
+          "segment_x": margin_x,
+          "segment_y": y_offset,
+          "segment_width": width - margin_x * 2,
+          "segment_height": 50 #Height is not static
+        }
+        field_json = make_field_json(field, segment, choice_lists)
+        if not field_json:
             continue
-        y_offset += y_incr
-        fields.append(field)
+        y_offset += segment['segment_height']
+        fields.append(field_json)
+
     return {
                 "height": height,
                 "width": width,
