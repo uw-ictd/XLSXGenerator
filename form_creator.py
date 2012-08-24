@@ -10,8 +10,8 @@ import xlsform2
 
 def choices2items(choice_list,
                   segment,
-                  item_width = 30,
-                  item_height = 30,
+                  item_width = 20,
+                  item_height = 20,
                   row_one_left_margin = 400,
                   base_margin = 20,
                   ):
@@ -68,8 +68,7 @@ def make_field_json(field, segment, choice_lists):
             pass
         field['type'] = 'int'
         field['items'] = choices2items([{} for x in range(amount)],
-                                       segment,
-                                       item_width=30)
+                                       segment)
     elif field_type == "string" or field_type == "int":
         pass
     else:
@@ -78,7 +77,7 @@ def make_field_json(field, segment, choice_lists):
     return field
 
 def make_json_template(xlsform_obj,
-                       height = 1176, #TODO: What is a good height?
+                       height = 1076, #Using letter height
                        width = 832,
                        y_initial_offset=100,
                        margin_y = 10,
@@ -97,7 +96,7 @@ def make_json_template(xlsform_obj,
           "segment_x": margin_x,
           "segment_y": y_offset,
           "segment_width": width - margin_x * 2,
-          "segment_height": 50 #Height is not static
+          "segment_height": 30 #Height is not static
         }
         field_json = make_field_json(field, segment, choice_lists)
         if not field_json:
@@ -116,9 +115,10 @@ def make_json_template(xlsform_obj,
                         },
                         "default_classification": True,
                         "training_data_uri": "bubbles",
-                        "classifier_height": 16,
-                        "classifier_width": 14,
+                        "classifier_height": 18,
+                        "classifier_width": 16,
                         "advanced": {
+                             "alignment_radius": 2.0,
                              "flip_training_data": True
                         }
                 }

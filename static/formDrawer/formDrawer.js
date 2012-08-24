@@ -147,8 +147,8 @@ function createForm(form) {
                         group: "myBoxes",
                         x: segment.segment_x + item.item_x,
                         y: segment.segment_y + item.item_y,
-                        width: classifier.classifier_width,
-                        height: classifier.classifier_height
+                        width: classifier.classifier_width * .8,
+                        height: classifier.classifier_height * .8
                     });
                     if('label' in item) {
                         var itemLabelObj = {
