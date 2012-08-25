@@ -15,6 +15,8 @@ def choices2items(choice_list,
                   row_one_left_margin = 400,
                   base_margin = 20,
                   ):
+    if len(choice_list) > 3:
+        row_one_left_margin = 999999 #skip the first row
     left_margin = row_one_left_margin
     y_offset = 0
     out_choice_list = []
@@ -39,6 +41,8 @@ select_regexp = re.compile(r"^(?P<select_type>("
                        + r")) (?P<list_name>\S+)( (?P<specify_other>(or specify other|or_other|or other)))?$",
                        flags=re.IGNORECASE)
 tally_regexp = re.compile(r"^tally( )?(?P<amount>\d*)$", flags=re.IGNORECASE)
+begin_block_regex = re.compile(r"^begin\s(?P<blocktype>\w+)$", flags=re.IGNORECASE)
+end_block_regex = re.compile(r"^end\s(?P<blocktype>\w+)$", flags=re.IGNORECASE)
 
 def make_field_json(field, segment, choice_lists):
     field_type = field['type']
@@ -92,6 +96,7 @@ def make_json_template(xlsform_obj,
     choice_lists = xlsform_obj['choices']
     fields = []
     for field in xlsform_obj['survey']:
+        
         segment = {
           "segment_x": margin_x,
           "segment_y": y_offset,
