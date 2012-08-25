@@ -83,6 +83,7 @@ function createForm(form) {
         $canvas.drawImage($.extend({}, {
             x: 0,
             y: 0,
+            load: fiducialLoaded,
             fromCenter: true //I think this has to be true if there is no height/width
         }, fiducial));
     });
@@ -174,6 +175,13 @@ function createForm(form) {
             }, 1000);
         }
     });
-    $canvas.drawLayers();
-    $('.viewAsImage').click();
+    var fiducialsLoaded = 0;
+    function fiducialLoaded(){
+    	fiducialsLoaded++;
+    	if(fiducialsLoaded === 4){
+		    $canvas.drawLayers();
+		    $('.viewAsImage').click();
+    	}
+    }
+
 }
