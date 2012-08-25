@@ -178,6 +178,7 @@ function createForm(form) {
     var fiducialsLoaded = 0;
     function fiducialLoaded(){
     	fiducialsLoaded++;
+    	console.log('fiducials loaded: ' + fiducialsLoaded)
     	if(fiducialsLoaded === 4){
 		    $canvas.drawLayers();
 		    $('.viewAsImage').click();
