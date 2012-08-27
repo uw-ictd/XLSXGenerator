@@ -1,179 +1,176 @@
 {
-     "image_filename": "example.jpg",
-     "height": 1176,
-     "width": 832,
-     "fields": [
-          {
-               "name": "square_checkboxes",
-               "label": "square checkboxes",
-               "segments": [
-                    {
-                         "segment_x": 120,
-                         "segment_y": 100,
-                         "segment_width": 100,
-                         "segment_height": 100,
-                         "items": [
-                              {
-                                   "item_x": 50,
-                                   "item_y": 20
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 50
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 80
-                              }
-                         ],
-                         "align_segment": false
-                    },
-                    {
-                         "segment_x": 230,
-                         "segment_y": 100,
-                         "segment_width": 100,
-                         "segment_height": 100,
-                         "items": [
-                              {
-                                   "item_x": 50,
-                                   "item_y": 20
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 50
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 80
-                              }
-                         ],
-                         "align_segment": false
-                    },
-                    {
-                         "segment_x": 340,
-                         "segment_y": 100,
-                         "segment_width": 100,
-                         "segment_height": 100,
-                         "items": [
-                              {
-                                   "item_x": 50,
-                                   "item_y": 20
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 50
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 80
-                              }
-                         ],
-                         "align_segment": false
-                    },
-                    {
-                         "segment_x": 450,
-                         "segment_y": 100,
-                         "segment_width": 100,
-                         "segment_height": 100,
-                         "items": [
-                              {
-                                   "item_x": 50,
-                                   "item_y": 20
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 50
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 80
-                              }
-                         ],
-                         "align_segment": false
-                    },
-                    {
-                         "segment_x": 560,
-                         "segment_y": 100,
-                         "segment_width": 100,
-                         "segment_height": 100,
-                         "items": [
-                              {
-                                   "item_x": 50,
-                                   "item_y": 20
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 50
-                              },
-                              {
-                                   "item_x": 50,
-                                   "item_y": 80
-                              }
-                         ],
-                         "align_segment": false
-                    }
-               ],
-               "classifier": {
-                    "classification_map": {
-                         "empty": false
-                    },
-                    "default_classification": true,
-                    "training_data_uri": "checkboxes",
-                    "classifier_height": 24,
-                    "classifier_width": 24,
-                    "advanced": {
-                         "flip_training_data": true
-                    }
-               },
-               "type": "input"
-          },
-          {
-               "name": "bubbles",
-               "label": "bubbles",
-               "segment_width": 80,
-               "segment_height": 101,
-               "segments": [
-                    {
-                         "segment_x": 302,
-                         "segment_y": 905,
-                         "segment_height": 50,
-                         "segment_width": 200,
-                         "items": [
-                              {
-                                   "item_x": 30,
-                                   "item_y": 25,
-                                   "label": "A",
-                                   "value": "A"
-                              },
-                              {
-                                   "item_x": 70,
-                                   "item_y": 25,
-                                   "label": "B",
-                                   "value": "B"
-                              },
-                              {
-                                   "item_x": 110,
-                                   "item_y": 25,
-                                   "label": "C",
-                                   "value": "C"
-                              }
-                         ],
-                         "align_segment": false
-                    }
-               ],
-               "classifier": {
-                    "classification_map": {
-                         "empty": false
-                    },
-                    "default_classification": true,
-                    "training_data_uri": "bubbles",
-                    "classifier_height": 14,
-                    "classifier_width": 16,
-                    "advanced": {
-                         "flip_training_data": true
-                    }
-               },
-               "type": "select"
-          }
-     ]
+    "width": 832, 
+    "form_title": "Example Form", 
+    "classifier": {
+        "training_data_uri": "bubbles", 
+        "classifier_height": 18, 
+        "classifier_width": 16, 
+        "default_classification": true, 
+        "classification_map": {
+            "empty": false
+        }, 
+        "advanced": {
+            "alignment_radius": 2.0, 
+            "flip_training_data": true
+        }
+    }, 
+    "fields": [
+        {
+            "segments": [
+                {
+                    "segment_y": 100, 
+                    "segment_x": 40, 
+                    "segment_height": 30, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "string", 
+            "name": "name", 
+            "label": "Enter your name:"
+        }, 
+        {
+            "segments": [
+                {
+                    "segment_y": 130, 
+                    "segment_x": 40, 
+                    "segment_height": 30, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "int", 
+            "name": "age", 
+            "label": "Enter your age:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 20, 
+                    "item_x": 440, 
+                    "value": "female", 
+                    "label": "female"
+                }, 
+                {
+                    "item_y": 20, 
+                    "item_x": 520, 
+                    "value": "male", 
+                    "label": "male"
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 160, 
+                    "segment_x": 40, 
+                    "segment_height": 40, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "select1", 
+            "name": "gender", 
+            "label": "Enter your gender:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 20, 
+                    "item_x": 440, 
+                    "value": "horse", 
+                    "label": "horse"
+                }, 
+                {
+                    "item_y": 20, 
+                    "item_x": 520, 
+                    "value": "cat", 
+                    "label": "cat"
+                }, 
+                {
+                    "item_y": 20, 
+                    "item_x": 600, 
+                    "value": "dog", 
+                    "label": "dog"
+                }, 
+                {
+                    "item_y": 20, 
+                    "item_x": 680, 
+                    "value": "fish", 
+                    "label": "fish"
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 200, 
+                    "segment_x": 40, 
+                    "segment_height": 40, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "select", 
+            "name": "pet_types", 
+            "label": "Why kinds of pets do you have:"
+        }, 
+        {
+            "name": "num_pets", 
+            "default": 3, 
+            "items": [
+                {
+                    "item_x": 440, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 460, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 480, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 500, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 520, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 540, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 560, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 580, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 600, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 620, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 640, 
+                    "item_y": 20
+                }, 
+                {
+                    "item_x": 660, 
+                    "item_y": 20
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 240, 
+                    "segment_x": 40, 
+                    "segment_height": 40, 
+                    "segment_width": 752
+                }
+            ], 
+            "label": "Fill in a bubble for every pet you have:", 
+            "type": "int"
+        }
+    ], 
+    "height": 1076
 }
