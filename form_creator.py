@@ -74,7 +74,11 @@ def make_field_json(field, segment, choice_lists):
         field['type'] = 'int'
         field['items'] = choices2items([{} for x in range(amount)],
                                        segment)
-    elif field_type == "string" or field_type == "int":
+    elif field_type == "string":
+        min_height = field.get('min_height', segment['segment_height'])
+        if min_height > segment['segment_height']:
+            segment['segment_height'] = min_height
+    elif field_type == "int":
         pass
     else:
         pass
