@@ -28,14 +28,15 @@ function computeMarkupLocation(field) {
     };
 }
 
-$('.viewAsImage').click(function() {
+function viewAsImage() {
     //Create a modal
     var $body = $('.modal-body');
     $body.empty();
     var uriContent = $("canvas").getCanvasImage("jpeg", 1.0);
     $body.append("<img src='" + uriContent + "' ></img>");
     $('#myModal').modal('show');
-});
+}
+$('.viewAsImage').click(viewAsImage);
 
 function createForm(form) {
     var $canvas = $("canvas").jCanvas();
@@ -153,8 +154,8 @@ function createForm(form) {
         x: 50,
         y: (form.height - 50)
     }, {
-        source: "fiducials/villagereach.jpg",
-        x: form.width - 55,
+        source: "fiducials/villagereach.png",
+        x: form.width - 130,
         y: (form.height - 40)
     }, {
         source: "fiducials/scan.png",
@@ -181,7 +182,7 @@ function createForm(form) {
         console.log('fiducials loaded');
         fiducialsLoaded++;
         if (fiducialsLoaded === 4) {
-            $('.viewAsImage').click();
+            viewAsImage();
         }
     }
 
