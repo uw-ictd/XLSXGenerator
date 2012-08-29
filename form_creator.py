@@ -147,10 +147,10 @@ def make_json_template(xlsform_obj,
                         },
                         "default_classification": True,
                         "training_data_uri": "bubbles",
-                        "classifier_height": 18,
-                        "classifier_width": 16,
+                        "classifier_height": 20,
+                        "classifier_width": 18,
                         "advanced": {
-                             "alignment_radius": 2.0,
+                             "alignment_radius": 4.0,
                              "flip_training_data": True
                         }
                 }
