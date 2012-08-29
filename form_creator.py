@@ -11,6 +11,7 @@ import xlsform2
 def choices2items(choice_list,
                   segment,
                   item_width = 20,
+                  item_label_width = 0,
                   item_height = 20,
                   row_one_left_margin = 400,
                   base_margin = 20,
@@ -23,9 +24,9 @@ def choices2items(choice_list,
     while len(choice_list) > 0:
         y_offset += item_height
         segment['segment_height'] = y_offset + item_height
-        for x in range(segment['segment_x'] + left_margin,
+        for x in range(segment['segment_x'] + left_margin + item_label_width,
                        segment['segment_width'] - base_margin,
-                       item_width):
+                       item_width + item_label_width):
             if len(choice_list) == 0: return out_choice_list
             choice = choice_list.pop()
             choice.update({
@@ -61,7 +62,7 @@ def make_field_json(field, segment, choice_lists):
                                 str(row_number))
             field['items'] = choices2items(choice_lists[list_name],
                                            segment,
-                                           item_width=80)
+                                           item_label_width=70)
     elif tally_parse:
         parse_dict = tally_parse.groupdict()
         amount_str = parse_dict.get("amount")
@@ -73,7 +74,11 @@ def make_field_json(field, segment, choice_lists):
         field['type'] = 'int'
         field['items'] = choices2items([{} for x in range(amount)],
                                        segment)
-    elif field_type == "string" or field_type == "int":
+    elif field_type == "string":
+        min_height = field.get('min_height', segment['segment_height'])
+        if min_height > segment['segment_height']:
+            segment['segment_height'] = min_height
+    elif field_type == "int":
         pass
     else:
         pass
@@ -96,18 +101,40 @@ def make_json_template(xlsform_obj,
     choice_lists = xlsform_obj['choices']
     fields = []
     for field in xlsform_obj['survey']:
-        
-        segment = {
-          "segment_x": margin_x,
-          "segment_y": y_offset,
-          "segment_width": width - margin_x * 2,
-          "segment_height": 30 #Height is not static
-        }
-        field_json = make_field_json(field, segment, choice_lists)
-        if not field_json:
-            continue
-        y_offset += segment['segment_height']
-        fields.append(field_json)
+        if field['type'] in ['group', 'block']:
+            idx = 0
+            segment_width = (width - margin_x * 2) / len(field['prompts'])
+            segments = []
+            for field in field['prompts']:
+                segment = {
+                  "segment_x": margin_x + idx * segment_width,
+                  "segment_y": y_offset,
+                  "segment_width": segment_width,
+                  "segment_height": 30 #Height is not static
+                }
+                segments.append(segment)
+                field_json = make_field_json(field, segment, choice_lists)
+                fields.append(field_json)
+                idx += 1
+            max_segment_height = 0
+            for segment in segments:
+                if segment['segment_height'] > max_segment_height:
+                    max_segment_height = segment['segment_height']
+            for segment in segments:
+                segment['segment_height'] = max_segment_height
+            y_offset += max_segment_height
+        else:
+            segment = {
+              "segment_x": margin_x,
+              "segment_y": y_offset,
+              "segment_width": width - margin_x * 2,
+              "segment_height": 30 #Height is not static
+            }
+            field_json = make_field_json(field, segment, choice_lists)
+            if not field_json:
+                continue
+            fields.append(field_json)
+            y_offset += segment['segment_height']
 
     return {
                 "form_title": form_title,
@@ -120,10 +147,10 @@ def make_json_template(xlsform_obj,
                         },
                         "default_classification": True,
                         "training_data_uri": "bubbles",
-                        "classifier_height": 18,
-                        "classifier_width": 16,
+                        "classifier_height": 20,
+                        "classifier_width": 18,
                         "advanced": {
-                             "alignment_radius": 2.0,
+                             "alignment_radius": 4.0,
                              "flip_training_data": True
                         }
                 }
