@@ -28,14 +28,15 @@ function computeMarkupLocation(field) {
     };
 }
 
-$('.viewAsImage').click(function() {
+function viewAsImage() {
     //Create a modal
     var $body = $('.modal-body');
     $body.empty();
     var uriContent = $("canvas").getCanvasImage("jpeg", 1.0);
     $body.append("<img src='" + uriContent + "' ></img>");
     $('#myModal').modal('show');
-});
+}
+$('.viewAsImage').click(viewAsImage);
 
 function createForm(form) {
     var $canvas = $("canvas").jCanvas();
@@ -119,8 +120,8 @@ function createForm(form) {
                         group: "myBoxes",
                         x: segment.segment_x + item.item_x,
                         y: segment.segment_y + item.item_y,
-                        width: classifier.classifier_width * 0.8,
-                        height: classifier.classifier_height * 0.8
+                        width: classifier.classifier_width * 0.7,
+                        height: classifier.classifier_height * 0.7
                     });
                     if ('label' in item) {
                         var itemLabelObj = {
@@ -151,18 +152,18 @@ function createForm(form) {
         var fiducials = [{
         source: "fiducials/cs.jpg",
         x: 50,
-        y: 40
+        y: (form.height - 50)
     }, {
-        source: "fiducials/villagereach.jpg",
-        x: form.width - 50,
-        y: form.height - 30
+        source: "fiducials/villagereach.png",
+        x: form.width - 130,
+        y: (form.height - 40)
     }, {
         source: "fiducials/scan.png",
         x: 70,
-        y: (form.height - 30)
+        y: 30
     }, {
         source: "fiducials/change.jpg",
-        x: form.width - 50,
+        x: form.width - 60,
         y: 40
     }];
     if ('fiducials' in form) {
@@ -181,7 +182,7 @@ function createForm(form) {
         console.log('fiducials loaded');
         fiducialsLoaded++;
         if (fiducialsLoaded === 4) {
-            $('.viewAsImage').click();
+            viewAsImage();
         }
     }
 
