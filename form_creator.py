@@ -21,12 +21,15 @@ def choices2items(choice_list,
     left_margin = row_one_left_margin
     y_offset = 0
     out_choice_list = []
+    if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
+        raise Exception('Cannot fit choices in segment. Do you have a group more than 5 questions?')
     while len(choice_list) > 0:
         y_offset += item_height
         segment['segment_height'] = y_offset + item_height
-        for x in range(segment['segment_x'] + left_margin + item_label_width,
-                       segment['segment_width'] - base_margin,
-                       item_width + item_label_width):
+        x_coords = range(segment['segment_x'] + left_margin + item_label_width,
+                       segment['segment_x'] + segment['segment_width'] - base_margin,
+                       item_width + item_label_width)
+        for x in x_coords:
             if len(choice_list) == 0: return out_choice_list
             choice = choice_list.pop()
             choice.update({
@@ -168,7 +171,7 @@ if __name__ == "__main__":
     #For debugging
     argv = [
             sys.argv[0],
-            os.path.join(os.path.dirname(__file__), "test.xls"),
+            os.path.join(os.path.dirname(__file__), "test3.xls"),
             os.path.join(os.path.dirname(__file__), "test.html"),
     ]
     if len(argv) < 3:
