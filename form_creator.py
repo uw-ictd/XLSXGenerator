@@ -26,12 +26,12 @@ def choices2items(choice_list,
     while len(choice_list) > 0:
         y_offset += item_height
         segment['segment_height'] = y_offset + item_height
-        x_coords = range(segment['segment_x'] + left_margin + item_label_width,
-                       segment['segment_x'] + segment['segment_width'] - base_margin,
+        x_coords = range(left_margin + item_label_width,
+                       segment['segment_width'] - base_margin,
                        item_width + item_label_width)
         for x in x_coords:
             if len(choice_list) == 0: return out_choice_list
-            choice = choice_list.pop()
+            choice = choice_list.pop(0)
             choice.update({
                   "item_x": x,
                   "item_y": y_offset
@@ -106,13 +106,13 @@ def make_json_template(xlsform_obj,
     for field in xlsform_obj['survey']:
         if field['type'] in ['group', 'block']:
             idx = 0
-            segment_width = (width - margin_x * 2) / len(field['prompts'])
+            segment_width = float(width - margin_x * 2) / len(field['prompts'])
             segments = []
             for field in field['prompts']:
                 segment = {
-                  "segment_x": margin_x + idx * segment_width,
+                  "segment_x": int(margin_x + idx * segment_width),
                   "segment_y": y_offset,
-                  "segment_width": segment_width,
+                  "segment_width": int(segment_width),
                   "segment_height": 30 #Height is not static
                 }
                 segments.append(segment)
