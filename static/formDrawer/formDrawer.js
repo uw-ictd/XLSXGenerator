@@ -28,6 +28,24 @@ function computeMarkupLocation(field) {
     };
 }
 
+function drawMultilineText($canvas, properties){
+    var strings = properties.text.split('\n');
+    var currentY = properties.y;
+    properties = $.extend({
+        method: "drawText",
+        lineSpacing: 0
+    }, properties);
+    $.each(strings, function(idx, string) {
+        var lineProperties = $.extend(Object.create(properties), {
+            text: string,
+            y: currentY
+        });
+        var measurements = $canvas.measureText(lineProperties);
+        $canvas.addLayer(lineProperties);
+        currentY += properties.lineSpacing + measurements.height;
+    });
+}
+
 function viewAsImage() {
     //Create a modal
     var $body = $('.modal-body');
@@ -60,17 +78,15 @@ function createForm(form) {
     });
     //$canvas.drawLayers();
 
-    var title = $canvas.addLayer({
+    drawMultilineText($canvas, {
         x: form.width / 2,
         y: 50,
-        method: "drawText",
         fillStyle: "#000",
         align: "center",
         baseline: "middle",
         font: "12pt Verdana, sans-serif",
         text: form.form_title
-    });
-
+    })
     ///////Draw form:
     $.each(form.fields, function(field_idx, field) {
         field = $.extend({}, form, field);
@@ -78,7 +94,6 @@ function createForm(form) {
         $bar.css('width', progress + '%');
         
         var markup_object = {
-            method: "drawText",
             fillStyle: "#000",
             opacity: 0.7,
             x: 0,
@@ -93,7 +108,7 @@ function createForm(form) {
             $.extend(markup_object, field.markup_location);
         }
 
-        var textLayer = $canvas.addLayer(markup_object);
+        drawMultilineText($canvas, markup_object);
         
         $.each(field.segments, function(segment_idx, segment) {
             var classifier;
