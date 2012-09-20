@@ -1,47 +1,49 @@
 {
-    "width": 832, 
-    "form_title": "Example Form", 
-    "classifier": {
-        "training_data_uri": "bubbles", 
-        "classifier_height": 20, 
-        "classifier_width": 18, 
-        "default_classification": true, 
-        "classification_map": {
-            "empty": false
-        }, 
-        "advanced": {
-            "alignment_radius": 4.0, 
-            "flip_training_data": true
-        }
-    }, 
     "fields": [
-        {
-            "min_height": 100, 
-            "segments": [
-                {
-                    "segment_y": 100, 
-                    "segment_x": 40, 
-                    "segment_height": 100, 
-                    "segment_width": 376
-                }
-            ], 
-            "type": "string", 
-            "name": "name", 
-            "label": "Enter your name:"
-        }, 
-        {
-            "segments": [
-                {
-                    "segment_y": 100, 
-                    "segment_x": 416, 
-                    "segment_height": 100, 
-                    "segment_width": 376
-                }
-            ], 
-            "type": "int", 
-            "name": "age", 
-            "label": "Enter your age:"
-        }, 
+        [
+            {
+                "segments": [
+                    {
+                        "segment_y": 100, 
+                        "segment_x": 40, 
+                        "segment_height": 30, 
+                        "segment_width": 752
+                    }
+                ], 
+                "type": "string", 
+                "name": "name", 
+                "label": "Enter your name:"
+            }, 
+            {
+                "segments": [
+                    {
+                        "segment_y": 130, 
+                        "segment_x": 40, 
+                        "segment_height": 30, 
+                        "segment_width": 752
+                    }
+                ], 
+                "type": "int", 
+                "name": "age", 
+                "label": "Enter your age:"
+            }
+        ], 
+        [
+            {
+                "min_height": 100, 
+                "segments": [
+                    {
+                        "segment_y": 100, 
+                        "segment_x": 40, 
+                        "segment_height": 30, 
+                        "segment_width": 752
+                    }
+                ], 
+                "type": "note", 
+                "name": "a_note", 
+                "label": "This is a\nInstructional note."
+            }
+        ], 
         {
             "items": [
                 {
@@ -59,7 +61,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 200, 
+                    "segment_y": 100, 
                     "segment_x": 40, 
                     "segment_height": 40, 
                     "segment_width": 752
@@ -98,7 +100,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 240, 
+                    "segment_y": 140, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752
@@ -215,7 +217,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 300, 
+                    "segment_y": 200, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752
@@ -225,5 +227,21 @@
             "type": "int"
         }
     ], 
-    "height": 1076
+    "height": 1076, 
+    "width": 832, 
+    "form_title": "Example Form", 
+    "font": "12pt Verdana, sans-serif", 
+    "classifier": {
+        "training_data_uri": "bubbles", 
+        "classifier_height": 20, 
+        "classifier_width": 18, 
+        "default_classification": true, 
+        "classification_map": {
+            "empty": false
+        }, 
+        "advanced": {
+            "alignment_radius": 4.0, 
+            "flip_training_data": true
+        }
+    }
 }

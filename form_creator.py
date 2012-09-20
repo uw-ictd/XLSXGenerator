@@ -117,46 +117,51 @@ def make_json_template(xlsform_obj,
         }
     }
     output.update(xlsform_obj.get('settings', {})[0])
-    y_offset = y_initial_offset
     choice_lists = xlsform_obj['choices']
-    fields = []
-    for field in xlsform_obj['survey']:
-        if field['type'] in ['group', 'block']:
-            idx = 0
-            segment_width = float(width - margin_x * 2) / len(field['prompts'])
-            segments = []
-            for field in field['prompts']:
+    def generate_fields(in_fields):
+        y_offset = y_initial_offset
+        fields = []
+        for field in in_fields:
+            if field['type'] in ['group', 'block']:
+                idx = 0
+                segment_width = float(width - margin_x * 2) / len(field['prompts'])
+                segments = []
+                for field in field['prompts']:
+                    if field['type'] in ['group', 'block']:
+                        fields.append(generate_fields(field['prompts']))
+                    else:
+                        segment = {
+                          "segment_x": int(margin_x + round(idx * segment_width)),
+                          "segment_y": y_offset,
+                          "segment_width": int(round(segment_width)),
+                          "segment_height": 30 #Height is not static
+                        }
+                        segments.append(segment)
+                        field_json = make_field_json(field, segment, choice_lists)
+                        fields.append(field_json)
+                    idx += 1
+                max_segment_height = 0
+                for segment in segments:
+                    if segment['segment_height'] > max_segment_height:
+                        max_segment_height = segment['segment_height']
+                for segment in segments:
+                    segment['segment_height'] = max_segment_height
+                y_offset += max_segment_height
+            else:
                 segment = {
-                  "segment_x": int(margin_x + round(idx * segment_width)),
+                  "segment_x": margin_x,
                   "segment_y": y_offset,
-                  "segment_width": int(round(segment_width)),
+                  "segment_width": width - margin_x * 2,
                   "segment_height": 30 #Height is not static
                 }
-                segments.append(segment)
                 field_json = make_field_json(field, segment, choice_lists)
+                if not field_json:
+                    continue
                 fields.append(field_json)
-                idx += 1
-            max_segment_height = 0
-            for segment in segments:
-                if segment['segment_height'] > max_segment_height:
-                    max_segment_height = segment['segment_height']
-            for segment in segments:
-                segment['segment_height'] = max_segment_height
-            y_offset += max_segment_height
-        else:
-            segment = {
-              "segment_x": margin_x,
-              "segment_y": y_offset,
-              "segment_width": width - margin_x * 2,
-              "segment_height": 30 #Height is not static
-            }
-            field_json = make_field_json(field, segment, choice_lists)
-            if not field_json:
-                continue
-            fields.append(field_json)
-            y_offset += segment['segment_height']
-    
-    output["fields"] = fields
+                y_offset += segment['segment_height']
+            pass
+        return fields
+    output["fields"] = generate_fields(xlsform_obj['survey'])
     return output
     
 def create_form(path_or_file, output_path):
