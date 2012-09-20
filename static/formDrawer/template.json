@@ -1,208 +1,166 @@
 {
     "width": 832, 
-    "form_title": "Example Form", 
+    "form_title": "APE Site Visit Monitoring and Evaluation Form", 
     "classifier": {
         "training_data_uri": "bubbles", 
-        "classifier_height": 18, 
-        "classifier_width": 16, 
+        "classifier_height": 20, 
+        "classifier_width": 18, 
         "default_classification": true, 
         "classification_map": {
             "empty": false
         }, 
         "advanced": {
-            "alignment_radius": 2.0, 
+            "alignment_radius": 4.0, 
             "flip_training_data": true
         }
     }, 
     "fields": [
         {
-            "min_height": 100, 
+            "default": "Maputo", 
             "segments": [
                 {
                     "segment_y": 100, 
                     "segment_x": 40, 
-                    "segment_height": 100, 
+                    "segment_height": 30, 
                     "segment_width": 376
                 }
             ], 
             "type": "string", 
-            "name": "name", 
-            "label": "Enter your name:"
+            "name": "province", 
+            "label": "Provincia:"
         }, 
         {
             "segments": [
                 {
                     "segment_y": 100, 
                     "segment_x": 416, 
-                    "segment_height": 100, 
+                    "segment_height": 30, 
                     "segment_width": 376
                 }
             ], 
+            "type": "string", 
+            "name": "district", 
+            "label": "Distrito:"
+        }, 
+        {
+            "segments": [
+                {
+                    "segment_y": 130, 
+                    "segment_x": 40, 
+                    "segment_height": 30, 
+                    "segment_width": 376
+                }
+            ], 
+            "type": "string", 
+            "name": "community", 
+            "label": "Communidade:"
+        }, 
+        {
+            "segments": [
+                {
+                    "segment_y": 130, 
+                    "segment_x": 416, 
+                    "segment_height": 30, 
+                    "segment_width": 376
+                }
+            ], 
+            "type": "string", 
+            "name": "APE_name", 
+            "label": "Nome do APE:"
+        }, 
+        {
+            "segments": [
+                {
+                    "segment_y": 160, 
+                    "segment_x": 40, 
+                    "segment_height": 60, 
+                    "segment_width": 250
+                }
+            ], 
             "type": "int", 
-            "name": "age", 
-            "label": "Enter your age:"
+            "name": "day", 
+            "label": "Dia:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 40, 
+                    "item_x": 90, 
+                    "value": 1, 
+                    "label": "January"
+                }, 
+                {
+                    "item_y": 40, 
+                    "item_x": 180, 
+                    "value": 2, 
+                    "label": "February"
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 160, 
+                    "segment_x": 290, 
+                    "segment_height": 60, 
+                    "segment_width": 250
+                }
+            ], 
+            "type": "select1", 
+            "name": "month", 
+            "label": "Mes:"
+        }, 
+        {
+            "items": [
+                {
+                    "item_y": 40, 
+                    "item_x": 90, 
+                    "value": 2012, 
+                    "label": 2012
+                }, 
+                {
+                    "item_y": 40, 
+                    "item_x": 180, 
+                    "value": 2013, 
+                    "label": 2012
+                }
+            ], 
+            "segments": [
+                {
+                    "segment_y": 160, 
+                    "segment_x": 541, 
+                    "segment_height": 60, 
+                    "segment_width": 250
+                }
+            ], 
+            "type": "select1", 
+            "name": "year", 
+            "label": "Ano:"
         }, 
         {
             "items": [
                 {
                     "item_y": 20, 
-                    "item_x": 510, 
-                    "value": "female", 
-                    "label": "female"
+                    "item_x": 470, 
+                    "value": 0, 
+                    "label": "no"
                 }, 
                 {
                     "item_y": 20, 
-                    "item_x": 600, 
-                    "value": "male", 
-                    "label": "male"
+                    "item_x": 560, 
+                    "value": 1, 
+                    "label": "yes"
                 }
             ], 
             "segments": [
                 {
-                    "segment_y": 200, 
+                    "segment_y": 220, 
                     "segment_x": 40, 
                     "segment_height": 40, 
                     "segment_width": 752
                 }
             ], 
             "type": "select1", 
-            "name": "gender", 
-            "label": "Enter your gender:"
-        }, 
-        {
-            "items": [
-                {
-                    "item_y": 40, 
-                    "item_x": 130, 
-                    "value": "horse", 
-                    "label": "horse"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 220, 
-                    "value": "cat", 
-                    "label": "cat"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 310, 
-                    "value": "dog", 
-                    "label": "dog"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 400, 
-                    "value": "fish", 
-                    "label": "fish"
-                }
-            ], 
-            "segments": [
-                {
-                    "segment_y": 240, 
-                    "segment_x": 40, 
-                    "segment_height": 60, 
-                    "segment_width": 752
-                }
-            ], 
-            "type": "select", 
-            "name": "pet_types", 
-            "label": "Why kinds of pets do you have:"
-        }, 
-        {
-            "name": "num_pets", 
-            "default": 3, 
-            "items": [
-                {
-                    "item_x": 60, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 80, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 100, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 120, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 140, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 160, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 180, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 200, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 220, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 240, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 260, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 280, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 300, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 320, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 340, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 360, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 380, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 400, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 420, 
-                    "item_y": 40
-                }, 
-                {
-                    "item_x": 440, 
-                    "item_y": 40
-                }
-            ], 
-            "segments": [
-                {
-                    "segment_y": 300, 
-                    "segment_x": 40, 
-                    "segment_height": 60, 
-                    "segment_width": 752
-                }
-            ], 
-            "label": "Fill in a bubble for every pet you have:", 
-            "type": "int"
+            "name": "Q1", 
+            "label": "Did you receive training in stock\nManagement for the products you manage?"
         }
     ], 
     "height": 1076
