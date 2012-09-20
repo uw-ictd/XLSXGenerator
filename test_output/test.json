@@ -19,7 +19,7 @@
                     "segment_width": 376, 
                     "segment_y": 130, 
                     "segment_x": 40, 
-                    "segment_height": 30
+                    "segment_height": 70
                 }
             ], 
             "type": "int", 
@@ -33,7 +33,7 @@
                     "segment_width": 376, 
                     "segment_y": 100, 
                     "segment_x": 416, 
-                    "segment_height": 60
+                    "segment_height": 100
                 }
             ], 
             "type": "note", 
@@ -57,7 +57,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 160, 
+                    "segment_y": 200, 
                     "segment_x": 40, 
                     "segment_height": 40, 
                     "segment_width": 752
@@ -96,7 +96,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 200, 
+                    "segment_y": 240, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752
@@ -213,7 +213,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 260, 
+                    "segment_y": 300, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752

@@ -23,15 +23,17 @@ def choices2items(choice_list,
     out_choice_list = []
     if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
         raise Exception('Cannot fit choices in segment. Do you have a group more than 5 questions?')
-    while len(choice_list) > 0:
+    choice_idx = 0
+    while choice_idx <= len(choice_list):
         y_offset += item_height
         segment['segment_height'] = y_offset + item_height
         x_coords = range(left_margin + item_label_width,
                        segment['segment_width'] - base_margin,
                        item_width + item_label_width)
         for x in x_coords:
-            if len(choice_list) == 0: return out_choice_list
-            choice = choice_list.pop(0)
+            if choice_idx == len(choice_list): return out_choice_list
+            choice = choice_list[choice_idx]
+            choice_idx += 1
             choice.update({
                   "item_x": x,
                   "item_y": y_offset
@@ -78,13 +80,14 @@ def make_field_json(field, segment, choice_lists):
         field['items'] = choices2items([{} for x in range(amount)],
                                        segment)
     elif field_type == "string":
-        min_height = field.get('min_height', segment['segment_height'])
-        if min_height > segment['segment_height']:
-            segment['segment_height'] = min_height
+        pass
     elif field_type == "int":
         pass
     else:
         pass
+    min_height = field.get('min_height', segment['segment_height'])
+    if min_height > segment['segment_height']:
+        segment['segment_height'] = min_height
     field['segments'] = [segment]
     return field
 
