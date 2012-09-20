@@ -99,7 +99,24 @@ def make_json_template(xlsform_obj,
     Create a json template from the xlsform json
     by adding location information to the fields.
     """
-    form_title = xlsform_obj.get('settings', {})[0].get('form_title', '')
+    output = {
+        "height": height,
+        "width": width,
+        "classifier": {
+                "classification_map": {
+                     "empty": False
+                },
+                "default_classification": True,
+                "training_data_uri": "bubbles",
+                "classifier_height": 20,
+                "classifier_width": 18,
+                "advanced": {
+                     "alignment_radius": 4.0,
+                     "flip_training_data": True
+                }
+        }
+    }
+    output.update(xlsform_obj.get('settings', {})[0])
     y_offset = y_initial_offset
     choice_lists = xlsform_obj['choices']
     fields = []
@@ -110,9 +127,9 @@ def make_json_template(xlsform_obj,
             segments = []
             for field in field['prompts']:
                 segment = {
-                  "segment_x": int(margin_x + idx * segment_width),
+                  "segment_x": int(margin_x + round(idx * segment_width)),
                   "segment_y": y_offset,
-                  "segment_width": int(segment_width),
+                  "segment_width": int(round(segment_width)),
                   "segment_height": 30 #Height is not static
                 }
                 segments.append(segment)
@@ -138,26 +155,9 @@ def make_json_template(xlsform_obj,
                 continue
             fields.append(field_json)
             y_offset += segment['segment_height']
-
-    return {
-                "form_title": form_title,
-                "height": height,
-                "width": width,
-                "fields": fields,
-                "classifier": {
-                        "classification_map": {
-                             "empty": False
-                        },
-                        "default_classification": True,
-                        "training_data_uri": "bubbles",
-                        "classifier_height": 20,
-                        "classifier_width": 18,
-                        "advanced": {
-                             "alignment_radius": 4.0,
-                             "flip_training_data": True
-                        }
-                }
-            }
+    
+    output["fields"] = fields
+    return output
     
 def create_form(path_or_file, output_path):
     fp = codecs.open(output_path, mode="w", encoding="utf-8")
@@ -165,14 +165,13 @@ def create_form(path_or_file, output_path):
     json.dump(make_json_template(xlsform_obj), fp=fp, ensure_ascii=False, indent=4)
     fp.close()
     
-    
 if __name__ == "__main__":
     argv = sys.argv
     #For debugging
     argv = [
             sys.argv[0],
-            os.path.join(os.path.dirname(__file__), "test3.xls"),
-            os.path.join(os.path.dirname(__file__), "test.html"),
+            os.path.join(os.path.dirname(__file__), "test.xls"),
+            os.path.join(os.path.dirname(__file__), "test_output/test.json"),
     ]
     if len(argv) < 3:
         print __doc__
