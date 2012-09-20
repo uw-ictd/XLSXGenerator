@@ -20,7 +20,6 @@
                     "segment_width": 376, 
                     "segment_y": 130, 
                     "segment_x": 40, 
-                    "row_segments": [], 
                     "segment_height": 30
                 }
             ], 
@@ -35,7 +34,6 @@
                     "segment_width": 376, 
                     "segment_y": 100, 
                     "segment_x": 416, 
-                    "row_segments": [], 
                     "segment_height": 60
                 }
             ], 
@@ -63,7 +61,7 @@
                     "segment_y": 160, 
                     "segment_x": 40, 
                     "segment_height": 40, 
-                    "segment_width": 752.0
+                    "segment_width": 752
                 }
             ], 
             "type": "select1", 
@@ -102,7 +100,7 @@
                     "segment_y": 200, 
                     "segment_x": 40, 
                     "segment_height": 60, 
-                    "segment_width": 752.0
+                    "segment_width": 752
                 }
             ], 
             "type": "select", 
@@ -219,7 +217,7 @@
                     "segment_y": 260, 
                     "segment_x": 40, 
                     "segment_height": 60, 
-                    "segment_width": 752.0
+                    "segment_width": 752
                 }
             ], 
             "label": "Fill in a bubble for every pet you have:", 
