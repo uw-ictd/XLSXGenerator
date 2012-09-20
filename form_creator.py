@@ -146,12 +146,13 @@ def make_json_template(xlsform_obj,
                 max_bottom_y = 0
                 for col_segment in col_segments:
                     for row_segment in col_segment['row_segments']:
+                        row_segment.pop('row_segments')
                         bottom_y = row_segment['segment_height'] + row_segment['segment_y']
                         if max_bottom_y < bottom_y:
                             max_bottom_y = bottom_y
+                            
                 for col_segment in col_segments:
                     bottom_segment = col_segment.pop('row_segments')[-1]
-                    bottom_segment.pop('row_segments')
                     bottom_segment['segment_height'] = max_bottom_y - bottom_segment['segment_y']
                 segment["segment_y"] = max_bottom_y
             else:
@@ -160,7 +161,7 @@ def make_json_template(xlsform_obj,
                 if not field_json:
                     continue
                 fields.append(field_json)
-                segment['segment_y'] += field_segment['segment_height']
+                segment['segment_y'] = field_segment['segment_y'] + field_segment['segment_height']
             pass
         return fields
     output["fields"] = generate_fields(xlsform_obj['survey'], {
