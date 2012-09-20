@@ -144,7 +144,7 @@ function createForm(form) {
                         var itemLabelObj = {
                             fillStyle: "#000",
                             opacity: 0.7,
-                            x: segment.segment_x + item.item_x - classifier.classifier_width,
+                            x: segment.segment_x + item.item_x - (.75 * classifier.classifier_width),
                             y: segment.segment_y + item.item_y,
                             align: "right",
                             font: form.font || default_font,
