@@ -29,7 +29,7 @@ function computeMarkupLocation(field) {
 }
 
 function drawMultilineText($canvas, properties){
-    var strings = properties.text.split('\n');
+    var strings = String(properties.text).split('\n');
     var currentY = properties.y;
     properties = $.extend({
         method: "drawText",
@@ -61,6 +61,7 @@ function createForm(form) {
     var $bar = $('.bar');
     var progress = 10;
     var numFields = form.fields.length;
+    var default_font = "12pt Verdana, sans-serif";
     $bar.css('width', '10%');
 
     //////Draw canvas background:
@@ -84,9 +85,10 @@ function createForm(form) {
         fillStyle: "#000",
         align: "center",
         baseline: "middle",
-        font: "12pt Verdana, sans-serif",
-        text: form.form_title
+        font: form.font || default_font,
+        text: form.form_title || ''
     })
+    
     ///////Draw form:
     $.each(form.fields, function(field_idx, field) {
         field = $.extend({}, form, field);
@@ -100,7 +102,7 @@ function createForm(form) {
             y: 0,
             align: "left",
             baseline: "top",
-            font: "12pt Verdana, sans-serif",
+            font: form.font || default_font,
             text: field.label || field.name
         };
         $.extend(markup_object, computeMarkupLocation(field));
@@ -140,16 +142,15 @@ function createForm(form) {
                     });
                     if ('label' in item) {
                         var itemLabelObj = {
-                            method: "drawText",
                             fillStyle: "#000",
                             opacity: 0.7,
                             x: segment.segment_x + item.item_x - classifier.classifier_width,
                             y: segment.segment_y + item.item_y,
                             align: "right",
-                            font: "12pt Verdana, sans-serif",
+                            font: form.font || default_font,
                             text: item.label
                         };
-                        $canvas.addLayer(itemLabelObj);
+                        drawMultilineText($canvas, itemLabelObj);
                     }
                 });
             }
@@ -194,7 +195,7 @@ function createForm(form) {
     });
     var fiducialsLoaded = 0;
     function fiducialLoaded(a,b,c) {
-        console.log('fiducials loaded');
+        //console.log('fiducials loaded');
         fiducialsLoaded++;
         if (fiducialsLoaded === 4) {
             viewAsImage();
