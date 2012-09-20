@@ -128,7 +128,7 @@ def make_json_template(xlsform_obj,
                 segments = []
                 for field in field['prompts']:
                     if field['type'] in ['group', 'block']:
-                        fields.append(generate_fields(field['prompts']))
+                        fields += generate_fields(field['prompts'])
                     else:
                         segment = {
                           "segment_x": int(margin_x + round(idx * segment_width)),
