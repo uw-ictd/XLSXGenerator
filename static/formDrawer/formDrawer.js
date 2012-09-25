@@ -67,7 +67,7 @@ function createForm(form) {
     //////Draw canvas background:
     $canvas.attr('height', form.height + ' px');
     $canvas.attr('width', form.width + ' px');
-
+    //Make bg white (rather than transparent)
     $canvas.addLayer({
         method: 'drawRect',
         fillStyle: "#fff",
@@ -77,8 +77,26 @@ function createForm(form) {
         height: form.height,
         width: form.width
     });
-    //$canvas.drawLayers();
-
+    //Draw page border:
+    $canvas.addLayer({
+        method: 'drawRect',
+        strokeStyle: "#000",
+        strokeWidth: 1,
+        fromCenter: false,
+        x: 12, y: 12,
+        width: (form.width - 24),
+        height: (form.height - 24)
+    });
+    $canvas.addLayer({
+        method: 'drawRect',
+        strokeStyle: "#000",
+        strokeWidth: 1,
+        fromCenter: false,
+        x: 8, y: 8,
+        width: (form.width - 16),
+        height: (form.height - 16)
+    });
+    //Draw form title:
     drawMultilineText($canvas, {
         x: form.width / 2,
         y: 50,
@@ -87,7 +105,7 @@ function createForm(form) {
         baseline: "middle",
         font: form.font || default_font,
         text: form.form_title || ''
-    })
+    });
     
     ///////Draw form:
     $.each(form.fields, function(field_idx, field) {
@@ -167,20 +185,20 @@ function createForm(form) {
     }
         var fiducials = [{
         source: "fiducials/cs.jpg",
-        x: 50,
-        y: (form.height - 50)
+        x: 60,
+        y: (form.height - 60)
     }, {
         source: "fiducials/villagereach.png",
-        x: form.width - 130,
+        x: form.width - 140,
         y: (form.height - 40)
     }, {
         source: "fiducials/scan.png",
-        x: 70,
-        y: 30
+        x: 80,
+        y: 40
     }, {
         source: "fiducials/change.jpg",
-        x: form.width - 60,
-        y: 40
+        x: form.width - 70,
+        y: 50
     }];
     if ('fiducials' in form) {
         fiducials = form.fiducials;
