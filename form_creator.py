@@ -145,21 +145,24 @@ def make_json_template(xlsform_obj,
                         field_json = make_field_json(field, col_segment, choice_lists)
                         fields.append(field_json)
                     idx += 1
-                #Now set the Y and height of the segments
-                max_bottom_y = 0
+                #Now set the Y offsets and heights of the segments
+                max_bottom_y = segment["segment_y"]
                 for col_segment in col_segments:
-                    for row_segment in col_segment['row_segments']:
-                        row_segment.pop('row_segments')
-                        bottom_y = row_segment['segment_height'] + row_segment['segment_y']
-                        if max_bottom_y < bottom_y:
-                            max_bottom_y = bottom_y
-                            
+                    row_segments = col_segment.get('row_segments')
+                    bottom_segment = row_segments[-1] if row_segments else col_segment
+                    bottom_y = bottom_segment['segment_height'] + bottom_segment['segment_y']
+                    if max_bottom_y < bottom_y:
+                        max_bottom_y = bottom_y                            
                 for col_segment in col_segments:
-                    bottom_segment = col_segment.pop('row_segments')[-1]
+                    row_segments = col_segment.pop('row_segments')
+                    bottom_segment = row_segments[-1] if row_segments else col_segment
                     bottom_segment['segment_height'] = max_bottom_y - bottom_segment['segment_y']
                 segment["segment_y"] = max_bottom_y
             else:
                 field_segment = segment.copy()
+                #remove extra junk from the segment
+                if "row_segments" in field_segment:
+                    del field_segment["row_segments"]
                 field_json = make_field_json(field, field_segment, choice_lists)
                 if not field_json:
                     continue
@@ -171,7 +174,7 @@ def make_json_template(xlsform_obj,
                                                                'segment_x' : margin_x,
                                                                'segment_y' : margin_y,
                                                                'segment_width' : form_width - margin_x * 2,
-                                                               'segment_height' : 0
+                                                               'segment_height' : 20
                                                                })
     return output
     

@@ -24,7 +24,7 @@ function computeMarkupLocation(field) {
     });
     return {
         x: minX + 5,
-        y: minY + 5
+        y: minY + 2
     };
 }
 

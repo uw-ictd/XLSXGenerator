@@ -104,7 +104,7 @@
             ], 
             "type": "select", 
             "name": "pet_types", 
-            "label": "Why kinds of pets do you have:"
+            "label": "What kinds of pets do you have:"
         }, 
         {
             "name": "num_pets", 
