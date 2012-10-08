@@ -140,13 +140,13 @@ def make_json_template(xlsform_obj,
                     if field['type'] in ['group', 'block']:
                         row_fields = generate_fields(field['prompts'], col_segment)
                         fields += row_fields
-                        col_segment["row_segments"] = [ f['segments'][0] for f in row_fields ]
+                        col_segment['row_segments'] = [ f['segments'][0] for f in row_fields ]
                     else:
                         field_json = make_field_json(field, col_segment, choice_lists)
                         fields.append(field_json)
                     idx += 1
                 #Now set the Y offsets and heights of the segments
-                max_bottom_y = segment["segment_y"]
+                max_bottom_y = segment['segment_y']
                 for col_segment in col_segments:
                     row_segments = col_segment.get('row_segments')
                     bottom_segment = row_segments[-1] if row_segments else col_segment
@@ -157,16 +157,23 @@ def make_json_template(xlsform_obj,
                     row_segments = col_segment.pop('row_segments')
                     bottom_segment = row_segments[-1] if row_segments else col_segment
                     bottom_segment['segment_height'] = max_bottom_y - bottom_segment['segment_y']
-                segment["segment_y"] = max_bottom_y
+                segment['segment_y'] = max_bottom_y
             else:
                 field_segment = segment.copy()
                 #remove extra junk from the segment
-                if "row_segments" in field_segment:
-                    del field_segment["row_segments"]
+                if 'row_segments' in field_segment:
+                    del field_segment['row_segments']
                 field_json = make_field_json(field, field_segment, choice_lists)
                 if not field_json:
                     continue
-                fields.append(field_json)
+                if field['type'] == 'markup':
+                    #Markup is not used for scanning or in collect.
+                    #It only alters the appearance of the form.
+                    if not 'markup' in output:
+                        output['markup'] = []
+                    output['markup'].append(field)
+                else:
+                    fields.append(field_json)
                 segment['segment_y'] = field_segment['segment_y'] + field_segment['segment_height']
             pass
         return fields

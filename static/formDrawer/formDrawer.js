@@ -108,7 +108,7 @@ function createForm(form) {
     });
     
     ///////Draw form:
-    $.each(form.fields, function(field_idx, field) {
+    $.each(form.fields.concat(form.markup ? form.markup : []), function(field_idx, field) {
         field = $.extend({}, form, field);
         progress += 90 / numFields;
         $bar.css('width', progress + '%');

@@ -37,8 +37,7 @@
                 }
             ], 
             "type": "note", 
-            "name": "a_note", 
-            "label": "This is a\nInstructional note."
+            "label": "This is a\ninstructional note that appears\nalso in Collect."
         }, 
         {
             "items": [
@@ -57,7 +56,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 200, 
+                    "segment_y": 220, 
                     "segment_x": 40, 
                     "segment_height": 40, 
                     "segment_width": 752
@@ -96,7 +95,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 240, 
+                    "segment_y": 260, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752
@@ -213,7 +212,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 300, 
+                    "segment_y": 320, 
                     "segment_x": 40, 
                     "segment_height": 60, 
                     "segment_width": 752
@@ -221,6 +220,20 @@
             ], 
             "label": "Fill in a bubble for every pet you have:", 
             "type": "int"
+        }
+    ], 
+    "markup": [
+        {
+            "segments": [
+                {
+                    "segment_y": 200, 
+                    "segment_x": 40, 
+                    "segment_height": 20, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "markup", 
+            "label": "This is markup. It will appear only on the printed form."
         }
     ], 
     "height": 1076, 
