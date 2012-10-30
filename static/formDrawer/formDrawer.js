@@ -48,13 +48,12 @@ function drawMultilineText($canvas, properties){
 
 function viewAsImage() {
     //Create a modal
-    var $body = $('.modal-body');
-    $body.empty();
+    var $formImage = $('.formImage');
     var uriContent = $("canvas").getCanvasImage("jpeg", 1.0);
-    $body.append("<img src='" + uriContent + "' ></img>");
-    $('#myModal').modal('show');
+    $formImage.replaceWith("<img src='" + uriContent + "' ></img>");
 }
-$('.viewAsImage').click(viewAsImage);
+$("canvas").hide();
+
 
 function createForm(form) {
     var $canvas = $("canvas").jCanvas();
@@ -162,7 +161,7 @@ function createForm(form) {
                         var itemLabelObj = {
                             fillStyle: "#000",
                             opacity: 0.7,
-                            x: segment.segment_x + item.item_x - (.75 * classifier.classifier_width),
+                            x: segment.segment_x + item.item_x - (0.75 * classifier.classifier_width),
                             y: segment.segment_y + item.item_y,
                             align: "right",
                             font: form.font || default_font,
@@ -183,10 +182,10 @@ function createForm(form) {
             $bar.parent().remove();
         }, 1000);
     }
-        var fiducials = [{
+    var fiducials = [{
         source: "fiducials/cs.jpg",
         x: 60,
-        y: (form.height - 60)
+        y: 55
     }, {
         source: "fiducials/villagereach.png",
         x: form.width - 140,
@@ -194,7 +193,7 @@ function createForm(form) {
     }, {
         source: "fiducials/scan.png",
         x: 80,
-        y: 40
+        y: (form.height - 40)
     }, {
         source: "fiducials/change.jpg",
         x: form.width - 70,

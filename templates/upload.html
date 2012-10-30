@@ -26,25 +26,30 @@
 </form>
 {% endblock %}
 
-{% if dir %}
-	{% if error %}
-	<div class="alert alert-error">
-		{{ error }}
-	</div>
-	{% else %}
-	<div class="alert alert-success">
-		<a href="download/{{ dir }}/{{ name }}" class="btn btn-success">Download JSON Template</a>
-		<a href="serve_json/{{ dir }}/{{ name }}" class="btn btn-success">View JSON Template</a>
-		<a href="static/formDrawer/index.html?jsonUrl=../../serve_json/{{ dir }}/{{ name }}" class="btn btn-success">Generate Image</a>
-	</div>
-	{% endif %}
-	
-	{% for warning in warnings %}
-	    <div class="alert">
-	        {{ warning }}
-	    </div>
-	{% endfor %}
+{% if paths %}
+    <div class="alert alert-success">
+    <a href="download/{{ paths.0 }}/template.json" class="btn btn-success">Download JSON Templates</a>
+    {% for path in paths %}
+        <div>
+            <iframe src="static/formDrawer/index.html?jsonUrl=../../serve_json/{{ dir }}/{{ name }}"></iframe>
+            <a href="serve_json/{{ path }}/template.json" class="btn btn-success">View JSON</a>
+        </div>
+    {% endfor %}
+    </div>
 {% endif %}
+
+{% if error %}
+<div class="alert alert-error">
+	{{ error }}
+</div>
+{% endif %}
+
+{% for warning in warnings %}
+    <div class="alert">
+        {{ warning }}
+    </div>
+{% endfor %}
+
 
 <div id="output"></div>
 </body>

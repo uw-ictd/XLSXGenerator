@@ -122,8 +122,21 @@ def make_json_template(xlsform_obj,
     choice_lists = xlsform_obj['choices']
     
     def generate_fields(in_fields, segment):
+        """
+        Generate field segments to fill the page.
+        The segment param sets the starting point and width.
+        Height is variable.
+        A tuple with remaining fields is returned if the page height is overflowed.
+        """
         fields = []
-        for field in in_fields:
+        for field, idx in zip(in_fields, range(len(in_fields))):
+            if segment["segment_y"] > (form_height - margin_y):
+                #This is where we split pages.
+                #I don't think this interferes with the recusive call to generate_fields
+                #because I think segment_y is the same at the top level call,
+                #so this condition will only be triggered from there.
+                #I added an assert to be sure.
+                return fields, in_fields[idx:]
             if field['type'] in ['group', 'block']:
                 idx = 0
                 col_width = float(segment["segment_width"]) / len(field['prompts'])
@@ -138,7 +151,8 @@ def make_json_template(xlsform_obj,
                     }
                     col_segments.append(col_segment)
                     if field['type'] in ['group', 'block']:
-                        row_fields = generate_fields(field['prompts'], col_segment)
+                        row_fields, remaining_fields = generate_fields(field['prompts'], col_segment)
+                        assert not remaining_fields
                         fields += row_fields
                         col_segment['row_segments'] = [ f['segments'][0] for f in row_fields ]
                     else:
@@ -176,20 +190,36 @@ def make_json_template(xlsform_obj,
                     fields.append(field_json)
                 segment['segment_y'] = field_segment['segment_y'] + field_segment['segment_height']
             pass
-        return fields
-    output["fields"] = generate_fields(xlsform_obj['survey'], {
-                                                               'segment_x' : margin_x,
-                                                               'segment_y' : margin_y,
-                                                               'segment_width' : form_width - margin_x * 2,
-                                                               'segment_height' : 20
-                                                               })
-    return output
+        return fields, None
+    pages = []
+    remaining_fields = xlsform_obj['survey']
+    while True:
+        fields_so_far, remaining_fields = generate_fields(remaining_fields, {
+                                                                   'segment_x' : margin_x,
+                                                                   'segment_y' : margin_y,
+                                                                   'segment_width' : form_width - margin_x * 2,
+                                                                   'segment_height' : 20
+                                                                   })
+        page = output.copy()
+        page['fields'] = fields_so_far
+        pages.append(page)
+        if not remaining_fields:
+            break
+    return pages
     
 def create_form(path_or_file, output_path):
-    fp = codecs.open(output_path, mode="w", encoding="utf-8")
     xlsform_obj = xlsform2.process_spreadsheet(path_or_file)
-    json.dump(make_json_template(xlsform_obj), fp=fp, ensure_ascii=False, indent=4)
-    fp.close()
+    pages = make_json_template(xlsform_obj)
+    cur_output_path = output_path
+    paths = []
+    for page in pages:
+        if not os.path.exists(cur_output_path):
+            os.makedirs(cur_output_path)
+        paths.append(cur_output_path)
+        with codecs.open(os.path.join(cur_output_path, 'template.json'), mode="w", encoding="utf-8") as fp:
+            json.dump(page, fp=fp, ensure_ascii=False, indent=4)
+        cur_output_path = os.path.join(cur_output_path, 'nextPage')
+    return paths
     
 if __name__ == "__main__":
     argv = sys.argv
@@ -197,7 +227,7 @@ if __name__ == "__main__":
     argv = [
             sys.argv[0],
             os.path.join(os.path.dirname(__file__), "test.xls"),
-            os.path.join(os.path.dirname(__file__), "test_output/test.json"),
+            os.path.join(os.path.dirname(__file__), "test_output", "test"),
     ]
     if len(argv) < 3:
         print __doc__

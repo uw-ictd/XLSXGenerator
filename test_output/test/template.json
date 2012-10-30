@@ -1,4 +1,6 @@
 {
+    "width": 832, 
+    "form_title": "Example Form", 
     "fields": [
         {
             "segments": [
@@ -236,9 +238,6 @@
             "label": "This is markup. It will appear only on the printed form."
         }
     ], 
-    "height": 1076, 
-    "width": 832, 
-    "form_title": "Example Form", 
     "font": "12pt Verdana, sans-serif", 
     "classifier": {
         "training_data_uri": "bubbles", 
@@ -252,5 +251,6 @@
             "alignment_radius": 4.0, 
             "flip_training_data": true
         }
-    }
+    }, 
+    "height": 1076
 }
