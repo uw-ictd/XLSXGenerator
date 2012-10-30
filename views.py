@@ -5,6 +5,7 @@ from django import forms
 import datetime
 import tempfile
 import os
+import warnings
 
 import form_creator
 
@@ -28,8 +29,8 @@ def index(request):
             out_path = os.path.join(temp_dir, filename)
             
             try:
-                warnings = []
-                with warnings.catch_warnings(record=True) as warnings:
+                form_creation_warnings = []
+                with warnings.catch_warnings(record=True) as form_creation_warnings:
                     paths = form_creator.create_form(request.FILES['file'], out_path)
             except Exception as e:
                 error = 'Error: ' + str(e)
@@ -38,7 +39,7 @@ def index(request):
                 'form': UploadFileForm(),
                 'paths': [os.path.relpath(path, SERVER_TMP_DIR) for path in paths],
                 'error': error,
-                'warnings': [str(wn.message) for wn in warnings],
+                'warnings': [str(wn.message) for wn in form_creation_warnings],
             })
         else:
             #Fall through and use the invalid form
