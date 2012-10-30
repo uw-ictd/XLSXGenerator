@@ -193,7 +193,9 @@ def make_json_template(xlsform_obj,
         return fields, None
     pages = []
     remaining_fields = xlsform_obj['survey']
+    page_number = 0
     while True:
+        page_number += 1
         fields_so_far, remaining_fields = generate_fields(remaining_fields, {
                                                                    'segment_x' : margin_x,
                                                                    'segment_y' : margin_y,
@@ -202,6 +204,7 @@ def make_json_template(xlsform_obj,
                                                                    })
         page = output.copy()
         page['fields'] = fields_so_far
+        page['page_number'] = page_number
         pages.append(page)
         if not remaining_fields:
             break

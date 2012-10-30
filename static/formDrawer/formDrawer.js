@@ -105,6 +105,16 @@ function createForm(form) {
         font: form.font || default_font,
         text: form.form_title || ''
     });
+    //Draw page number
+    drawMultilineText($canvas, {
+        x: form.width / 2,
+        y: (form.height - 30),
+        fillStyle: "#000",
+        align: "center",
+        baseline: "middle",
+        font: form.font || default_font,
+        text: form.page_number || ''
+    });
     
     ///////Draw form:
     $.each(form.fields.concat(form.markup ? form.markup : []), function(field_idx, field) {
