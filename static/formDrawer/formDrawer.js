@@ -177,7 +177,7 @@ function createForm(form) {
         });
 
     });$canvas.drawLayers();
-    if (progress > 100) {
+    if (progress >= 100) {
         window.setTimeout(function() {
             $bar.parent().hide();
             $('.save-instructions').show();
@@ -203,6 +203,17 @@ function createForm(form) {
     if ('fiducials' in form) {
         fiducials = form.fiducials;
     }
+    
+    var fiducialLoaded = (function() {
+        var fiducialsLoaded = 0;
+        return function(){
+            console.log('fiducial loaded');
+            fiducialsLoaded++;
+            if (fiducialsLoaded === 4) {
+                viewAsImage();
+            }
+        }
+    })();
     $.each(fiducials, function(fiducial_idx, fiducial) {
         $canvas.drawImage($.extend({}, {
             x: 0,
@@ -211,13 +222,11 @@ function createForm(form) {
             fromCenter: true //I think this has to be true if there is no height/width
         }, fiducial));
     });
-    var fiducialsLoaded = 0;
-    function fiducialLoaded(a,b,c) {
-        //console.log('fiducials loaded');
-        fiducialsLoaded++;
-        if (fiducialsLoaded === 4) {
-            viewAsImage();
-        }
-    }
-
+    window.setTimeout(function() {
+        //If the fiducials don't load in 10 seconds pretend they did.
+        fiducialLoaded();
+        fiducialLoaded();
+        fiducialLoaded();
+        fiducialLoaded();
+    }, 10000);
 }
