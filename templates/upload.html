@@ -31,7 +31,7 @@
     <a href="download/{{ paths.0 }}/template.json" class="btn btn-success">Download JSON Templates</a>
     {% for path in paths %}
         <div>
-            <iframe src="static/formDrawer/index.html?jsonUrl=../../serve_json/{{ dir }}/{{ name }}"></iframe>
+            <iframe src="static/formDrawer/index.html?jsonUrl=../../serve_json/{{ path }}/template.json" width="100%" height="1100px"></iframe>
             <a href="serve_json/{{ path }}/template.json" class="btn btn-success">View JSON</a>
         </div>
     {% endfor %}

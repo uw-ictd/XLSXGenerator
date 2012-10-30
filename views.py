@@ -57,7 +57,7 @@ def download(request, path):
     name = os.path.split(path)[-1]
     zip_filename = "%s.zip" % name
     zipFileBuffer = StringIO.StringIO()
-    zf = zipfile.ZipFile(s, "w")
+    zf = zipfile.ZipFile(zipFileBuffer, "w")
 
     for root, dirs, files in os.walk(os.path.join(SERVER_TMP_DIR, path)):
         for file in files:
