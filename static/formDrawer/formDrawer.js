@@ -177,7 +177,7 @@ function createForm(form) {
         });
 
     });$canvas.drawLayers();
-    if (progress >= 100) {
+    if (progress >= 99) {
         window.setTimeout(function() {
             $bar.parent().hide();
             $('.save-instructions').show();

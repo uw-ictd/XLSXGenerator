@@ -63,7 +63,7 @@ def download(request, path):
         for file in files:
             filepath = os.path.join(root, file)
             filepath_without_base_dirs = os.path.join(*filter(lambda x: x, filepath.split('/'))[2:])
-            zf.write(filepath, filepath_without_base_dir)
+            zf.write(filepath, filepath_without_base_dirs)
 
     zf.close()
 
