@@ -28,7 +28,7 @@
 
 {% if paths %}
     <div class="alert alert-success">
-    <a href="download/{{ paths.0 }}/template.json" class="btn btn-success">Download JSON Templates</a>
+    <a href="download/{{ paths.0 }}" class="btn btn-success">Download JSON Templates</a>
     {% for path in paths %}
         <div>
             <iframe src="static/formDrawer/index.html?jsonUrl=../../serve_json/{{ path }}/template.json" width="100%" height="1100px"></iframe>

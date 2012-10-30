@@ -36,7 +36,7 @@ def index(request):
             
             return render_to_response('upload.html', {
                 'form': UploadFileForm(),
-                'paths': [path for path in paths],
+                'paths': [os.path.relpath(path, SERVER_TMP_DIR) for path in paths],
                 'error': error,
                 'warnings': warnings,
             })
@@ -71,27 +71,6 @@ def download(request, path):
     response['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
     return response
 
-#def download_zip(request, path):
-#    try:
-#        myzip = ZipFile('test.zip', 'w')
-#        myzip.write(output_path, os.path.basename(output_path))
-#    except: 
-#        pass
-#    finally:
-#        myzip.close()
-#        return response.write(myzip.read())
-#
-#def download(request, path):
-#    """
-#    Serve a downloadable file
-#    """
-#    fo = open(os.path.join(SERVER_TMP_DIR, path))
-#    data = fo.read()
-#    fo.close()
-#    response = HttpResponse(mimetype='application/octet-stream')
-#    response.write(data)
-#    return response
-    
 def serve_json(request, path):
     """
     Serve a downloadable file
