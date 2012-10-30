@@ -130,7 +130,7 @@ function createForm(form) {
             align: "left",
             baseline: "top",
             font: form.font || default_font,
-            text: field.label || field.name
+            text: field.label || (field.name || '')
         };
         $.extend(markup_object, computeMarkupLocation(field));
         if ("markup_location" in field) {

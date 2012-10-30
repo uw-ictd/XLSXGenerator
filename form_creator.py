@@ -5,9 +5,6 @@ and uses it to create a JSON template and form image for use with ODK Scan.
 import json, codecs, sys, os, re
 import xlsform2
 
-#TODO: add aliases for types and choice values to standard XLSForms work
-#TODO: make the layout more "dynamic" (i.e. make bigger segments when there are more choices)
-
 def choices2items(choice_list,
                   segment,
                   item_width = 20,

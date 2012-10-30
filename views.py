@@ -29,8 +29,8 @@ def index(request):
             
             try:
                 warnings = []
-                paths = form_creator.create_form(request.FILES['file'], out_path)
-                
+                with warnings.catch_warnings(record=True) as warnings:
+                    paths = form_creator.create_form(request.FILES['file'], out_path)
             except Exception as e:
                 error = 'Error: ' + str(e)
             
@@ -38,7 +38,7 @@ def index(request):
                 'form': UploadFileForm(),
                 'paths': [os.path.relpath(path, SERVER_TMP_DIR) for path in paths],
                 'error': error,
-                'warnings': warnings,
+                'warnings': [str(wn.message) for wn in warnings],
             })
         else:
             #Fall through and use the invalid form

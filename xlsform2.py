@@ -1,7 +1,7 @@
 """
 XLSForm2 converts spreadsheets into forms for Collect 2.0
 """
-import json, codecs, sys, os, re
+import json, codecs, sys, os, re, warnings
 import xlrd
 
 def load_string(path, encoding="utf-8"):
@@ -134,31 +134,64 @@ def xls_to_dict(path_or_file):
     return result
 
 def parse_prompts(worksheet):
-    begin_control_regex = re.compile(r"^begin\s(?P<blocktype>.+)$")
-    end_control_regex = re.compile(r"^end\s(?P<blocktype>.+)$")
+    type_regex = re.compile(r"^(?P<type>\w+)(\s*(?P<param>.+))?$")
+    names_used = set()
+    promptTypeMap = {
+        'select1':'select1',
+        'select_one':'select1',
+        'select':'select',
+        'select_multiple':'select',
+        'int':'int',
+        'integer':'int',
+        'string':'string',
+        'text':'string',
+        'markup':'markup',
+        'note':'note',
+        'tally':'tally',
+    }
     prompt_stack = [{'prompts' : []}]
-    for row in worksheet:
-        begin_control_parse = begin_control_regex.search(row['type'])
-        if begin_control_parse:
-            parse_dict = begin_control_parse.groupdict()
-            row['type'] = parse_dict['blocktype'] #Change to 'block' ?
-            row['blocktype'] = parse_dict['blocktype']
+    for row, rowNum in zip(worksheet, range(len(worksheet))):
+        if not 'type' in row:
+            continue
+        #Ensure names are all strings (i.e. not numbers)
+        if 'name' in row:
+            row['name'] = str(row['name'])
+        row['type'] = row['type'].strip()
+        type_parse = type_regex.search(row['type'])
+        parse_dict = type_parse.groupdict()
+        #Ignore case on types
+        parse_dict['type'] = parse_dict['type'].lower()
+        if parse_dict['type'] == 'begin':
+            row['type'] = parse_dict['param']
             row['prompts'] = []
             prompt_stack.append(row)
             continue
-        end_control_parse = end_control_regex.search(row['type'])
-        if end_control_parse:
-            parse_dict = end_control_parse.groupdict()
-            if prompt_stack[-1]['blocktype'] == parse_dict['blocktype']:
+        elif parse_dict['type'] == 'end':
+            if prompt_stack[-1]['type'] == parse_dict['param']:
                 top_prompt = prompt_stack.pop()
                 prompt_stack[-1]['prompts'].append(top_prompt)
             else:
-                raise Exception("Unmatched end statement.")
+                rowString = '[row:' + str(rowNum) + ']'
+                raise Exception(rowString + " Unmatched end statement.")
             continue
-        prompt_stack[-1]['prompts'].append(row)
+        else:
+            row.update(parse_dict)
+            #Name and type validation:
+            if row['type'] in promptTypeMap:
+                row['type'] = promptTypeMap[row['type']]
+            else:
+                rowString = '[row:' + str(rowNum) + ']'
+                warnings.warn(rowString + " Unknown type: " + row['type'])
+            if 'name' in row:
+                if row['name'] in names_used:
+                    rowString = '[row:' + str(rowNum) + ']'
+                    warnings.warn(rowString + " Duplicate name found: " + row['name'])
+                names_used.add(row['name'])
+            prompt_stack[-1]['prompts'].append(row)
+        continue
     if len(prompt_stack) != 1:
+        print len(prompt_stack)
         raise Exception("Unmatched begin statement.")
-    #print prompt_stack
     return prompt_stack.pop()['prompts']
     
 def process_spreadsheet(path_or_file):
@@ -179,19 +212,9 @@ def process_spreadsheet(path_or_file):
             
     return workbook
 
-def spreadsheet_to_form(path_or_file, output_path):
-    """
-    Convert a spreadsheet to a Collect form by processing it into JSON
-    and sandwiching it into some html/js files that will interpret it.
-    """
-    #Ideally the header/footer would be resources held in memory on a server.
-    HTML_HEADER = load_string(os.path.join(os.path.dirname(__file__), 'header.html'))
-    HTML_FOOTER = load_string(os.path.join(os.path.dirname(__file__), 'footer.html'))
-    fp = codecs.open(output_path, mode="w", encoding="utf-8")
-    fp.write(HTML_HEADER)
-    json.dump(process_spreadsheet(path_or_file), fp=fp, ensure_ascii=False, indent=4)
-    fp.write(HTML_FOOTER)
-    fp.close()
+def spreadsheet_to_json(path_or_file, output_path):
+    with codecs.open(output_path, mode="w", encoding="utf-8") as fp:
+        json.dump(process_spreadsheet(path_or_file), fp=fp, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     """
@@ -209,6 +232,6 @@ if __name__ == "__main__":
         print 'Usage:'
         print argv[0] + ' path_to_XLSForm output_path'
     else:
-        spreadsheet_to_form(argv[1], argv[2])
+        spreadsheet_to_json(argv[1], argv[2])
         print 'Conversion complete!'
         

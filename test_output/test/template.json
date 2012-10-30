@@ -14,6 +14,7 @@
             ], 
             "type": "string", 
             "name": "name", 
+            "param": null, 
             "label": "Enter your name:"
         }, 
         {
@@ -27,6 +28,7 @@
             ], 
             "type": "int", 
             "name": "age", 
+            "param": null, 
             "label": "Enter your age:"
         }, 
         {
@@ -40,72 +42,35 @@
                 }
             ], 
             "type": "note", 
+            "param": null, 
             "label": "This is a\ninstructional note that appears\nalso in Collect."
         }, 
         {
-            "items": [
-                {
-                    "item_y": 20, 
-                    "item_x": 470, 
-                    "value": "male", 
-                    "label": "male"
-                }, 
-                {
-                    "item_y": 20, 
-                    "item_x": 560, 
-                    "value": "female", 
-                    "label": "female"
-                }
-            ], 
             "segments": [
                 {
                     "segment_y": 220, 
                     "segment_x": 40, 
-                    "segment_height": 40, 
+                    "segment_height": 20, 
                     "segment_width": 752
                 }
             ], 
             "type": "select1", 
             "name": "gender", 
+            "param": "genders", 
             "label": "Enter your gender:"
         }, 
         {
-            "items": [
-                {
-                    "item_y": 40, 
-                    "item_x": 90, 
-                    "value": "fish", 
-                    "label": "fish"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 180, 
-                    "value": "dog", 
-                    "label": "dog"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 270, 
-                    "value": "cat", 
-                    "label": "cat"
-                }, 
-                {
-                    "item_y": 40, 
-                    "item_x": 360, 
-                    "value": "horse", 
-                    "label": "horse"
-                }
-            ], 
             "segments": [
                 {
-                    "segment_y": 260, 
+                    "segment_y": 240, 
                     "segment_x": 40, 
-                    "segment_height": 60, 
+                    "segment_height": 20, 
                     "segment_width": 752
                 }
             ], 
             "type": "select", 
             "name": "pet_types", 
+            "param": "pets", 
             "label": "What kinds of pets do you have:"
         }, 
         {
@@ -211,18 +176,79 @@
                 {
                     "item_x": 500, 
                     "item_y": 40
+                }, 
+                {
+                    "item_x": 520, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 540, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 560, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 580, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 600, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 620, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 640, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 660, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 680, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 700, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 720, 
+                    "item_y": 40
+                }, 
+                {
+                    "item_x": 20, 
+                    "item_y": 60
+                }, 
+                {
+                    "item_x": 40, 
+                    "item_y": 60
+                }, 
+                {
+                    "item_x": 60, 
+                    "item_y": 60
+                }, 
+                {
+                    "item_x": 80, 
+                    "item_y": 60
                 }
             ], 
             "segments": [
                 {
-                    "segment_y": 320, 
+                    "segment_y": 260, 
                     "segment_x": 40, 
-                    "segment_height": 60, 
+                    "segment_height": 80, 
                     "segment_width": 752
                 }
             ], 
-            "label": "Fill in a bubble for every pet you have:", 
-            "type": "int"
+            "type": "int", 
+            "param": "25", 
+            "label": "Fill in a bubble for every pet you have:"
         }
     ], 
     "markup": [
@@ -236,6 +262,7 @@
                 }
             ], 
             "type": "markup", 
+            "param": null, 
             "label": "This is markup. It will appear only on the printed form."
         }
     ], 
