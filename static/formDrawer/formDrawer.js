@@ -53,7 +53,7 @@ function viewAsImage() {
     $formImage.replaceWith("<img src='" + uriContent + "' ></img>");
 }
 $("canvas").hide();
-
+$('.save-instructions').hide();
 
 function createForm(form) {
     var $canvas = $("canvas").jCanvas();
@@ -177,9 +177,10 @@ function createForm(form) {
         });
 
     });$canvas.drawLayers();
-    if (progress == 100) {
+    if (progress > 100) {
         window.setTimeout(function() {
-            $bar.parent().remove();
+            $bar.parent().hide();
+            $('.save-instructions').show();
         }, 1000);
     }
     var fiducials = [{
