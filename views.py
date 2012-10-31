@@ -19,8 +19,8 @@ def index(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             error = None
-            warnings = None
             paths = []
+            form_creation_warnings = []
             
             filename, ext = os.path.splitext(request.FILES['file'].name)
             
