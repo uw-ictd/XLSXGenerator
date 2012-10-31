@@ -4,7 +4,7 @@ and uses it to create a JSON template and form image for use with ODK Scan.
 """
 import json, codecs, sys, os, re
 import xlsform2
-
+import xml.dom.minidom
 def choices2items(choice_list,
                   segment,
                   item_width = 20,
@@ -40,6 +40,14 @@ def choices2items(choice_list,
     return out_choice_list
 
 def make_field_json(field, segment, choice_lists):
+    #Validate name:
+    field_name = field.get('name')
+    if field_name:
+        try:
+            xml.dom.minidom.parseString('<' + field_name + ' />')
+        except:
+            raise Exception('Invalid name: ' + field_name + '\nNames must be valid xml tag names.')
+    
     if field['type'] == 'select' or field['type'] == 'select1':
         list_name = field["param"]
         if list_name not in choice_lists:
