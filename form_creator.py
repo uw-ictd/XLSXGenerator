@@ -39,35 +39,19 @@ def choices2items(choice_list,
         left_margin = base_margin
     return out_choice_list
 
-select_regexp = re.compile(r"^(?P<select_type>("
-                       + 'select(1)?'
-                       + r")) (?P<list_name>\S+)( (?P<specify_other>(or specify other|or_other|or other)))?$",
-                       flags=re.IGNORECASE)
-tally_regexp = re.compile(r"^tally( )?(?P<amount>\d*)$", flags=re.IGNORECASE)
-begin_block_regex = re.compile(r"^begin\s(?P<blocktype>\w+)$", flags=re.IGNORECASE)
-end_block_regex = re.compile(r"^end\s(?P<blocktype>\w+)$", flags=re.IGNORECASE)
-
 def make_field_json(field, segment, choice_lists):
-    field_type = field['type']
-    select_parse = select_regexp.search(field_type)
-    tally_parse = tally_regexp.search(field_type)
-    if select_parse:
-        parse_dict = select_parse.groupdict()
-        select_type = parse_dict.get("select_type")
-        if select_type:
-            field['type'] = select_type
-            list_name = parse_dict["list_name"]
-            if list_name not in choice_lists:
-                raise Exception("List name not in choices sheet: " +
-                                list_name +
-                                " Error on row: " +
-                                str(row_number))
-            field['items'] = choices2items(choice_lists[list_name],
-                                           segment,
-                                           item_label_width=70)
-    elif tally_parse:
-        parse_dict = tally_parse.groupdict()
-        amount_str = parse_dict.get("amount")
+    if field['type'] == 'select' or field['type'] == 'select1':
+        list_name = field["param"]
+        if list_name not in choice_lists:
+            raise Exception("List name not in choices sheet: " +
+                            list_name +
+                            " Error on row: " +
+                            str(row_number))
+        field['items'] = choices2items(choice_lists[list_name],
+                                       segment,
+                                       item_label_width=70)
+    elif field['type'] == 'tally':
+        amount_str = field["param"]
         amount = 40
         try:
             amount = int(amount_str)
@@ -76,9 +60,9 @@ def make_field_json(field, segment, choice_lists):
         field['type'] = 'int'
         field['items'] = choices2items([{} for x in range(amount)],
                                        segment)
-    elif field_type == "string":
+    elif field['type'] == "string":
         pass
-    elif field_type == "int":
+    elif field['type'] == "int":
         pass
     else:
         pass
