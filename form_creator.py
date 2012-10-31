@@ -16,7 +16,7 @@ def separate_markup(fields):
             markup.append(field)
         else:
             non_markup.append(field)
-    return markup, non_markup
+    return non_markup, markup
 
 def make_json_template(xlsform_obj,
                        form_height = 1076, #Using letter height
