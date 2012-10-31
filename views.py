@@ -27,13 +27,11 @@ def index(request):
             #Make a randomly generated directory to prevent name collisions
             temp_dir = tempfile.mkdtemp(dir=SERVER_TMP_DIR)
             out_path = os.path.join(temp_dir, filename)
-            
-            try:
-                form_creation_warnings = []
-                with warnings.catch_warnings(record=True) as form_creation_warnings:
+            with warnings.catch_warnings(record=True) as form_creation_warnings:
+                try:
                     paths = form_creator.create_form(request.FILES['file'], out_path)
-            except Exception as e:
-                error = 'Error: ' + str(e)
+                except Exception as e:
+                    error = 'Error: ' + str(e)
             
             return render_to_response('upload.html', {
                 'form': UploadFileForm(),
