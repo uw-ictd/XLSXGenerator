@@ -5,6 +5,12 @@
 	<title>Form Converter</title>
 	<!-- Bootstrap CSS Toolkit styles -->
 	<link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <style type="text/css">
+	.keepformatting {
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+	}
+	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript">
 	//Javascript for the loading bar
@@ -27,15 +33,11 @@
 {% endblock %}
 
 {% if error %}
-<div class="alert alert-error">
-	<pre>{{ error }}</pre>
-</div>
+    <div class="alert alert-error keepformatting">>{{ error }}</div>
 {% endif %}
 
 {% for warning in warnings %}
-    <div class="alert">
-        <pre>{{ warning }}</pre>
-    </div>
+    <div class="alert keepformatting">{{ warning }}</div>
 {% endfor %}
 
 {% if paths %}
