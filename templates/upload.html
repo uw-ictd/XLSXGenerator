@@ -28,13 +28,13 @@
 
 {% if error %}
 <div class="alert alert-error">
-	{{ error }}
+	<pre>{{ error }}</pre>
 </div>
 {% endif %}
 
 {% for warning in warnings %}
     <div class="alert">
-        {{ warning }}
+        <pre>{{ warning }}</pre>
     </div>
 {% endfor %}
 

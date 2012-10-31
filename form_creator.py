@@ -80,6 +80,18 @@ def make_field_json(field, segment, choice_lists):
     field['segments'] = [segment]
     return field
 
+def separate_markup(fields):
+    #This function separates out markup fields
+    #so they are not used for scanning or in collect
+    markup = []
+    non_markup = []
+    for field in fields:
+        if field['type'] == 'markup':
+            markup.append(field)
+        else:
+            non_markup.append(field)
+    return markup, non_markup
+
 def make_json_template(xlsform_obj,
                        form_height = 1076, #Using letter height
                        form_width = 832,
@@ -169,12 +181,6 @@ def make_json_template(xlsform_obj,
                 field_json = make_field_json(field, field_segment, choice_lists)
                 if not field_json:
                     continue
-                if field['type'] == 'markup':
-                    #Markup is not used for scanning or in collect.
-                    #It only alters the appearance of the form.
-                    if not 'markup' in output:
-                        output['markup'] = []
-                    output['markup'].append(field)
                 else:
                     fields.append(field_json)
                 segment['segment_y'] = field_segment['segment_y'] + field_segment['segment_height']
@@ -192,7 +198,7 @@ def make_json_template(xlsform_obj,
                                                                    'segment_height' : 20
                                                                    })
         page = output.copy()
-        page['fields'] = fields_so_far
+        page['fields'], page['markup'] = separate_markup(fields_so_far)
         page['page_number'] = page_number
         pages.append(page)
         if not remaining_fields:

@@ -1,8 +1,20 @@
 {
-    "width": 832, 
-    "form_title": "Example Form", 
-    "page_number": 1, 
     "fields": [
+        {
+            "segments": [
+                {
+                    "segment_y": 200, 
+                    "segment_x": 40, 
+                    "segment_height": 20, 
+                    "segment_width": 752
+                }
+            ], 
+            "type": "markup", 
+            "param": null, 
+            "label": "This is markup. It will appear only on the printed form."
+        }
+    ], 
+    "markup": [
         {
             "segments": [
                 {
@@ -231,21 +243,10 @@
             "label": "Fill in a bubble for every pet you have:"
         }
     ], 
-    "markup": [
-        {
-            "segments": [
-                {
-                    "segment_y": 200, 
-                    "segment_x": 40, 
-                    "segment_height": 20, 
-                    "segment_width": 752
-                }
-            ], 
-            "type": "markup", 
-            "param": null, 
-            "label": "This is markup. It will appear only on the printed form."
-        }
-    ], 
+    "height": 1076, 
+    "width": 832, 
+    "form_title": "Example Form", 
+    "page_number": 1, 
     "font": "12pt Verdana, sans-serif", 
     "classifier": {
         "training_data_uri": "bubbles", 
@@ -259,6 +260,5 @@
             "alignment_radius": 4.0, 
             "flip_training_data": true
         }
-    }, 
-    "height": 1076
+    }
 }
