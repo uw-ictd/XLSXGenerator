@@ -60,7 +60,7 @@ function createForm(form) {
     var $bar = $('.bar');
     var progress = 10;
     var numFields = form.fields.length;
-    var default_font = "12pt Verdana, sans-serif";
+    var default_font = "9pt Verdana, sans-serif";
     $bar.css('width', '10%');
 
     //////Draw canvas background:
@@ -158,14 +158,14 @@ function createForm(form) {
                     $canvas.addLayer({
                         method: classifier.training_data_uri === "bubbles" ? "drawEllipse" : "drawRect",
                         strokeStyle: "#55d",
-                        strokeWidth: 2,
+                        strokeWidth: 1.6,
                         fromCenter: true,
                         name: "myBox",
                         group: "myBoxes",
                         x: segment.segment_x + item.item_x,
                         y: segment.segment_y + item.item_y,
-                        width: classifier.classifier_width * 0.7,
-                        height: classifier.classifier_height * 0.7
+                        width: classifier.classifier_width * 0.65,
+                        height: classifier.classifier_height * 0.65
                     });
                     if ('label' in item) {
                         var itemLabelObj = {
