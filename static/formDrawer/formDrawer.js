@@ -102,7 +102,7 @@ function createForm(form) {
         fillStyle: "#000",
         align: "center",
         baseline: "middle",
-        font: form.font || default_font,
+        font: form.title_font || form.font || default_font,
         text: form.form_title || ''
     });
     //Draw page number
@@ -129,7 +129,7 @@ function createForm(form) {
             y: 0,
             align: "left",
             baseline: "top",
-            font: form.font || default_font,
+            font: field.font || form.font || default_font,
             text: field.label || (field.name || '')
         };
         $.extend(markup_object, computeMarkupLocation(field));
