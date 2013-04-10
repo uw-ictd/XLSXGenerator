@@ -63,12 +63,12 @@ def make_json_template(xlsform_obj,
                       item_label_width = 0,
                       item_height = output["classifier"]["classifier_height"],
                       row_one_left_margin = 400,
-                      base_margin = 10,
+                      base_margin = 8,
+                      y_offset = 0
                       ):
         if len(item_list) > 3:
             row_one_left_margin = 999999 #skip the first row
         left_margin = row_one_left_margin
-        y_offset = 0
         out_item_list = []
         if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
             raise Exception('There are too many columns. They would be too narrow for any choices to fit.')
@@ -107,9 +107,14 @@ def make_json_template(xlsform_obj,
                                 list_name +
                                 " Error on row: " +
                                 str(row_number))
+            item_properties = {
+                'item_label_width' : 60,
+                'y_offset' : 10 * field.get('label', '').count('\n')
+            }
+            item_properties.update(field.get('itemProperties', {}))
             field['items'] = generate_items(choice_lists[list_name],
                                            segment,
-                                           item_label_width=60)
+                                           **item_properties)
         elif field['type'] == 'tally':
             amount_str = field["param"]
             amount = 40
