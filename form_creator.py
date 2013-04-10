@@ -1,6 +1,12 @@
 """
 form_creator.py take an XLSForm (or rather something similar for the time being)
 and uses it to create a JSON template and form image for use with ODK Scan.
+
+I think a better approach would be to use XLSXConverter to process the spreadsheet,
+render the form image using an html template,
+then use js to compute the bubble offsets from the rendered html.
+This way everything would happen inside the browser and the layout would be
+much more flexible.
 """
 import json, codecs, sys, os, re
 import xlsform2
@@ -22,7 +28,7 @@ def make_json_template(xlsform_obj,
                        form_height = 1076, #Using letter height
                        form_width = 832,
                        margin_y = 100,
-                       margin_x = 40,
+                       margin_x = 20,
                        ):
     """
     Create a json template from the xlsform json
@@ -57,7 +63,7 @@ def make_json_template(xlsform_obj,
                       item_label_width = 0,
                       item_height = output["classifier"]["classifier_height"],
                       row_one_left_margin = 400,
-                      base_margin = 14,
+                      base_margin = 10,
                       ):
         if len(item_list) > 3:
             row_one_left_margin = 999999 #skip the first row
@@ -65,7 +71,7 @@ def make_json_template(xlsform_obj,
         y_offset = 0
         out_item_list = []
         if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
-            raise Exception('Cannot fit choices in segment. Do you have a group more than 5 questions?')
+            raise Exception('There are too many columns. They would be too narrow for any choices to fit.')
         choice_idx = 0
         while choice_idx < len(item_list):
             y_offset += item_height
@@ -103,7 +109,7 @@ def make_json_template(xlsform_obj,
                                 str(row_number))
             field['items'] = generate_items(choice_lists[list_name],
                                            segment,
-                                           item_label_width=70)
+                                           item_label_width=60)
         elif field['type'] == 'tally':
             amount_str = field["param"]
             amount = 40
