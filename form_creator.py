@@ -81,7 +81,7 @@ def make_json_template(xlsform_obj,
                            item_width + item_label_width)
             for x in x_coords:
                 if choice_idx == len(item_list): return out_item_list
-                choice = item_list[choice_idx]
+                choice = item_list[choice_idx].copy()
                 choice_idx += 1
                 choice.update({
                       "item_x": x + item_width/2,
@@ -100,6 +100,11 @@ def make_json_template(xlsform_obj,
             except:
                 raise Exception('Invalid name: ' + field_name + '\nNames must be valid xml tag names.')
         
+        item_properties = {
+            'y_offset' : 10 * field.get('label', '').count('\n')
+        }
+        item_properties.update(field.get('itemProperties', {}))
+        
         if field['type'] == 'select' or field['type'] == 'select1':
             list_name = field["param"]
             if list_name not in choice_lists:
@@ -107,11 +112,8 @@ def make_json_template(xlsform_obj,
                                 list_name +
                                 " Error on row: " +
                                 str(row_number))
-            item_properties = {
-                'item_label_width' : 60,
-                'y_offset' : 10 * field.get('label', '').count('\n')
-            }
-            item_properties.update(field.get('itemProperties', {}))
+            if 'item_label_width' not in item_properties:
+                item_properties['item_label_width'] = 60
             field['items'] = generate_items(choice_lists[list_name],
                                            segment,
                                            **item_properties)
@@ -123,8 +125,11 @@ def make_json_template(xlsform_obj,
             except:
                 pass
             field['type'] = 'int'
+            if 'item_label_width' not in item_properties:
+                item_properties['item_label_width'] = 0
             field['items'] = generate_items([{} for x in range(amount)],
-                                           segment)
+                                           segment,
+                                           **item_properties)
         elif field['type'] == "string":
             pass
         elif field['type'] == "int":
