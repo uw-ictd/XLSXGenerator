@@ -43,7 +43,7 @@
                         </div>
                 </form>
                 <form class="well fiducial" data-position="br">
-                    <legend>Bottom right</legend>
+                    <legend>Bottom Right</legend>
                         <div class="row-fluid">
                           <div class="span4"><input type="file" name="file" class="fiducialFile"></div>
                           <div class="span4"><label>left offset: <input type="number" class="x" value="700"></label></div>
@@ -51,7 +51,7 @@
                         </div>
                 </form>
                 <form class="well fiducial" data-position="bl">
-                    <legend>Bottom left</legend>
+                    <legend>Bottom Left</legend>
                         <div class="row-fluid">
                           <div class="span4"><input type="file" name="file" class="fiducialFile"></div>
                           <div class="span4"><label>left offset: <input type="number" class="x" value="120"></label></div>
@@ -73,11 +73,21 @@
         <script src="formDrawer.js"></script>
         <script type="text/javascript">
         jQuery(function($) {
+            function getParameter(paramName, defaultValue) {
+                var searchString = window.location.search.substring(1);
+                searchString = searchString ? searchString : window.location.hash.substring(2);
+                var params = searchString.split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var val = params[i].split('=');
+                    if (val[0] === paramName) {
+                        return decodeURI(val[1]);
+                    }
+                }
+                return defaultValue;
+            }
+            
             var jsonUrl = getParameter('jsonUrl', "template.json");
             $.getJSON(jsonUrl, createForm);
-            
-
-            
         });
         </script>
     </body>

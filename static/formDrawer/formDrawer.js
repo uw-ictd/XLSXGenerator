@@ -1,16 +1,3 @@
-function getParameter(paramName, defaultValue) {
-    var searchString = window.location.search.substring(1);
-    searchString = searchString ? searchString : window.location.hash.substring(2);
-    var params = searchString.split('&');
-    for (var i = 0; i < params.length; i++) {
-        var val = params[i].split('=');
-        if (val[0] === paramName) {
-            return decodeURI(val[1]);
-        }
-    }
-    return defaultValue;
-}
-
 function computeMarkupLocation(field) {
     var minX = 999999;
     var minY = 999999;
@@ -224,7 +211,7 @@ function createForm(form) {
             height: 64,
             left: 20,
             top: 20,
-            text: form.qrdata || form.title || "no data"
+            text: form.qrcode_data || form.title || "no data"
         });
         
         //This is a function that gets called after each fiducial is loaded
