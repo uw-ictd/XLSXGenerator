@@ -102,7 +102,7 @@ function createForm(form) {
         fillStyle: "#000",
         align: "center",
         baseline: "middle",
-        font: form.font || default_font,
+        font: form.title_font || form.font || default_font,
         text: form.form_title || ''
     });
     //Draw page number
@@ -129,7 +129,7 @@ function createForm(form) {
             y: 0,
             align: "left",
             baseline: "top",
-            font: form.font || default_font,
+            font: field.font || form.font || default_font,
             text: field.label || (field.name || '')
         };
         $.extend(markup_object, computeMarkupLocation(field));
@@ -174,7 +174,7 @@ function createForm(form) {
                             x: segment.segment_x + item.item_x - (0.75 * classifier.classifier_width),
                             y: segment.segment_y + item.item_y,
                             align: "right",
-                            font: form.font || default_font,
+                            font: field.font || form.font || default_font,
                             text: item.label
                         };
                         drawMultilineText($canvas, itemLabelObj);
@@ -216,6 +216,7 @@ function createForm(form) {
         if (userDefFiducials) {
             $.extend(fiducials, userDefFiducials);
         }
+
         console.log(fiducials);
         
         $canvas.qrcode({
@@ -292,5 +293,3 @@ function createForm(form) {
     
     $('.fiducialFile, .x, .y').on('change', updateFiducials);
 }
-
-

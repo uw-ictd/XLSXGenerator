@@ -1,6 +1,12 @@
 """
 form_creator.py take an XLSForm (or rather something similar for the time being)
 and uses it to create a JSON template and form image for use with ODK Scan.
+
+I think a better approach would be to use XLSXConverter to process the spreadsheet,
+render the form image using an html template,
+then use js to compute the bubble offsets from the rendered html.
+This way everything would happen inside the browser and the layout would be
+much more flexible.
 """
 import json, codecs, sys, os, re
 import xlsform2
@@ -22,7 +28,7 @@ def make_json_template(xlsform_obj,
                        form_height = 1076, #Using letter height
                        form_width = 832,
                        margin_y = 100,
-                       margin_x = 40,
+                       margin_x = 20,
                        ):
     """
     Create a json template from the xlsform json
@@ -57,15 +63,15 @@ def make_json_template(xlsform_obj,
                       item_label_width = 0,
                       item_height = output["classifier"]["classifier_height"],
                       row_one_left_margin = 400,
-                      base_margin = 14,
+                      base_margin = 8,
+                      y_offset = 0
                       ):
         if len(item_list) > 3:
             row_one_left_margin = 999999 #skip the first row
         left_margin = row_one_left_margin
-        y_offset = 0
         out_item_list = []
         if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
-            raise Exception('Cannot fit choices in segment. Do you have a group more than 5 questions?')
+            raise Exception('There are too many columns. They would be too narrow for any choices to fit.')
         choice_idx = 0
         while choice_idx < len(item_list):
             y_offset += item_height
@@ -75,7 +81,7 @@ def make_json_template(xlsform_obj,
                            item_width + item_label_width)
             for x in x_coords:
                 if choice_idx == len(item_list): return out_item_list
-                choice = item_list[choice_idx]
+                choice = item_list[choice_idx].copy()
                 choice_idx += 1
                 choice.update({
                       "item_x": x + item_width/2,
@@ -94,6 +100,11 @@ def make_json_template(xlsform_obj,
             except:
                 raise Exception('Invalid name: ' + field_name + '\nNames must be valid xml tag names.')
         
+        item_properties = {
+            'y_offset' : 10 * field.get('label', '').count('\n')
+        }
+        item_properties.update(field.get('itemProperties', {}))
+        
         if field['type'] == 'select' or field['type'] == 'select1':
             list_name = field["param"]
             if list_name not in choice_lists:
@@ -101,9 +112,11 @@ def make_json_template(xlsform_obj,
                                 list_name +
                                 " Error on row: " +
                                 str(row_number))
+            if 'item_label_width' not in item_properties:
+                item_properties['item_label_width'] = 60
             field['items'] = generate_items(choice_lists[list_name],
                                            segment,
-                                           item_label_width=70)
+                                           **item_properties)
         elif field['type'] == 'tally':
             amount_str = field["param"]
             amount = 40
@@ -112,8 +125,11 @@ def make_json_template(xlsform_obj,
             except:
                 pass
             field['type'] = 'int'
+            if 'item_label_width' not in item_properties:
+                item_properties['item_label_width'] = 0
             field['items'] = generate_items([{} for x in range(amount)],
-                                           segment)
+                                           segment,
+                                           **item_properties)
         elif field['type'] == "string":
             pass
         elif field['type'] == "int":
