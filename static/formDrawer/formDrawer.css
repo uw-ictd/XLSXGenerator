@@ -24,3 +24,8 @@ body {
 .modal-gallery .modal-body {
 	max-height: none;
 }
+.instructions {
+    color:white;
+    font-size: 2em;
+    line-height: 2.1em;
+}

@@ -49,8 +49,8 @@ function drawMultilineText($canvas, properties){
 function viewAsImage() {
     //Create a modal
     var $formImage = $('.formImage');
-    var uriContent = $("canvas").getCanvasImage("jpeg", 1.0);
-    $formImage.replaceWith("<img src='" + uriContent + "' ></img>");
+    var uriContent = $("canvas").getCanvasImage("jpeg", 2.0);
+    $formImage.replaceWith('<img src="' + uriContent + '" class="formImage" ></img>');
 }
 $("canvas").hide();
 $('.save-instructions').hide();
@@ -186,57 +186,111 @@ function createForm(form) {
             }
         });
 
-    });$canvas.drawLayers();
+    });
+    $canvas.drawLayers();
     if (progress >= 99) {
         window.setTimeout(function() {
             $bar.parent().hide();
             $('.save-instructions').show();
         }, 1000);
     }
-    var fiducials = [{
-        source: "fiducials/cs.jpg",
-        x: 60,
-        y: 55
-    }, {
-        source: "fiducials/villagereach.png",
-        x: form.width - 140,
-        y: (form.height - 40)
-    }, {
-        source: "fiducials/scan.png",
-        x: 80,
-        y: (form.height - 40)
-    }, {
-        source: "fiducials/change.jpg",
-        x: form.width - 70,
-        y: 50
-    }];
-    if ('fiducials' in form) {
-        fiducials = form.fiducials;
-    }
     
-    var fiducialLoaded = (function() {
-        var fiducialsLoaded = 0;
-        return function(){
-            console.log('fiducial loaded');
-            fiducialsLoaded++;
-            if (fiducialsLoaded === 4) {
-                viewAsImage();
+    var drawFiducials = function(userDefFiducials){
+        var fiducials = {
+            tr: {
+                source: "fiducials/cs.jpg",
+                x: form.width - 70,
+                y: 55
+            },
+            bl: {
+                source: "fiducials/villagereach.png",
+                x: 142,
+                y: (form.height - 40)
+            },
+            br: {
+                source: "fiducials/ScanLogoSm.png",
+                x: (form.width - 110),
+                y: (form.height - 45)
             }
+        };
+        if (userDefFiducials) {
+            $.extend(fiducials, userDefFiducials);
         }
-    })();
-    $.each(fiducials, function(fiducial_idx, fiducial) {
-        $canvas.drawImage($.extend({}, {
-            x: 0,
-            y: 0,
-            load: fiducialLoaded,
-            fromCenter: true //I think this has to be true if there is no height/width
-        }, fiducial));
-    });
-    window.setTimeout(function() {
-        //If the fiducials don't load in 10 seconds pretend they did.
-        fiducialLoaded();
-        fiducialLoaded();
-        fiducialLoaded();
-        fiducialLoaded();
-    }, 10000);
+        console.log(fiducials);
+        
+        $canvas.qrcode({
+            width: 64,
+            height: 64,
+            left: 20,
+            top: 20,
+            text: form.qrdata || form.title || "no data"
+        });
+        
+        //This is a function that gets called after each fiducial is loaded
+        //And when all the fiducials finish loading it draws the image.
+        var fiducialLoaded = (function() {
+            console.log(fiducials, Object.keys(fiducials));
+            var fiducialsToLoad = Object.keys(fiducials).length;
+            return function(){
+                console.log('fiducial loaded');
+                fiducialsToLoad--;
+                if (fiducialsToLoad === 0) {
+                    viewAsImage();
+                }
+            };
+        })();
+        $.each(fiducials, function(fidName, fiducial) {
+            $canvas.drawImage($.extend({}, {
+                layer: true,
+                group: "fiducials",
+                name: fidName,
+                x: 0,
+                y: 0,
+                load: fiducialLoaded,
+                fromCenter: true
+            }, fiducial));
+        });
+        
+        window.setTimeout(function() {
+            //If the fiducials don't load in 10 seconds pretend they did.
+            fiducialLoaded();
+            fiducialLoaded();
+            fiducialLoaded();
+        }, 10000);
+    };
+    drawFiducials();
+    
+    
+    var updateFiducials = function(){
+        var userDefFiducials = {};
+        $.when.apply(null, $('.fiducial').map(function(fidx, fiducial){
+            var dfd = $.Deferred();
+            var fileInput = $(fiducial).find('[type="file"]').get(0);
+            var reader = new FileReader();
+            if(fileInput.files.length > 0) {
+                reader.onload = function(e) {
+                    userDefFiducials[$(fiducial).data('position')] = {
+                        source: e.target.result,
+                        x: parseInt($(fiducial).find('.x').val() || 0, 10),
+                        y: parseInt($(fiducial).find('.y').val() || 0, 10)
+                    };
+                    dfd.resolve();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                dfd.resolve();
+            }
+            return dfd;
+        })).then(function(){
+            $canvas.removeLayerGroup("fiducials");
+            $canvas.drawLayers();
+            drawFiducials(userDefFiducials);
+        });
+        
+    };
+    
+    
+    $('.fiducialFile, .x, .y').on('change', updateFiducials);
 }
+
+

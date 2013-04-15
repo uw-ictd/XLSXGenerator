@@ -1,6 +1,5 @@
 {
-    "fields": [], 
-    "markup": [
+    "fields": [
         {
             "segments": [
                 {
@@ -1342,6 +1341,7 @@
             "label": "If so please list them:"
         }
     ], 
+    "markup": [], 
     "height": 1076, 
     "width": 832, 
     "form_title": "Example Form", 
