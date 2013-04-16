@@ -2,9 +2,9 @@
 form_creator.py take an XLSForm (or rather something similar for the time being)
 and uses it to create a JSON template and form image for use with ODK Scan.
 
-I think a better approach would be to use XLSXConverter to process the spreadsheet,
+I think a better approach would be to use XLSXConverter.js to process the spreadsheet,
 render the form image using an html template,
-then use js to compute the bubble offsets from the rendered html.
+then use a javascript to compute the bubble offsets from the rendered html.
 This way everything would happen inside the browser and the layout would be
 much more flexible.
 """
@@ -64,7 +64,9 @@ def make_json_template(xlsform_obj,
                       item_height = output["classifier"]["classifier_height"],
                       row_one_left_margin = 400,
                       base_margin = 8,
-                      y_offset = 0
+                      y_offset = 0,
+                      x_offset = 0,
+                      bubbles_per_row = 999, #i.e. wrap the bubbles
                       ):
         if len(item_list) > 3:
             row_one_left_margin = 999999 #skip the first row
@@ -79,12 +81,12 @@ def make_json_template(xlsform_obj,
             x_coords = range(left_margin + item_label_width,
                            segment['segment_width'] - base_margin - item_width,
                            item_width + item_label_width)
-            for x in x_coords:
+            for x in x_coords[:bubbles_per_row]:
                 if choice_idx == len(item_list): return out_item_list
                 choice = item_list[choice_idx].copy()
                 choice_idx += 1
                 choice.update({
-                      "item_x": x + item_width/2,
+                      "item_x": x_offset + x + item_width/2,
                       "item_y": y_offset
                 })
                 out_item_list.append(choice)
@@ -109,14 +111,35 @@ def make_json_template(xlsform_obj,
             list_name = field["param"]
             if list_name not in choice_lists:
                 raise Exception("List name not in choices sheet: " +
-                                list_name +
-                                " Error on row: " +
-                                str(row_number))
+                                list_name)
             if 'item_label_width' not in item_properties:
                 item_properties['item_label_width'] = 60
             field['items'] = generate_items(choice_lists[list_name],
                                            segment,
                                            **item_properties)
+        elif field['type'] == 'bub_num':
+            #Need to use multiple segments for bub_nums,
+            #This would require a substancial rewrite...
+            #Maybe I should switch to the HTML Method?
+            amount_str = field["param"]
+            amount = 5
+            try:
+                amount = int(amount_str)
+            except:
+                pass
+            field['type'] = 'string'
+            if 'item_label_width' not in item_properties:
+                item_properties['item_label_width'] = 20
+            item_properties['bubbles_per_row'] = 1
+            for i in range(amount):
+                item_properties['x_offset'] = i * (output["classifier"]["classifier_width"] + item_properties['item_label_width'])
+                field['items'] = generate_items([{
+                        'value' : str(x),
+                        'label' : str(x)
+                    } for x in range(amount)],
+                    segment,
+                    **item_properties)
+        
         elif field['type'] == 'tally':
             amount_str = field["param"]
             amount = 40
@@ -128,8 +151,8 @@ def make_json_template(xlsform_obj,
             if 'item_label_width' not in item_properties:
                 item_properties['item_label_width'] = 0
             field['items'] = generate_items([{} for x in range(amount)],
-                                           segment,
-                                           **item_properties)
+                segment,
+                **item_properties)
         elif field['type'] == "string":
             pass
         elif field['type'] == "int":

@@ -148,6 +148,8 @@ def parse_prompts(worksheet):
         'markup':'markup',
         'note':'note',
         'tally':'tally',
+        'bub_num':'bub_num',
+        'bub_word':'bub_word'
     }
     prompt_stack = [{'prompts' : []}]
     for row, rowNum in zip(worksheet, range(len(worksheet))):
