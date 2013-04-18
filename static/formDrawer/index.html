@@ -14,12 +14,11 @@
     <link href="formDrawer.css" rel="stylesheet">
 <style>
 body {
-    background-color: black;
     margin: 0;
     font-size: 15pt;
     font-family: "Times New Roman"; 
 }
-#drop{
+#drop {
     background-color: white;
     border:2px dashed #bbb;
     -moz-border-radius:5px;
@@ -30,7 +29,7 @@ body {
 	font:20pt bold;
     color:#bbb
 }
-#out{
+#out {
     clear: both;
     height: 500px;
     width: 100%;
@@ -60,6 +59,22 @@ body {
     padding-top: .5em;
     padding-bottom: .5em;
 }
+
+</style>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+    <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
+        <canvas width="400" height="200"></canvas>
+        <div class="fContainer">
+        <div class="formImage">
+        
+
+<style>
+
 .field {
     display: table-row;
 }
@@ -72,17 +87,73 @@ body {
 .field .field .field .field {
     display: table-cell;
 }
+.field .field .field .field .field {
+    display: table-row;
+}
 .formImage {
     background-color: white;
+    padding: 2%;
+    position: relative;
+}
+.formImage .heading {
+    text-align: center;
+}
+.formImage .tl {
+    position:absolute;
+    top:0;
+    left:0;
+}
+.formImage .tr {
+    position:absolute;
+    top:0;
+    right:0;
+}
+.formImage .bl {
+    position:absolute;
+    bottom:0;
+    left:0;
+}
+.formImage .br {
+    position:absolute;
+    bottom:0;
+    right:0;
+}
+.formImage {
+    padding-top: 50px;
+    padding-bottom: 100px;
+    width: 800px;
+}
+.formFields table {
+    width: 100%;
+}
+.item > * {
+    vertical-align: middle;
+}
+.item label {
+    display: inline;
+}
+.bubble {
+    display: inline-block;
+    width: .6em;
+    height: .6em;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+@media print {
+    .main { display: none; }
 }
 </style>
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-
-    <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
+        
+        
+            <img class="tl" src="fiducials/ScanLogoSm.png">
+            <img class="tr" src="fiducials/villagereach.png">
+            <img class="bl" src="fiducials/cs.jpg">
+            <img class="br" src="fiducials/change.jpg">
+            <h2 class="heading">Test Form</h1>
+            <table class="formFields"></table>
+        </div>
+        </div>
+    
         <div class="main">
         
 <div class="panel">
@@ -104,8 +175,7 @@ body {
                     Right-click and select "Save as..." to save the form image.
                 </div>
                 
-                <canvas></canvas>
-                <div class="formImage"></div>
+                
                 <div style="color:white;" class="instructions">
                     You can customize the logos here:
                 </div>
@@ -150,7 +220,18 @@ body {
         <script src="XLSXConverter/js-xlsx/xlsx.js"></script>
         <script src="XLSXConverter/underscore.js"></script>
         <script src="XLSXConverter/XLSXConverter.js"></script>
+        
+        <script type="text/javascript" src="assets/js/rasterizeHTML.allinone.js"></script>
 <script>
+
+/*
+XLS file is converted to json with some basic processing to nest
+groups and parse type parameters.
+The JSON is fed into a handlebars template that generates the HTML.
+A number of helpers are defined to help render certain items.
+After the HTML is rendered, jQuery is used to construct the formdef json from it.
+*/
+$(document).ready(function () {
 
 function removeEmptyStrings(rObjArr){
     var outArr = [];
@@ -239,7 +320,7 @@ function handleDrop(e) {
                 //console.log(jsonWorkbook);
                 var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
                 
-                //var scanTemplate = convertToScanTemplate(processedWorkbook);
+                renderForm(processedWorkbook);
                 
                 print_output(JSON.stringify(processedWorkbook, 2, 2));
                 _.each(XLSXConverter.getWarnings(), function(warning){
@@ -272,65 +353,117 @@ drop.addEventListener('dragover', handleDragover, false);
 drop.addEventListener('drop', handleDrop, false);
 
 
-$(document).ready(function () {
-    /**
-     * If Equals
-     * if_eq this compare=that
-     */
-    Handlebars.registerHelper('if_eq', function(context, options) {
-        if (context == options.hash.compare)
-            return options.fn(this);
-        return options.inverse(this);
-    });
-    
-    
-    // compile and register the "element" partial template
-    //var formTemplate = Handlebars.compile($("#form-template").html());
-    var fieldGroupTemplate = Handlebars.compile($("#fieldGroup-template").html());
-    Handlebars.registerPartial("fieldGroup", fieldGroupTemplate);
+/**
+ * If Equals
+ * if_eq this compare=that
+ */
+Handlebars.registerHelper('if_eq', function(context, options) {
+    if (context == options.hash.compare)
+        return options.fn(this);
+    return options.inverse(this);
+});
 
-    $('#out').on('input', function(){
-        console.log("Output changed");
-        var formJSON = JSON.parse($('#out').text());
-        console.log(formJSON);
-        
-        var attachItems = function(fields){
-            _.each(fields, function(field){
-                if(field.type.match(/select/)){
-                    field.items = _.where(formJSON.settings, { listName : field.param });
-                }
-            });
-        };
+/*
+Handlebars.registerHelper('range', function(context, options) {
+    return _.range(function(context) {
+        if (options.data) { data = Handlebars.createFrame(options.data); }
+        out += "<li>" + options.fn(context[i], { data: data }) + "</li>";
+        return options.fn(_.extend({}, context, {}));
+    }).join("\n");
+});
+*/  
 
-        attachItems(formJSON.survey);
-        
-        $(".formImage").html(fieldGroupTemplate({ prompts: formJSON.survey }));
-        
-    });
+// compile and register the "element" partial template
+//var formTemplate = Handlebars.compile($("#form-template").html());
+var fieldGroupTemplate = Handlebars.compile($("#fieldGroup-template").html());
+Handlebars.registerPartial("fieldGroup", fieldGroupTemplate);
+
+var renderForm = function(formJSON){
+    console.log("Rendering...", formJSON);
     
+    var attachItems = function(fields) {
+        _.each(fields, function(field) {
+            if('prompts' in field){
+                attachItems(field.prompts);
+            }
+            field.type = field.type.toLowerCase();
+            
+            field.segments = [{ }];
+            
+            if(field.type.match(/select/)){
+                field.segments[0].items = formJSON.choices[field.param];
+            }
+            if(field.type.match(/tally/)){
+                field.segments[0].items = _.map(_.range(parseInt(field.param, 10)), function(rIdx){
+                        return { value: rIdx };
+                });
+                console.log(field);
+            }
+            if(field.type.match(/bub_num/)){
+                field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
+                    return { };
+                });
+                _.each(field.segments, function(segment){
+                    segment.items = _.map(_.range(9), function(rIdx){
+                        return { value: rIdx, label: rIdx };
+                    });
+                });
+            }
+            if(field.type.match(/bub_word/)){
+                field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
+                    return { };
+                });
+                _.each(field.segments, function(segment){
+                    var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
+                    segment.items = _.map(alphabet, function(letter){
+                        return { value: letter, label: letter };
+                    });
+                });
+                
+            }
+        });
+    };
+
+    attachItems(formJSON.survey);
+    
+    $(".formFields").html(fieldGroupTemplate({ prompts: formJSON.survey }));
+    $("canvas").width(800);
+    rasterizeHTML.drawHTML($(".fContainer").html(), $("canvas").get(0));
+};
+   
+$.getJSON('test.json', renderForm);
+   
 });
 
 </script>
 
-
-
 <script id="fieldGroup-template" type="text/x-handlebars-template">
 {{#each prompts}}
     <td class="field">
-    {{#if label}}<label>{{label}}</label>{{/if}}
+    {{#if label}}<label>{{{label}}}</label>{{/if}}
     
-    {{#if_eq type compare="group"}}
+    {{#if prompts}}
         <table><tbody><tr>{{> fieldGroup}}</tr></tbody></table>
-    {{/if_eq}}
+    {{/if}}
     
-    {{#each items}}
-        {{#if label}}<label>{{label}}</label>{{/if}}
-        <span class="bubble"></span>
+    <table class="segments"><tbody><tr>
+    {{#each segments}}
+        <td class="segment">
+        {{#each items}}
+            <span class="item">
+                {{#if label}}
+                    <label>{{{label}}}</label>
+                {{/if}}
+                <span class="bubble" data-value="{{value}}"></span>
+            </span>
+        {{/each}}
+        </td>
     {{/each}}
+    </tr></tbody></table>
+    
     </td>
 {{/each}}
 </script>
-
 
     </body>
 </html>

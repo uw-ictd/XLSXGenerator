@@ -1,0 +1,295 @@
+{
+  "survey": [
+    {
+      "type": "group",
+      "_rowNum": 2,
+      "prompts": [
+        {
+          "type": "group",
+          "_rowNum": 3,
+          "prompts": [
+            {
+              "type": "string",
+              "name": "name",
+              "label": "<b>Enter your name:</b>",
+              "min_height": 80,
+              "_rowNum": 4,
+              "segments": [
+                {}
+              ]
+            },
+            {
+              "type": "int",
+              "name": "age",
+              "label": "Enter your age:",
+              "min_height": 80,
+              "_rowNum": 5,
+              "segments": [
+                {}
+              ]
+            },
+            {
+              "type": "select1",
+              "name": "gender",
+              "label": "Enter your gender:",
+              "_rowNum": 6,
+              "param": "genders",
+              "segments": [
+                {
+                  "items": [
+                    {
+                      "list_name": "genders",
+                      "value": "male",
+                      "label": "male",
+                      "_rowNum": 2
+                    },
+                    {
+                      "list_name": "genders",
+                      "value": "female",
+                      "label": "female",
+                      "_rowNum": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "segments": [
+            {}
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 8,
+          "prompts": [
+            {
+              "type": "note",
+              "name": "a_note",
+              "label": "This is a\nInstructional note.",
+              "min_height": 80,
+              "_rowNum": 9,
+              "segments": [
+                {}
+              ]
+            }
+          ],
+          "segments": [
+            {}
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 11,
+          "prompts": [
+            {
+              "type": "note",
+              "name": "another_note",
+              "label": "This is a\nInstructional note.",
+              "min_height": 100,
+              "_rowNum": 12,
+              "segments": [
+                {}
+              ]
+            },
+            {
+              "type": "note",
+              "name": "yet_another_note",
+              "label": "This is a\nInstructional note.",
+              "min_height": 100,
+              "_rowNum": 13,
+              "segments": [
+                {}
+              ]
+            }
+          ],
+          "segments": [
+            {}
+          ]
+        }
+      ],
+      "segments": [
+        {}
+      ]
+    },
+    {
+      "type": "select",
+      "name": "pet_types",
+      "label": "What kinds of pets do you have:",
+      "_rowNum": 16,
+      "param": "pets",
+      "segments": [
+        {
+          "items": [
+            {
+              "list_name": "pets",
+              "value": "fish",
+              "label": "fish",
+              "_rowNum": 4
+            },
+            {
+              "list_name": "pets",
+              "value": "dog",
+              "label": "dog",
+              "_rowNum": 5
+            },
+            {
+              "list_name": "pets",
+              "value": "cat",
+              "label": "cat",
+              "_rowNum": 6
+            },
+            {
+              "list_name": "pets",
+              "value": "horse",
+              "label": "horse",
+              "_rowNum": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tally",
+      "name": "num_pets",
+      "label": "Fill in a bubble for every pet you have:",
+      "default": 3,
+      "_rowNum": 17,
+      "param": "25",
+      "segments": [
+        {
+          "items": [
+            {
+              "value": 0
+            },
+            {
+              "value": 1
+            },
+            {
+              "value": 2
+            },
+            {
+              "value": 3
+            },
+            {
+              "value": 4
+            },
+            {
+              "value": 5
+            },
+            {
+              "value": 6
+            },
+            {
+              "value": 7
+            },
+            {
+              "value": 8
+            },
+            {
+              "value": 9
+            },
+            {
+              "value": 10
+            },
+            {
+              "value": 11
+            },
+            {
+              "value": 12
+            },
+            {
+              "value": 13
+            },
+            {
+              "value": 14
+            },
+            {
+              "value": 15
+            },
+            {
+              "value": 16
+            },
+            {
+              "value": 17
+            },
+            {
+              "value": 18
+            },
+            {
+              "value": 19
+            },
+            {
+              "value": 20
+            },
+            {
+              "value": 21
+            },
+            {
+              "value": 22
+            },
+            {
+              "value": 23
+            },
+            {
+              "value": 24
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "choices": {
+    "genders": [
+      {
+        "list_name": "genders",
+        "value": "male",
+        "label": "male",
+        "_rowNum": 2
+      },
+      {
+        "list_name": "genders",
+        "value": "female",
+        "label": "female",
+        "_rowNum": 3
+      }
+    ],
+    "pets": [
+      {
+        "list_name": "pets",
+        "value": "fish",
+        "label": "fish",
+        "_rowNum": 4
+      },
+      {
+        "list_name": "pets",
+        "value": "dog",
+        "label": "dog",
+        "_rowNum": 5
+      },
+      {
+        "list_name": "pets",
+        "value": "cat",
+        "label": "cat",
+        "_rowNum": 6
+      },
+      {
+        "list_name": "pets",
+        "value": "horse",
+        "label": "horse",
+        "_rowNum": 7
+      }
+    ]
+  },
+  "settings": [
+    {
+      "setting": "form_title",
+      "value": "Example Form",
+      "_rowNum": 2
+    },
+    {
+      "setting": "font",
+      "value": "12pt times",
+      "_rowNum": 3
+    }
+  ]
+}
