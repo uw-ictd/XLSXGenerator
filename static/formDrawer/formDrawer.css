@@ -1,33 +1,72 @@
-.image-container {
-	margin-left: auto;
-	margin-right: auto;
-	padding: 0;
-	width: 832px;
+.formImage {
+    background-color: white;
+    padding: 2%;
+    position: relative;
+    padding: 0;
 }
-body {
-	padding-top: 0;
-	min-width: 832px;
+.formImage .heading {
+    text-align: center;
+    padding-top: 20px;
 }
-.modal-gallery {
-	width: auto;
-	max-height: none;
-	margin: 2em;
-	top: 0;
-	left: 0;
-	position: relative;
-	float: left;
+.formImage .fiducial {
+    position:absolute;
+    margin: 5px;
 }
-.modal-gallery .modal-body {
-	max-height: none;
+.formImage .tl {
+    top:0;
+    left:0;
 }
-.instructions {
-    color:white;
-    font-size: 2em;
-    line-height: 2.1em;
+.formImage .tr {
+    top:0;
+    right:0;
 }
-/*
-canvas {
-    position: absolute;
-	z-index: 400;
+.formImage .bl {
+    bottom:0;
+    left:0;
 }
-*/
+.formImage .br {
+    bottom:0;
+    right:0;
+}
+
+.formFields {
+    width: 90%;
+    margin: 5%;
+    outline: 1px solid gray;
+}
+.fieldRowTable {
+    width: 100%;
+}
+.fieldRow >  .field {
+    border-right: 1px solid gray;
+}
+.fieldRow >  .field:last-child {
+    border-right: 0 solid gray;
+}
+.fieldColumn > .field {
+    border-bottom: 1px solid gray;
+}
+.fieldColumn > .field:last-child {
+    border-bottom: 0 solid gray;
+}
+.field {
+    vertical-align: top;
+    margin: 0;
+    padding: 5px;
+    height: 100%;
+    min-height: 100%;
+}
+
+.item > * {
+    vertical-align: middle;
+}
+.item label {
+    display: inline;
+}
+.bubble {
+    display: inline-block;
+    width: .6em;
+    height: .6em;
+    border: 1px solid black;
+    border-radius: 50%;
+}

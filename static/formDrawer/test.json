@@ -11,22 +11,16 @@
             {
               "type": "string",
               "name": "name",
-              "label": "<b>Enter your name:</b>",
+              "label": "<b>Enter your name:</b>!",
               "min_height": 80,
-              "_rowNum": 4,
-              "segments": [
-                {}
-              ]
+              "_rowNum": 4
             },
             {
               "type": "int",
               "name": "age",
               "label": "Enter your age:",
               "min_height": 80,
-              "_rowNum": 5,
-              "segments": [
-                {}
-              ]
+              "_rowNum": 5
             },
             {
               "type": "select1",
@@ -53,9 +47,6 @@
                 }
               ]
             }
-          ],
-          "segments": [
-            {}
           ]
         },
         {
@@ -67,14 +58,8 @@
               "name": "a_note",
               "label": "This is a\nInstructional note.",
               "min_height": 80,
-              "_rowNum": 9,
-              "segments": [
-                {}
-              ]
+              "_rowNum": 9
             }
-          ],
-          "segments": [
-            {}
           ]
         },
         {
@@ -86,29 +71,17 @@
               "name": "another_note",
               "label": "This is a\nInstructional note.",
               "min_height": 100,
-              "_rowNum": 12,
-              "segments": [
-                {}
-              ]
+              "_rowNum": 12
             },
             {
               "type": "note",
               "name": "yet_another_note",
               "label": "This is a\nInstructional note.",
               "min_height": 100,
-              "_rowNum": 13,
-              "segments": [
-                {}
-              ]
+              "_rowNum": 13
             }
-          ],
-          "segments": [
-            {}
           ]
         }
-      ],
-      "segments": [
-        {}
       ]
     },
     {

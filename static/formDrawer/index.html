@@ -12,55 +12,93 @@
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="formDrawer.css" rel="stylesheet">
-<style>
-body {
-    margin: 0;
-    font-size: 15pt;
-    font-family: "Times New Roman"; 
-}
-#drop {
-    background-color: white;
-    border:2px dashed #bbb;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
-    padding:25px;
-    text-align:center;
-	font:20pt bold;
-    color:#bbb
-}
-#out {
-    clear: both;
-    height: 500px;
-    width: 100%;
-}
-#save {
-    float: right;
-    font-size: 15pt;
-    margin-top: 15px;
-    font-family: "Times New Roman"; 
-}
-#errors p {
-    background-color: pink;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    padding: .5em;
-}
-#warnings p {
-    background-color: orange;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    padding: .5em;
-}
-.panel {
-    background-color: #f5f5f5;
-    border: 1px solid lightgray;
-    padding: 1em;
-    padding-top: .5em;
-    padding-bottom: .5em;
-}
+    <style>
+    body {
+        margin: 0;
+        font-size: 15pt;
+        font-family: "Times New Roman"; 
+        padding-top: 0;
+    	min-width: 832px;
+    }
+    
+    .image-container {
+        margin-left: auto;
+    	margin-right: auto;
+    	padding: 0;
+    	width: 832px;
+    }
+    
+    .modal-gallery {
+    	width: auto;
+    	max-height: none;
+    	margin: 2em;
+    	top: 0;
+    	left: 0;
+    	position: relative;
+    	float: left;
+    }
+    .modal-gallery .modal-body {
+    	max-height: none;
+    }
+    .instructions {
+        color:white;
+        font-size: 2em;
+        line-height: 2.1em;
+    }
+    /*
+    canvas {
+        position: absolute;
+    	z-index: 400;
+    }
+    */
 
-</style>
+
+    
+    #drop {
+        background-color: white;
+        border:2px dashed #bbb;
+        -moz-border-radius:5px;
+        -webkit-border-radius:5px;
+        border-radius:5px;
+        padding:25px;
+        text-align:center;
+    	font:20pt bold;
+        color:#bbb
+    }
+    #out {
+        clear: both;
+        height: 500px;
+        width: 100%;
+    }
+    #save {
+        float: right;
+        font-size: 15pt;
+        margin-top: 15px;
+        font-family: "Times New Roman"; 
+    }
+    #errors p {
+        background-color: pink;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: .5em;
+    }
+    #warnings p {
+        background-color: orange;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: .5em;
+    }
+    .panel {
+        background-color: #f5f5f5;
+        border: 1px solid lightgray;
+        padding: 1em;
+        padding-top: .5em;
+        padding-bottom: .5em;
+    }
+    @media print {
+        .main { display: none; }
+    }
+    </style>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -68,89 +106,21 @@ body {
   </head>
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
-        <canvas width="400" height="200"></canvas>
+        <canvas></canvas>
         <div class="fContainer">
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/docs.css" rel="stylesheet">
+        <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+        <link href="formDrawer.css" rel="stylesheet" >
+        
         <div class="formImage">
-        
-
-<style>
-
-.field {
-    display: table-row;
-}
-.field .field {
-    display: table-cell;
-}
-.field .field .field {
-    display: table-row;
-}
-.field .field .field .field {
-    display: table-cell;
-}
-.field .field .field .field .field {
-    display: table-row;
-}
-.formImage {
-    background-color: white;
-    padding: 2%;
-    position: relative;
-}
-.formImage .heading {
-    text-align: center;
-}
-.formImage .tl {
-    position:absolute;
-    top:0;
-    left:0;
-}
-.formImage .tr {
-    position:absolute;
-    top:0;
-    right:0;
-}
-.formImage .bl {
-    position:absolute;
-    bottom:0;
-    left:0;
-}
-.formImage .br {
-    position:absolute;
-    bottom:0;
-    right:0;
-}
-.formImage {
-    padding-top: 50px;
-    padding-bottom: 100px;
-    width: 800px;
-}
-.formFields table {
-    width: 100%;
-}
-.item > * {
-    vertical-align: middle;
-}
-.item label {
-    display: inline;
-}
-.bubble {
-    display: inline-block;
-    width: .6em;
-    height: .6em;
-    border: 1px solid black;
-    border-radius: 50%;
-}
-@media print {
-    .main { display: none; }
-}
-</style>
-        
-        
-            <img class="tl" src="fiducials/ScanLogoSm.png">
-            <img class="tr" src="fiducials/villagereach.png">
-            <img class="bl" src="fiducials/cs.jpg">
-            <img class="br" src="fiducials/change.jpg">
+            <img class="tl fiducial" src="fiducials/ScanLogoSm.png">
+            <img class="tr fiducial" src="fiducials/villagereach.png">
+            <img class="bl fiducial" src="fiducials/cs.jpg">
+            <img class="br fiducial" src="fiducials/change.jpg">
             <h2 class="heading">Test Form</h1>
-            <table class="formFields"></table>
+            <div class="formFields"></div>
         </div>
         </div>
     
@@ -353,30 +323,16 @@ drop.addEventListener('dragover', handleDragover, false);
 drop.addEventListener('drop', handleDrop, false);
 
 
-/**
- * If Equals
- * if_eq this compare=that
- */
-Handlebars.registerHelper('if_eq', function(context, options) {
-    if (context == options.hash.compare)
-        return options.fn(this);
-    return options.inverse(this);
-});
-
-/*
-Handlebars.registerHelper('range', function(context, options) {
-    return _.range(function(context) {
-        if (options.data) { data = Handlebars.createFrame(options.data); }
-        out += "<li>" + options.fn(context[i], { data: data }) + "</li>";
-        return options.fn(_.extend({}, context, {}));
-    }).join("\n");
-});
-*/  
-
 // compile and register the "element" partial template
 //var formTemplate = Handlebars.compile($("#form-template").html());
-var fieldGroupTemplate = Handlebars.compile($("#fieldGroup-template").html());
-Handlebars.registerPartial("fieldGroup", fieldGroupTemplate);
+var fieldRowTemplate = Handlebars.compile($("#field-row-template").html());
+Handlebars.registerPartial("fieldRow", fieldRowTemplate);
+
+var fieldColumnTemplate = Handlebars.compile($("#field-column-template").html());
+Handlebars.registerPartial("fieldColumn", fieldColumnTemplate);
+
+var segmentsTemplate = Handlebars.compile($("#segments-template").html());
+Handlebars.registerPartial("segments", segmentsTemplate);
 
 var renderForm = function(formJSON){
     console.log("Rendering...", formJSON);
@@ -385,18 +341,18 @@ var renderForm = function(formJSON){
         _.each(fields, function(field) {
             if('prompts' in field){
                 attachItems(field.prompts);
+                return;
             }
             field.type = field.type.toLowerCase();
             
-            field.segments = [{ }];
-            
             if(field.type.match(/select/)){
-                field.segments[0].items = formJSON.choices[field.param];
+                field.segments = [{ items : formJSON.choices[field.param] }];
             }
             if(field.type.match(/tally/)){
-                field.segments[0].items = _.map(_.range(parseInt(field.param, 10)), function(rIdx){
+                field.segments = [{ items :  _.map(_.range(parseInt(field.param, 10)), function(rIdx){
                         return { value: rIdx };
-                });
+                    })
+                }];
                 console.log(field);
             }
             if(field.type.match(/bub_num/)){
@@ -425,10 +381,32 @@ var renderForm = function(formJSON){
     };
 
     attachItems(formJSON.survey);
+    console.log(formJSON);
+    $(".formFields").html(fieldColumnTemplate({ prompts: formJSON.survey }));
     
-    $(".formFields").html(fieldGroupTemplate({ prompts: formJSON.survey }));
-    $("canvas").width(800);
+    var $canvas = $("canvas");
+
+    var height = 1024;
+    var width = 832;
+
+    $(".formImage").height(height);
+    $(".formImage").width(width);
+    
+    $canvas.attr('width', width);
+    $canvas.attr('height', height);
+    
     rasterizeHTML.drawHTML($(".fContainer").html(), $("canvas").get(0));
+    
+    var baseOffset = $(".fContainer").offset();
+    $(".fContainer").find('.field').each(function(idx, fieldEl){
+        var absOffset = $(fieldEl).offset();
+        var offset = {
+            top: absOffset.top - baseOffset.top,
+            left: absOffset.left - baseOffset.left
+        }
+        console.log(offset);
+        //$(fieldEl).segments
+    });
 };
    
 $.getJSON('test.json', renderForm);
@@ -437,15 +415,47 @@ $.getJSON('test.json', renderForm);
 
 </script>
 
-<script id="fieldGroup-template" type="text/x-handlebars-template">
-{{#each prompts}}
-    <td class="field">
-    {{#if label}}<label>{{{label}}}</label>{{/if}}
-    
-    {{#if prompts}}
-        <table><tbody><tr>{{> fieldGroup}}</tr></tbody></table>
-    {{/if}}
-    
+<script id="field-row-template" type="text/x-handlebars-template">
+    <table class="fieldRowTable"><tbody><tr class="fieldRow">
+    {{#each prompts}}
+        <td class="field">
+        
+        {{#if label}}<label>{{{label}}}</label>{{/if}}
+        
+        {{#if prompts}}
+            {{> fieldColumn}}
+        {{/if}}
+        
+        {{#if segments}}
+            {{> segments}}
+        {{/if}}
+        
+        </td>
+    {{/each}}
+    </tr></tbody></table>
+</script>
+
+<script id="field-column-template" type="text/x-handlebars-template">
+    <div class="fieldColumn">
+    {{#each prompts}}
+        <div class="field">
+        
+        {{#if label}}<label>{{{label}}}</label>{{/if}}
+        
+        {{#if prompts}}
+            {{> fieldRow}}
+        {{/if}}
+        
+        {{#if segments}}
+            {{> segments}}
+        {{/if}}
+        
+        </div>
+    {{/each}}
+    </div>
+</script>
+
+<script id="segments-template" type="text/x-handlebars-template">
     <table class="segments"><tbody><tr>
     {{#each segments}}
         <td class="segment">
@@ -460,9 +470,6 @@ $.getJSON('test.json', renderForm);
         </td>
     {{/each}}
     </tr></tbody></table>
-    
-    </td>
-{{/each}}
 </script>
 
     </body>
