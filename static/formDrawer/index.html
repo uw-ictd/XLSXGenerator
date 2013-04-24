@@ -386,27 +386,79 @@ var renderForm = function(formJSON){
     
     var $canvas = $("canvas");
 
-    var height = 1024;
-    var width = 832;
+    var formDef = {
+        height: 1176,
+        width: 832,
+        classifier : {
+            "classification_map": {
+                 "empty": false
+            },
+            "default_classification": true,
+            "training_data_uri": "bubbles",
+            "classifier_height": 12,
+            "classifier_width": 10,
+            "advanced": {
+                 "flip_training_data": true
+            }
+        }
+    };
 
-    $(".formImage").height(height);
-    $(".formImage").width(width);
+    $(".formImage").height(formDef.height);
+    $(".formImage").width(formDef.width);
+    $(".bubble").height(formDef.classifier.classifier_height);
+    $(".bubble").width(formDef.classifier.classifier_width);
     
-    $canvas.attr('width', width);
-    $canvas.attr('height', height);
+    $canvas.attr('width', formDef.width);
+    $canvas.attr('height', formDef.height);
     
     rasterizeHTML.drawHTML($(".fContainer").html(), $("canvas").get(0));
     
+    //Generate the template json
     var baseOffset = $(".fContainer").offset();
-    $(".fContainer").find('.field').each(function(idx, fieldEl){
-        var absOffset = $(fieldEl).offset();
-        var offset = {
-            top: absOffset.top - baseOffset.top,
-            left: absOffset.left - baseOffset.left
+    formDef.fields = $(".fContainer").find('.scanField').map(function(idx, fieldEl){
+        var $field = $(fieldEl);
+        var segments = $field.find('.segment').map(function(idx, segmentEl){
+            var $segment = $(segmentEl);
+            var absOffset = $segment.offset();
+            var offset = {
+                top: absOffset.top - baseOffset.top,
+                left: absOffset.left - baseOffset.left
+            };
+            var items = $segment.find('.item').map(function(idx, itemEl){
+                var $item = $(itemEl);
+                var absOffset = $item.offset();
+                var offset = {
+                    top: absOffset.top - baseOffset.top + $item.height()/2,
+                    left: absOffset.left - baseOffset.left + $item.width()/2
+                };
+                return {
+                    label: $item.children('label').text(),
+                    value: $item.data('value'),
+                    item_x: offset.left,
+                    item_y: offset.top
+                };
+            }).toArray();
+            var segment = {
+                segment_x: offset.left,
+                segment_y: offset.top,
+                segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
+                segment_height: ($segment.innerHeight() + $segment.outerHeight()) / 2
+            };
+            if(items.length > 0) {
+                segment.items = items;
+            }
+            return segment;
+        }).toArray();
+        var out = {
+            name: $field.data('name'),
+            label: $field.find('label').first().text()
+        };
+        if(segments.length > 0) {
+            out.segments = segments;
         }
-        console.log(offset);
-        //$(fieldEl).segments
-    });
+        return out;
+    }).toArray();
+    console.log(formDef);
 };
    
 $.getJSON('test.json', renderForm);
@@ -418,7 +470,7 @@ $.getJSON('test.json', renderForm);
 <script id="field-row-template" type="text/x-handlebars-template">
     <table class="fieldRowTable"><tbody><tr class="fieldRow">
     {{#each prompts}}
-        <td class="field">
+        <td class="field {{#unless prompts}}scanField{{/unless}}" data-name="{{name}}">
         
         {{#if label}}<label>{{{label}}}</label>{{/if}}
         
@@ -438,7 +490,7 @@ $.getJSON('test.json', renderForm);
 <script id="field-column-template" type="text/x-handlebars-template">
     <div class="fieldColumn">
     {{#each prompts}}
-        <div class="field">
+        <div class="field {{#unless prompts}}scanField{{/unless}}" data-name="{{name}}">
         
         {{#if label}}<label>{{{label}}}</label>{{/if}}
         
@@ -460,11 +512,11 @@ $.getJSON('test.json', renderForm);
     {{#each segments}}
         <td class="segment">
         {{#each items}}
-            <span class="item">
+            <span class="item" data-value="{{value}}">
                 {{#if label}}
                     <label>{{{label}}}</label>
                 {{/if}}
-                <span class="bubble" data-value="{{value}}"></span>
+                <span class="bubble"></span>
             </span>
         {{/each}}
         </td>
