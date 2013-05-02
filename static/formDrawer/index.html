@@ -106,7 +106,8 @@
   </head>
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
-        <canvas></canvas>
+        <img class="outImg"></img>
+        <canvas crossOrigin="anonymous"></canvas>
         <div class="fContainer">
         <link href="assets/css/bootstrap.css" rel="stylesheet">
         <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -179,10 +180,6 @@
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="assets/js/jquery.js"></script>
-        <script src="assets/js/bootstrap-transition.js"></script>
-        <script src="assets/js/bootstrap-alert.js"></script>
-        <script src="assets/js/bootstrap-modal.js"></script>
-        <script src="assets/js/bootstrap-button.js"></script>
         <script src="assets/js/jquery.qrcode.min.js"></script>
         <script src="assets/js/handlebars.js"></script>
         
@@ -411,7 +408,16 @@ var renderForm = function(formJSON){
     $canvas.attr('width', formDef.width);
     $canvas.attr('height', formDef.height);
     
-    rasterizeHTML.drawHTML($(".fContainer").html(), $("canvas").get(0));
+    var myCanvas = $("canvas").get(0); //$(".fContainer").html()
+    rasterizeHTML.drawHTML('<span>hi</span>', myCanvas, function(svgImage){
+         //$('.outImg').replaceWith(svgImage);
+         $('.outImg').attr('src', myCanvas.toDataURL("image/jpeg"));
+    });
+    /*
+    setTimeout(function(){
+        $('.outImg').attr('src', $("canvas").get(0).toDataURL("image/jpeg"));
+    }, 1000)
+    */
     
     //Generate the template json
     var baseOffset = $(".fContainer").offset();
