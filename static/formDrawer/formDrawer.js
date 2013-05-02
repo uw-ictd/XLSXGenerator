@@ -31,6 +31,7 @@ function drawMultilineText($canvas, properties){
         $canvas.addLayer(lineProperties);
         currentY += properties.lineSpacing + measurements.height;
     });
+    return currentY;
 }
 
 function viewAsImage() {
@@ -124,7 +125,25 @@ function createForm(form) {
             $.extend(markup_object, field.markup_location);
         }
 
-        drawMultilineText($canvas, markup_object);
+        var textOffset = drawMultilineText($canvas, markup_object);
+        
+        if(field['type'] === 'qrcode') {
+            if('param' in field && field.param !== ''){
+                $(document).on('drawQrCodes', function(){
+                    var segment = field.segments[0];
+                    var topOffset = textOffset - segment.segment_y;
+                    var size = Math.min(segment.segment_width - 10, segment.segment_height - topOffset - 10);
+                    console.log(size);
+                    $canvas.qrcode({
+                        width: size,
+                        height: size,
+                        left: segment.segment_x + 5,
+                        top: textOffset  + 5,
+                        text: field.param
+                    });
+                });
+            }
+        }
         
         $.each(field.segments, function(segment_idx, segment) {
             var classifier;
@@ -168,13 +187,12 @@ function createForm(form) {
                     }
                 });
             }
-            else {
-
-            }
         });
 
     });
+    
     $canvas.drawLayers();
+    
     if (progress >= 99) {
         window.setTimeout(function() {
             $bar.parent().hide();
@@ -214,6 +232,8 @@ function createForm(form) {
             text: form.qrcode_data || form.title || "no data"
         });
         
+        $(document).trigger('drawQrCodes');
+        
         //This is a function that gets called after each fiducial is loaded
         //And when all the fiducials finish loading it draws the image.
         var fiducialLoaded = (function() {
@@ -248,7 +268,6 @@ function createForm(form) {
     };
     drawFiducials();
     
-    
     var updateFiducials = function(){
         var userDefFiducials = {};
         $.when.apply(null, $('.fiducial').map(function(fidx, fiducial){
@@ -276,7 +295,6 @@ function createForm(form) {
         });
         
     };
-    
     
     $('.fiducialFile, .x, .y').on('change', updateFiducials);
 }

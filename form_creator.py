@@ -37,7 +37,15 @@ def make_json_template(xlsform_obj,
     output = {
         "height": form_height,
         "width": form_width,
-        "classifier": {
+    }
+    output.update(xlsform_obj.get('settings', {})[0])
+    choice_lists = xlsform_obj['choices']
+    
+    #The functions below are defined inside functions so outer variables can be
+    #accessed without me having the pass them around.
+
+    def generate_field(field, segment):
+        classifier = {
                 "classification_map": {
                      "empty": False
                 },
@@ -50,48 +58,42 @@ def make_json_template(xlsform_obj,
                      "flip_training_data": True
                 }
         }
-    }
-    output.update(xlsform_obj.get('settings', {})[0])
-    choice_lists = xlsform_obj['choices']
-    
-    #The functions below are defined inside this function
-    #so they can access the choice_lists and form properties
-    #without me having the pass them around.
-    def generate_items(item_list,
+        
+        def generate_items(item_list,
                       segment,
-                      item_width = output["classifier"]["classifier_width"],
+                      item_width = classifier["classifier_width"],
                       item_label_width = 0,
-                      item_height = output["classifier"]["classifier_height"],
+                      item_height = classifier["classifier_height"],
                       row_one_left_margin = 400,
                       base_margin = 8,
                       y_offset = 0
                       ):
-        if len(item_list) > 3:
-            row_one_left_margin = 999999 #skip the first row
-        left_margin = row_one_left_margin
-        out_item_list = []
-        if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
-            raise Exception('There are too many columns. They would be too narrow for any choices to fit.')
-        choice_idx = 0
-        while choice_idx < len(item_list):
-            y_offset += item_height
-            segment['segment_height'] = y_offset + item_height
-            x_coords = range(left_margin + item_label_width,
-                           segment['segment_width'] - base_margin - item_width,
-                           item_width + item_label_width)
-            for x in x_coords:
-                if choice_idx == len(item_list): return out_item_list
-                choice = item_list[choice_idx].copy()
-                choice_idx += 1
-                choice.update({
-                      "item_x": x + item_width/2,
-                      "item_y": y_offset
-                })
-                out_item_list.append(choice)
-            left_margin = base_margin
-        return out_item_list
+            if len(item_list) > 3:
+                row_one_left_margin = 999999 #skip the first row
+            left_margin = row_one_left_margin
+            out_item_list = []
+            if segment['segment_width'] - 2 * base_margin < item_width + item_label_width:
+                raise Exception('There are too many columns. They would be too narrow for any choices to fit.')
+            choice_idx = 0
+            while choice_idx < len(item_list):
+                y_offset += item_height
+                segment['segment_height'] = y_offset + item_height
+                x_coords = range(left_margin + item_label_width,
+                               segment['segment_width'] - base_margin - item_width,
+                               item_width + item_label_width)
+                for x in x_coords:
+                    if choice_idx == len(item_list): return out_item_list
+                    choice = item_list[choice_idx].copy()
+                    choice_idx += 1
+                    choice.update({
+                          "item_x": x + item_width/2,
+                          "item_y": y_offset
+                    })
+                    out_item_list.append(choice)
+                left_margin = base_margin
+            return out_item_list
     
-    def generate_field(field, segment):
+        
         #Validate name:
         field_name = field.get('name')
         if field_name:
@@ -106,6 +108,9 @@ def make_json_template(xlsform_obj,
         item_properties.update(field.get('itemProperties', {}))
         
         if field['type'] == 'select' or field['type'] == 'select1':
+            field['classifier'] = classifier
+            if field.get('appearance') == 'checkbox':
+                classifier['training_data_uri'] = 'square_checkboxes'
             list_name = field["param"]
             if list_name not in choice_lists:
                 raise Exception("List name not in choices sheet: " +
@@ -118,6 +123,7 @@ def make_json_template(xlsform_obj,
                                            segment,
                                            **item_properties)
         elif field['type'] == 'tally':
+            field['classifier'] = classifier
             amount_str = field["param"]
             amount = 40
             try:
@@ -134,6 +140,8 @@ def make_json_template(xlsform_obj,
             pass
         elif field['type'] == "int":
             pass
+        elif field['type'] == "qrcode":
+            segment['segment_height'] = 100
         else:
             pass
         min_height = field.get('min_height', segment['segment_height'])
@@ -242,12 +250,12 @@ def create_form(path_or_file, output_path):
     
 if __name__ == "__main__":
     argv = sys.argv
-    #For debugging
-    argv = [
-            sys.argv[0],
-            os.path.join(os.path.dirname(__file__), "test.xlsx"),
-            os.path.join(os.path.dirname(__file__), "test_output", "test"),
-    ]
+    # #For debugging
+    # argv = [
+    #         sys.argv[0],
+    #         os.path.join(os.path.dirname(__file__), "test.xlsx"),
+    #         os.path.join(os.path.dirname(__file__), "test_output", "test"),
+    # ]
     if len(argv) < 3:
         print __doc__
         print 'Usage:'
