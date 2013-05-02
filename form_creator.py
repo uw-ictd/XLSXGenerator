@@ -141,7 +141,14 @@ def make_json_template(xlsform_obj,
         elif field['type'] == "int":
             pass
         elif field['type'] == "qrcode":
-            segment['segment_height'] = 100
+            #The qr code expands to fit the segment height
+            #so make it heigher as the amount of data increases
+            segment['segment_height'] = 100 *  (1 + len(field['param']) / 40)
+            #but the qr code can't get any bigger than the segment width because
+            #its a square so we cap the segment height around there
+            max_height = (1.5 * segment['segment_width'])
+            if segment['segment_height'] > max_height:
+                segment['segment_height'] = max_height
         else:
             pass
         min_height = field.get('min_height', segment['segment_height'])

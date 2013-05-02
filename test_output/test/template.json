@@ -91,7 +91,7 @@
                     "segment_width": 264, 
                     "segment_y": 414, 
                     "segment_x": 20, 
-                    "segment_height": 100
+                    "segment_height": 200
                 }
             ], 
             "type": "qrcode", 
@@ -106,7 +106,7 @@
                     "segment_width": 264, 
                     "segment_y": 200, 
                     "segment_x": 284, 
-                    "segment_height": 314
+                    "segment_height": 414
                 }
             ], 
             "type": "note", 
@@ -136,7 +136,7 @@
                     "segment_width": 264, 
                     "segment_y": 300, 
                     "segment_x": 548, 
-                    "segment_height": 214
+                    "segment_height": 314
                 }
             ], 
             "type": "note", 
@@ -174,7 +174,7 @@
             "type": "select", 
             "segments": [
                 {
-                    "segment_y": 514, 
+                    "segment_y": 614, 
                     "segment_x": 20, 
                     "segment_height": 54, 
                     "segment_width": 792
@@ -304,7 +304,7 @@
             ], 
             "segments": [
                 {
-                    "segment_y": 568, 
+                    "segment_y": 668, 
                     "segment_x": 20, 
                     "segment_height": 54, 
                     "segment_width": 792
