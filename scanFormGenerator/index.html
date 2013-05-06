@@ -106,72 +106,36 @@
   </head>
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
-        <img class="outImg"></img>
-        <div class="fContainer">
-        <div class="formImage">
-            <img class="tl fiducial" src="fiducials/ScanLogoSm.png">
-            <img class="tr fiducial" src="fiducials/villagereach.png">
-            <img class="bl fiducial" src="fiducials/cs.jpg">
-            <img class="br fiducial" src="fiducials/change.jpg">
-            <h2 class="heading">Test Form</h1>
-            <div class="formFields"></div>
-        </div>
-        </div>
+
     
         <div class="main">
         
-<div class="panel">
-    <div id="drop">Drop an XLSX file here to convert to JSON.</div>
-</div>
-
-<div id="errors"></div>
-<div id="warnings"></div>
-
-<div class="panel">
-    <button onclick="handleSave();" id="save">Save</button>
-    <p>Output:</p>
-    <textarea id="out"></textarea>
-</div>
-        
-        
-            <div class="image-container">
-                <div class="instructions">
-                    Right-click and select "Save as..." to save the form image.
-                </div>
-                
-                
-                <div style="color:white;" class="instructions">
-                    You can customize the logos here:
-                </div>
-                <form class="well fiducial" data-position="tr">
-                    <legend>Top Right</legend>
-                        <div class="row-fluid">
-                          <div class="span4"><input type="file" name="file" class="fiducialFile"></div>
-                          <div class="span4"><label>left offset: <input type="number" class="x" value="700"></label></div>
-                          <div class="span4"><label>top offset: <input type="number" class="y" value="50"></label></div>
-                        </div>
-                </form>
-                <form class="well fiducial" data-position="br">
-                    <legend>Bottom Right</legend>
-                        <div class="row-fluid">
-                          <div class="span4"><input type="file" name="file" class="fiducialFile"></div>
-                          <div class="span4"><label>left offset: <input type="number" class="x" value="700"></label></div>
-                          <div class="span4"><label>top offset: <input type="number" class="y" value="1020"></label></div>
-                        </div>
-                </form>
-                <form class="well fiducial" data-position="bl">
-                    <legend>Bottom Left</legend>
-                        <div class="row-fluid">
-                          <div class="span4"><input type="file" name="file" class="fiducialFile"></div>
-                          <div class="span4"><label>left offset: <input type="number" class="x" value="120"></label></div>
-                          <div class="span4"><label>top offset: <input type="number" class="y" value="1020"></label></div>
-                        </div>
-                </form>
+            <div class="panel">
+                <div id="drop">Drop an XLSX file here to generate a new form</div>
             </div>
+            
+            <div id="errors"></div>
+            <div id="warnings"></div>
+            
+            <img class="outImg"></img>
+            <div class="fContainer">
+                <div class="formImage">
+                    <img class="tl fiducial" src="fiducials/ScanLogoSm.png">
+                    <img class="tr fiducial" src="fiducials/villagereach.png">
+                    <img class="bl fiducial" src="fiducials/cs.jpg">
+                    <img class="br fiducial" src="fiducials/change.jpg">
+                    <h2 class="heading"></h1>
+                    <div class="formFields"></div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <button onclick="handleSave();" id="save">Save</button>
+                <p>Output:</p>
+                <textarea id="out"></textarea>
+            </div>
+
         </div>
-        <!-- Le javascript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
         <script src="assets/js/jquery.js"></script>
         <script src="assets/js/jquery.qrcode.min.js"></script>
         <script src="assets/js/handlebars.js"></script>
@@ -314,6 +278,13 @@ Handlebars.registerPartial("fieldColumn", fieldColumnTemplate);
 var segmentsTemplate = Handlebars.compile($("#segments-template").html());
 Handlebars.registerPartial("segments", segmentsTemplate);
 
+
+var typeAliases = {
+    "text" : "string",
+    "select_one" : "select1",
+    "select_mulitple" : "select"
+};
+
 var renderForm = function(formJSON){
     console.log("Rendering...", formJSON);
     
@@ -324,6 +295,12 @@ var renderForm = function(formJSON){
                 return;
             }
             field.type = field.type.toLowerCase();
+            
+            //Map from XLSForm types to internal type names that are closer
+            //to XForm types.
+            if(field.type in typeAliases) {
+                field.type = typeAliases[field.type];
+            } 
             
             if(field.type.match(/string|int/)){
                 field.segments = [{}];
@@ -343,8 +320,8 @@ var renderForm = function(formJSON){
                     return { };
                 });
                 _.each(field.segments, function(segment){
-                    segment.items = _.map(_.range(9), function(rIdx){
-                        return { value: rIdx, label: rIdx };
+                    segment.items = _.map(_.range(0, 10), function(rIdx){
+                        return { value: rIdx, label: "" + rIdx, class: "vertical"};
                     });
                 });
             }
@@ -355,102 +332,134 @@ var renderForm = function(formJSON){
                 _.each(field.segments, function(segment){
                     var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
                     segment.items = _.map(alphabet, function(letter){
-                        return { value: letter, label: letter };
+                        return { value: letter, label: letter, class: "vertical" };
                     });
                 });
             }
         });
     };
+    
+    var generateFormDef = function(){
+        //This object will be the Scan formDef that we output:
+        var formDef = {
+            height: 1176,
+            width: 832,
+            classifier : {
+                "classification_map": {
+                     "empty": false
+                },
+                "default_classification": true,
+                "training_data_uri": "bubbles",
+                "classifier_height": 14,
+                "classifier_width": 12,
+                "advanced": {
+                     "flip_training_data": true
+                }
+            }
+        };
+    
+        //Set some of the dimensions using the default values in the formDef:
+        $(".formImage").height(formDef.height);
+        $(".formImage").width(formDef.width);
+        $(".bubble").height(formDef.classifier.classifier_height * .7);
+        $(".bubble").width(formDef.classifier.classifier_width  * .7);
+        $(".heading").text(_.where(formJSON.settings, {setting: "form_title"})[0].value);
+    
+        //Generate the form image from the html.
+        html2canvas( [ $(".formImage").get(0) ], {
+          onrendered: function(canvas) {
+            $('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
+          }
+        });
+        
+        //Generate the formDef json using the HTML.
+        var baseOffset = $(".fContainer").offset();
+        formDef.fields = $(".fContainer").find('.scanField').map(function(idx, fieldEl){
+            var $field = $(fieldEl);
+            
+            var segments = $field.find('.segment').map(function(idx, segmentEl){
+                var $segment = $(segmentEl);
+                var segAbsOffset = $segment.offset();
+                var segOffset = {
+                    top: segAbsOffset.top - baseOffset.top,
+                        //(parseInt($segment.css("border-top-width"), 10)  / 2),
+                    left: segAbsOffset.left - baseOffset.left
+                        //(parseInt($segment.css("border-left-width"), 10) / 2)
+                };
+                var items = $segment.find('.bubble').map(function(idx, itemEl){
+                    var $item = $(itemEl);
+                    var itemAbsOffset = $item.offset();
+                    var itemOffset = {
+                        top: itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4,
+                        left: itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4,
+                    };
+                    return {
+                        //In theory this should remove any html markup.
+                        label: $item.children('label').text(),
+                        value: $item.data('value'),
+                        item_x: itemOffset.left,
+                        item_y: itemOffset.top
+                    };
+                }).toArray();
+                var segment = {
+                    segment_x: segOffset.left,
+                    segment_y: segOffset.top,
+                    segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
+                    segment_height: ($segment.innerHeight() + $segment.outerHeight()) / 2
+                };
+                if(items.length > 0) {
+                    segment.items = items;
+                }
+                return segment;
+            }).toArray();
+            var out = {
+                name: $field.data('name'),
+                type: "text",//TODO
+                label: $field.find('label').first().text()
+            };
+            if(segments.length > 0) {
+                out.segments = segments;
+            }
+            return out;
+        }).toArray();
+        console.log(JSON.stringify(formDef));
+    };
 
     attachItems(formJSON.survey);
     console.log(formJSON);
-    $(".formFields").html(fieldColumnTemplate({ prompts: formJSON.survey }));
     
-    var $canvas = $("canvas");
-
-    var formDef = {
-        height: 1176,
-        width: 832,
-        classifier : {
-            "classification_map": {
-                 "empty": false
-            },
-            "default_classification": true,
-            "training_data_uri": "bubbles",
-            "classifier_height": 14,
-            "classifier_width": 12,
-            "advanced": {
-                 "flip_training_data": true
-            }
-        }
-    };
-
-    $(".formImage").height(formDef.height);
-    $(".formImage").width(formDef.width);
-    $(".bubble").height(formDef.classifier.classifier_height * .7);
-    $(".bubble").width(formDef.classifier.classifier_width  * .7);
-
-
-    html2canvas( [ $(".formImage").get(0) ], {
-      onrendered: function(canvas) {
-          var img = document.createElement('img');
-            img.src = canvas.toDataURL('image/jpeg');
-            document.body.appendChild(img);
-      }
+    //Generate the form image as HTML.
+    $(".formFields").html(fieldColumnTemplate({
+        prompts: formJSON.survey
+    }));
+    
+    //Generate the image and json
+    generateFormDef();
+    
+    //Fiducal replacement functionality
+    $(".fContainer").find('img').on('dragover', function(e){
+        e.stopPropagation();
+    	e.preventDefault();
+    	e.originalEvent.dataTransfer.dropEffect = 'copy';
     });
-
     
-    //Generate the template json
-    var baseOffset = $(".fContainer").offset();
-
-    formDef.fields = $(".fContainer").find('.scanField').map(function(idx, fieldEl){
-        var $field = $(fieldEl);
+    $(".fContainer").find('img').on('drop', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+    	var files = e.originalEvent.dataTransfer.files;
+    	var f = files[0];
+    
+    	var reader = new FileReader();
+    	var name = f.name;
         
-        var segments = $field.find('.segment').map(function(idx, segmentEl){
-            var $segment = $(segmentEl);
-            var segAbsOffset = $segment.offset();
-            var segOffset = {
-                top: segAbsOffset.top - baseOffset.top,
-                    //(parseInt($segment.css("border-top-width"), 10)  / 2),
-                left: segAbsOffset.left - baseOffset.left
-                    //(parseInt($segment.css("border-left-width"), 10) / 2)
-            };
-            var items = $segment.find('.bubble').map(function(idx, itemEl){
-                var $item = $(itemEl);
-                var itemAbsOffset = $item.offset();
-                var itemOffset = {
-                    top: itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4,
-                    left: itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4,
-                };
-                return {
-                    label: $item.children('label').text(),
-                    value: $item.data('value'),
-                    item_x: itemOffset.left,
-                    item_y: itemOffset.top
-                };
-            }).toArray();
-            var segment = {
-                segment_x: segOffset.left,
-                segment_y: segOffset.top,
-                segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
-                segment_height: ($segment.innerHeight() + $segment.outerHeight()) / 2
-            };
-            if(items.length > 0) {
-                segment.items = items;
-            }
-            return segment;
-        }).toArray();
-        var out = {
-            name: $field.data('name'),
-            type: "text",//TODO
-            label: $field.find('label').first().text()
-        };
-        if(segments.length > 0) {
-            out.segments = segments;
-        }
-        return out;
-    }).toArray();
-    console.log(JSON.stringify(formDef));
+        var $targetEl = $(e.target);
+    
+        reader.onload = function(e) {
+    		$targetEl.attr('src', e.target.result);
+            generateFormDef();
+    	};
+        reader.readAsDataURL(f);
+    });
 };
    
 $.getJSON('test.json', renderForm);
@@ -504,7 +513,7 @@ $.getJSON('test.json', renderForm);
     {{#each segments}}
         <td class="segment">
         {{#each items}}
-            <span class="item" data-value="{{value}}">
+            <span class="item {{class}}" data-value="{{value}}">
                 {{#if label}}
                     <label>{{{label}}}</label>
                 {{/if}}

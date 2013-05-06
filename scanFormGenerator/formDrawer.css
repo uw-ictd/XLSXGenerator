@@ -63,8 +63,10 @@
 }
 .segment {
     border: 1px solid black;
-    width: 100%;
     padding: 5px;
+}
+.item {
+    display: inline-block;
 }
 .item > * {
     vertical-align: middle;
@@ -78,4 +80,10 @@
     height: .6em;
     border: 1px solid black;
     border-radius: 50%;
+}
+.vertical {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
 }
