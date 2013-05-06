@@ -127,7 +127,7 @@
       "label": "Fill in a bubble for every pet you have:",
       "default": 3,
       "_rowNum": 17,
-      "param": "25",
+      "param": "80",
       "segments": [
         {
           "items": [

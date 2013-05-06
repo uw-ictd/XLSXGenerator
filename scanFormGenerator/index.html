@@ -107,14 +107,7 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
         <img class="outImg"></img>
-        <canvas crossOrigin="anonymous"></canvas>
         <div class="fContainer">
-        <link href="assets/css/bootstrap.css" rel="stylesheet">
-        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="assets/css/docs.css" rel="stylesheet">
-        <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
-        <link href="formDrawer.css" rel="stylesheet" >
-        
         <div class="formImage">
             <img class="tl fiducial" src="fiducials/ScanLogoSm.png">
             <img class="tr fiducial" src="fiducials/villagereach.png">
@@ -182,13 +175,13 @@
         <script src="assets/js/jquery.js"></script>
         <script src="assets/js/jquery.qrcode.min.js"></script>
         <script src="assets/js/handlebars.js"></script>
+        <script type="text/javascript" src="assets/js/html2canvas/build/html2canvas.js"></script>
         
         <script src="XLSXConverter/js-xlsx/jszip.js"></script>
         <script src="XLSXConverter/js-xlsx/xlsx.js"></script>
         <script src="XLSXConverter/underscore.js"></script>
         <script src="XLSXConverter/XLSXConverter.js"></script>
         
-        <script type="text/javascript" src="assets/js/rasterizeHTML.allinone.js"></script>
 <script>
 
 /*
@@ -270,16 +263,6 @@ function handleDrop(e) {
             errorEl.innerHTML = "Sorry, XLS files are not supported.<br />";
             errorEl.innerHTML += "You can convert your XLS file to XLSX using libreOffice or Google Docs.";
             errorsEl.appendChild(errorEl);
-            /*
-			var cfb = CFB.read(data, {type:'binary'})
-			window.cfbs[name] = cfb;
-			//cfb.Paths.forEach(function(x){console.log(x); out.innerHTML+=x+"\n";});
-			var wb = parse_xlscfb(cfb);
-			var ws = wb.Sheets[wb.Directory[0]] 
-			var csv = make_csv(ws);  
-			var cmds = get_formulae(ws).join("\n");
-			out.innerHTML+=csv+"\n";
-            */
         } else {
              try {
                 var xlsx = XLSX.read(data, {type: 'binary'});
@@ -342,6 +325,9 @@ var renderForm = function(formJSON){
             }
             field.type = field.type.toLowerCase();
             
+            if(field.type.match(/string|int/)){
+                field.segments = [{}];
+            }
             if(field.type.match(/select/)){
                 field.segments = [{ items : formJSON.choices[field.param] }];
             }
@@ -372,7 +358,6 @@ var renderForm = function(formJSON){
                         return { value: letter, label: letter };
                     });
                 });
-                
             }
         });
     };
@@ -392,8 +377,8 @@ var renderForm = function(formJSON){
             },
             "default_classification": true,
             "training_data_uri": "bubbles",
-            "classifier_height": 12,
-            "classifier_width": 10,
+            "classifier_height": 14,
+            "classifier_width": 12,
             "advanced": {
                  "flip_training_data": true
             }
@@ -402,51 +387,51 @@ var renderForm = function(formJSON){
 
     $(".formImage").height(formDef.height);
     $(".formImage").width(formDef.width);
-    $(".bubble").height(formDef.classifier.classifier_height);
-    $(".bubble").width(formDef.classifier.classifier_width);
-    
-    $canvas.attr('width', formDef.width);
-    $canvas.attr('height', formDef.height);
-    
-    var myCanvas = $("canvas").get(0); //$(".fContainer").html()
-    rasterizeHTML.drawHTML('<span>hi</span>', myCanvas, function(svgImage){
-         //$('.outImg').replaceWith(svgImage);
-         $('.outImg').attr('src', myCanvas.toDataURL("image/jpeg"));
+    $(".bubble").height(formDef.classifier.classifier_height * .7);
+    $(".bubble").width(formDef.classifier.classifier_width  * .7);
+
+
+    html2canvas( [ $(".formImage").get(0) ], {
+      onrendered: function(canvas) {
+          var img = document.createElement('img');
+            img.src = canvas.toDataURL('image/jpeg');
+            document.body.appendChild(img);
+      }
     });
-    /*
-    setTimeout(function(){
-        $('.outImg').attr('src', $("canvas").get(0).toDataURL("image/jpeg"));
-    }, 1000)
-    */
+
     
     //Generate the template json
     var baseOffset = $(".fContainer").offset();
+
     formDef.fields = $(".fContainer").find('.scanField').map(function(idx, fieldEl){
         var $field = $(fieldEl);
+        
         var segments = $field.find('.segment').map(function(idx, segmentEl){
             var $segment = $(segmentEl);
-            var absOffset = $segment.offset();
-            var offset = {
-                top: absOffset.top - baseOffset.top,
-                left: absOffset.left - baseOffset.left
+            var segAbsOffset = $segment.offset();
+            var segOffset = {
+                top: segAbsOffset.top - baseOffset.top,
+                    //(parseInt($segment.css("border-top-width"), 10)  / 2),
+                left: segAbsOffset.left - baseOffset.left
+                    //(parseInt($segment.css("border-left-width"), 10) / 2)
             };
-            var items = $segment.find('.item').map(function(idx, itemEl){
+            var items = $segment.find('.bubble').map(function(idx, itemEl){
                 var $item = $(itemEl);
-                var absOffset = $item.offset();
-                var offset = {
-                    top: absOffset.top - baseOffset.top + $item.height()/2,
-                    left: absOffset.left - baseOffset.left + $item.width()/2
+                var itemAbsOffset = $item.offset();
+                var itemOffset = {
+                    top: itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4,
+                    left: itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4,
                 };
                 return {
                     label: $item.children('label').text(),
                     value: $item.data('value'),
-                    item_x: offset.left,
-                    item_y: offset.top
+                    item_x: itemOffset.left,
+                    item_y: itemOffset.top
                 };
             }).toArray();
             var segment = {
-                segment_x: offset.left,
-                segment_y: offset.top,
+                segment_x: segOffset.left,
+                segment_y: segOffset.top,
                 segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
                 segment_height: ($segment.innerHeight() + $segment.outerHeight()) / 2
             };
@@ -457,6 +442,7 @@ var renderForm = function(formJSON){
         }).toArray();
         var out = {
             name: $field.data('name'),
+            type: "text",//TODO
             label: $field.find('label').first().text()
         };
         if(segments.length > 0) {
@@ -464,7 +450,7 @@ var renderForm = function(formJSON){
         }
         return out;
     }).toArray();
-    console.log(formDef);
+    console.log(JSON.stringify(formDef));
 };
    
 $.getJSON('test.json', renderForm);
