@@ -145,7 +145,7 @@
             <h3 id="myModalLabel">Scan XLS Form generator documentation</h3>
           </div>
           <div class="modal-body">
-            <p>One fine body…</p>
+            <p>Not loaded…</p>
           </div>
           <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -161,6 +161,8 @@
         
         <script src="assets/js/handlebars.js"></script>
         <script type="text/javascript" src="assets/html2canvas/build/html2canvas.js"></script>
+        
+        <script src="assets/js/textile.js"></script>
         
         <script src="XLSXConverter/js-xlsx/jszip.js"></script>
         <script src="XLSXConverter/js-xlsx/xlsx.js"></script>
@@ -487,6 +489,11 @@ var renderForm = function(formJSON){
 };
    
 $.getJSON('test.json', renderForm);
+
+$.get('documentation.textile', function ( txt ) {
+    
+    $( '.modal-body' ).html( textile( txt ) );
+});
    
 });
 </script>

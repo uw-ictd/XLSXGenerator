@@ -1,0 +1,136 @@
+
+h1. XLSX Format documentation
+
+The form converter expects workbooks with 3 sheets: survey, choices and settings.
+They are individually described in the sections below.
+Most spreadsheet programs have controls in the bottom-left corner where you can create them.
+There is an example spreadsheet available "here ":scanExample.xlsx which you can use a starting point.
+
+h2. survey
+
+All XLSForms require a survey sheet. The survey worksheet contains the structure and most of the content of the form. It contains the full list of questions and information about how they should be presented. Most rows represent a question; the rest of the rows specify control structures such as groups.
+
+Example survey sheet:
+
+| *type* | *name*   | *label*            |
+| text   | user_name| What is your name? |
+| integer| user_age | How old are you?   |
+
+h3. survey sheet columns:
+
+h4. type
+
+| text   | Write-in text input. |
+| integer| Integer (i.e. whole number) input.|
+| decimal| Decimal input. |
+| note   | Displays a label with no input. |
+| select_one `choice_list` | Multiple choice question; only one answer can be selected. |
+| select_multiple `choice_list` | Multiple choice question; multiple answers can be selected.|
+
+
+
+
+h4. Scan specific types:
+
+
+
+| tally `number`     | Print the specified number of bubbles, and count up how many are filled in. |
+| markup             | A label that only appears on the printed form. |
+| bub_num `digits`   | (in development) Create a field for inputing numbers by filling in numeric bubbles |
+| bub_word `letters` | (in development) Create a field for writing in words by filling in alphabetic bubbles. |
+
+h4. Groups:
+
+Groups are drawn as columns. Nested groups are drawn as rows within a column. For example:
+
+| *type* | *name*   | *label*            |
+| begin group| | |
+| note| | This is in the left column |
+| begin group| | |
+| note| | These are |
+| note| | in rows in  |
+| note| | the right column  |
+| end group| | |
+| end group| | |
+
+h4. name
+
+The name sets the variable the answer is stored under.
+
+h4. label
+
+The label is typically the question you want to ask. Labels can contain line-breaks (most spreadsheet software allows you to create line breaks using ctrl or alt + enter).
+
+h4. min_height
+
+Form segments are not automatically re-sized to fit text. If the text content is overflowing you can set the min_height to some number of pixels to make the segment larger.
+
+h4. default/constraint
+
+When scanned forms are exported to Collect the default and constraint columns can be used to set default values to be entered as answers, as well as xpath constraints on the answers. [http://opendatakit.org/help/form-design/xlsform/ For more information see the XLSForm documentation.]
+
+h4. font
+
+Using the font column it is possible to customize the font of individual labels.
+
+h4. itemProperties.items_per_row
+
+Limits the number of bubble items in a row. If there is no limit they will fill whatever space is available.
+
+h4. itemProperties.y_offset
+
+If a question's label overlaps its bubbles, it may be necessary to manually set the pixel distance from the top of the segment where the bubbles begin using this property.
+
+h2. choices
+
+The choices sheet allows you to specify choices for use with `select_` type questions.
+
+Example choices sheet:
+
+| *list_name* | *name*  | *label* |
+| cities      | seattle | Seattle |
+| cities      | paris   | Paris   |
+| cities      | new_york| New York|
+| cities      | mumbai  | Mumbai  |
+
+h3. choices sheet columns:
+
+h4. list_name
+
+The list_name is used to group choices into lists that can be referenced from the survey sheet. The example above could be referenced as follows:
+
+| *type*           | *name*        | *label*                       |
+| select_one cities|cities_visited | Which cities have you visited?|
+
+h4. name
+
+The name sets the value that the choice is stored as. This is useful in constraint formulas, and for formatting exports.
+
+h4. label
+
+Label sets the text that is drawn next to each choice bubble. There is a limited amount of space for them.
+
+h2. settings
+
+Example settings sheet:
+
+| *form_title* | *font*                   |
+| Example Form | 12pt Verdana, sans-serif |
+
+h3. settings sheet columns:
+
+h4. form_title
+
+This sets the form title displayed at the top of the form.
+
+h4. title_font
+
+This sets the form title's font.
+
+h4. font
+
+This sets the font of all text used in the form.
+
+h4. qrcode_data
+
+The data to include in the form's qr code. By default it will be the form title.
