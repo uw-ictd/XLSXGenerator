@@ -153,8 +153,8 @@
             <div id="errors"></div>
             <div id="warnings"></div>
             
-            <p class="instructions">You drag & drop custom images onto the corners of the from.</p>
-            <p class="instructions">These images can affect alignment, so it is adivsable to use unique, high contrast pictures.</p>
+            <p class="instructions">You can drag & drop custom images onto the corners of the from.</p>
+            <p class="instructions">These images affect alignment, so it is adivsable to use unique, high contrast pictures.</p>
             
             <img class="outImg"></img>
             
@@ -264,6 +264,7 @@ function handleDrop(evt) {
                 //console.log(jsonWorkbook);
                 var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
                 
+                console.log(JSON.stringify(processedWorkbook, 0, 2))
                 renderForm(processedWorkbook);
                 
                 _.each(XLSXConverter.getWarnings(), function(warning){

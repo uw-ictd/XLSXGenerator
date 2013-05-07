@@ -5,116 +5,32 @@
       "_rowNum": 2,
       "prompts": [
         {
-          "type": "group",
+          "type": "bub_word",
+          "name": "name",
+          "label": "Name:",
           "_rowNum": 3,
+          "param": "10"
+        },
+        {
+          "type": "group",
+          "_rowNum": 4,
           "prompts": [
             {
-              "type": "string",
-              "name": "name",
-              "label": "<b>Enter your name:</b>!",
-              "min_height": 80,
-              "_rowNum": 4
-            },
-            {
-              "type": "int",
-              "name": "age",
-              "label": "Enter your age:",
-              "min_height": 80,
+              "type": "markup",
+              "label": "Please turn in this chore signup form<br />when you arrive at the lodge.",
               "_rowNum": 5
             },
             {
-              "type": "select1",
-              "name": "gender",
-              "label": "Enter your gender:",
+              "type": "bub_num",
+              "name": "roomNum",
+              "label": "Room Number:",
               "_rowNum": 6,
-              "param": "genders",
-              "segments": [
-                {
-                  "items": [
-                    {
-                      "list_name": "genders",
-                      "value": "male",
-                      "label": "male",
-                      "_rowNum": 2
-                    },
-                    {
-                      "list_name": "genders",
-                      "value": "female",
-                      "label": "female",
-                      "_rowNum": 3
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "_rowNum": 8,
-          "prompts": [
-            {
-              "type": "note",
-              "name": "a_note",
-              "label": "This is a\nInstructional note.",
-              "min_height": 80,
-              "_rowNum": 9
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "_rowNum": 11,
-          "prompts": [
-            {
-              "type": "note",
-              "name": "another_note",
-              "label": "This is a\nInstructional note.",
-              "min_height": 100,
-              "_rowNum": 12
+              "param": "2"
             },
             {
-              "type": "note",
-              "name": "yet_another_note",
-              "label": "This is a\nInstructional note.",
-              "min_height": 100,
-              "_rowNum": 13
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "name": "pet_types",
-      "label": "What kinds of pets do you have:",
-      "_rowNum": 16,
-      "param": "pets",
-      "segments": [
-        {
-          "items": [
-            {
-              "list_name": "pets",
-              "value": "fish",
-              "label": "fish",
-              "_rowNum": 4
-            },
-            {
-              "list_name": "pets",
-              "value": "dog",
-              "label": "dog",
-              "_rowNum": 5
-            },
-            {
-              "list_name": "pets",
-              "value": "cat",
-              "label": "cat",
-              "_rowNum": 6
-            },
-            {
-              "list_name": "pets",
-              "value": "horse",
-              "label": "horse",
+              "type": "text",
+              "name": "address",
+              "label": "Home Address:",
               "_rowNum": 7
             }
           ]
@@ -122,147 +38,204 @@
       ]
     },
     {
-      "type": "tally",
-      "name": "num_pets",
-      "label": "Fill in a bubble for every pet you have:",
-      "default": 3,
-      "_rowNum": 17,
-      "param": "80",
-      "segments": [
+      "type": "group",
+      "_rowNum": 12,
+      "prompts": [
         {
-          "items": [
+          "type": "group",
+          "_rowNum": 13,
+          "prompts": [
             {
-              "value": 0
+              "type": "markup",
+              "name": "Monday",
+              "label": "Monday",
+              "_rowNum": 14
             },
             {
-              "value": 1
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 15,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 17,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Tuesday",
+              "label": "Tuesday",
+              "_rowNum": 18
             },
             {
-              "value": 2
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 19,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 21,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Wednesday",
+              "label": "Wednesday",
+              "_rowNum": 22
             },
             {
-              "value": 3
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 23,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 25,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Thursday",
+              "label": "Thursday",
+              "_rowNum": 26
             },
             {
-              "value": 4
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 27,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 29,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Friday",
+              "label": "Friday",
+              "_rowNum": 30
             },
             {
-              "value": 5
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 31,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 33,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Saturday",
+              "label": "Saturday",
+              "_rowNum": 34
             },
             {
-              "value": 6
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 35,
+              "param": "chores"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "_rowNum": 37,
+          "prompts": [
+            {
+              "type": "markup",
+              "name": "Sunday",
+              "label": "Sunday",
+              "_rowNum": 38
             },
             {
-              "value": 7
-            },
-            {
-              "value": 8
-            },
-            {
-              "value": 9
-            },
-            {
-              "value": 10
-            },
-            {
-              "value": 11
-            },
-            {
-              "value": 12
-            },
-            {
-              "value": 13
-            },
-            {
-              "value": 14
-            },
-            {
-              "value": 15
-            },
-            {
-              "value": 16
-            },
-            {
-              "value": 17
-            },
-            {
-              "value": 18
-            },
-            {
-              "value": 19
-            },
-            {
-              "value": 20
-            },
-            {
-              "value": 21
-            },
-            {
-              "value": 22
-            },
-            {
-              "value": 23
-            },
-            {
-              "value": 24
+              "type": "select_multiple",
+              "name": "chores",
+              "label": "Chores",
+              "_rowNum": 39,
+              "param": "chores"
             }
           ]
         }
       ]
+    },
+    {
+      "type": "text",
+      "name": "comments",
+      "label": "Comments:",
+      "_rowNum": 43
     }
   ],
   "choices": {
-    "genders": [
+    "yes_no": [
       {
-        "list_name": "genders",
-        "value": "male",
-        "label": "male",
+        "list_name": "yes_no",
+        "value": "Yes",
+        "label": "Yes",
         "_rowNum": 2
       },
       {
-        "list_name": "genders",
-        "value": "female",
-        "label": "female",
+        "list_name": "yes_no",
+        "value": "No",
+        "label": "No",
         "_rowNum": 3
       }
     ],
-    "pets": [
+    "chores": [
       {
-        "list_name": "pets",
-        "value": "fish",
-        "label": "fish",
+        "list_name": "chores",
+        "value": "dishes",
+        "label": "Wash dishes",
         "_rowNum": 4
       },
       {
-        "list_name": "pets",
-        "value": "dog",
-        "label": "dog",
+        "list_name": "chores",
+        "value": "sweep",
+        "label": "Sweep patio",
         "_rowNum": 5
       },
       {
-        "list_name": "pets",
-        "value": "cat",
-        "label": "cat",
+        "list_name": "chores",
+        "value": "bathroom",
+        "label": "Clean bathroom<br />",
         "_rowNum": 6
       },
       {
-        "list_name": "pets",
-        "value": "horse",
-        "label": "horse",
+        "list_name": "chores",
+        "value": "cook",
+        "label": "Cook dinner",
         "_rowNum": 7
+      },
+      {
+        "list_name": "chores",
+        "value": "roomba",
+        "label": "Program roomba<br />",
+        "_rowNum": 8
       }
     ]
   },
   "settings": [
     {
       "setting": "form_title",
-      "value": "Example Form",
+      "value": "Example Chore Chart",
       "_rowNum": 2
-    },
-    {
-      "setting": "font",
-      "value": "12pt times",
-      "_rowNum": 3
     }
   ]
-}
+} 
