@@ -455,7 +455,7 @@ var renderForm = function(formJSON){
             return out;
         }).toArray();
         console.log(JSON.stringify(formDef));
-        $('#download').html('<div><a class="btn btn-success download">Download</a></div>');
+        $('#download').html($('#download-notice').html());
         $('#download').find('.download').click(function(){
             alert("Not yet implemented.");
         });
@@ -507,6 +507,14 @@ $.get('documentation.textile', function ( txt ) {
 });
    
 });
+</script>
+
+<script id="download-notice" type="text/x-handlebars-template">
+<div>
+    <a class="btn btn-success download">Download Form Definition</a>
+    This is a zip file and may require using a program like
+    <a href="http://www.7-zip.org/">7-zip</a> to open on some systems.
+</div>
 </script>
 
 <script id="field-row-template" type="text/x-handlebars-template">
