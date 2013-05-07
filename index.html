@@ -106,8 +106,10 @@
         <div class="main">
         
             <div class="panel">
-                <div id="drop">Drop an XLSX file here to generate a new form</div>
-            </div>
+                <label>Upload an XLSX file here: <input class="xlsxfile" type="file"> 
+                <a class="btn btn-success">Download</a>
+                <a class="btn btn-info">Help</a>
+            </label></div>
             
             <div id="errors"></div>
             <div id="warnings"></div>
@@ -195,10 +197,11 @@ function handleSave(e) {
 
 var drop = document.getElementById('drop');
 //TODO: Test multiple forms
-function handleDrop(e) {
+function handleDrop(evt) {
+    var e = evt.originalEvent;
 	e.stopPropagation();
 	e.preventDefault();
-	var files = e.dataTransfer.files;
+	var files = e.target.files;
 	var f = files[0];
 
 	var reader = new FileReader();
@@ -252,13 +255,7 @@ function handleDrop(e) {
     }
 }
 
-function handleDragover(e) {
-	e.stopPropagation();
-	e.preventDefault();
-	e.dataTransfer.dropEffect = 'copy';
-}
-drop.addEventListener('dragover', handleDragover, false);
-drop.addEventListener('drop', handleDrop, false);
+$('.xlsxfile').change(handleDrop);
 
 
 // compile and register the "element" partial template
