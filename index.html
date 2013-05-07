@@ -16,7 +16,6 @@
     body {
         margin: 0;
         font-size: 15pt;
-        font-family: "Times New Roman"; 
         padding-top: 0;
     	min-width: 832px;
     }
@@ -86,6 +85,13 @@
         padding-top: .5em;
         padding-bottom: .5em;
     }
+    .panel label {
+        display: inline;
+        font-weight: bolder;
+    }
+    .panel input {
+        margin: 0;
+    }
     .formImage {
         margin-right: auto;
         margin-left: auto;
@@ -106,10 +112,12 @@
         <div class="main">
         
             <div class="panel">
-                <label>Upload an XLSX file here: <input class="xlsxfile" type="file"> 
-                <a class="btn btn-success">Download</a>
-                <a class="btn btn-info">Help</a>
-            </label></div>
+                <label>Upload an XLSX file here:</label>
+                <input class="xlsxfile" type="file"></input>
+                |
+                <a class="btn btn-success download">Download</a>
+                <a class="btn btn-info help" href="#myModal" role="button" data-toggle="modal">Help</a>
+            </div>
             
             <div id="errors"></div>
             <div id="warnings"></div>
@@ -130,10 +138,27 @@
                 </div>
             </div>
             
+        <!-- Modal -->
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Scan XLS Form generator documentation</h3>
+          </div>
+          <div class="modal-body">
+            <p>One fine body…</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
 
         </div>
         <script src="assets/js/jquery.js"></script>
         <script src="assets/js/jquery.qrcode.min.js"></script>
+        
+        <script src="assets/js/bootstrap-modal.js"></script>
+        
         <script src="assets/js/handlebars.js"></script>
         <script type="text/javascript" src="assets/html2canvas/build/html2canvas.js"></script>
         
