@@ -42,18 +42,9 @@
     }
     .instructions {
         color:white;
-        font-size: 2em;
-        line-height: 2.1em;
+        text-align: center;
+        line-height: 2em;
     }
-    /*
-    canvas {
-        position: absolute;
-    	z-index: 400;
-    }
-    */
-
-
-    
     #drop {
         background-color: white;
         border:2px dashed #bbb;
@@ -95,6 +86,10 @@
         padding-top: .5em;
         padding-bottom: .5em;
     }
+    .formImage {
+        margin-right: auto;
+        margin-left: auto;
+    }
     @media print {
         .main { display: none; }
     }
@@ -117,7 +112,11 @@
             <div id="errors"></div>
             <div id="warnings"></div>
             
+            <p class="instructions">You drag & drop custom images onto the corners of the from.</p>
+            <p class="instructions">These images can affect alignment, so it is adivsable to use unique, high contrast pictures.</p>
+            
             <img class="outImg"></img>
+            
             <div class="fContainer">
                 <div class="formImage">
                     <img class="tl fiducial" src="fiducials/ScanLogoSm.png">
@@ -129,11 +128,6 @@
                 </div>
             </div>
             
-            <div class="panel">
-                <button onclick="handleSave();" id="save">Save</button>
-                <p>Output:</p>
-                <textarea id="out"></textarea>
-            </div>
 
         </div>
         <script src="assets/js/jquery.js"></script>
@@ -278,6 +272,8 @@ Handlebars.registerPartial("fieldColumn", fieldColumnTemplate);
 var segmentsTemplate = Handlebars.compile($("#segments-template").html());
 Handlebars.registerPartial("segments", segmentsTemplate);
 
+var segmentTemplate = Handlebars.compile($("#segment-template").html());
+Handlebars.registerPartial("segment", segmentTemplate);
 
 var typeAliases = {
     "text" : "string",
@@ -324,16 +320,22 @@ var renderForm = function(formJSON){
                         return { value: rIdx, label: "" + rIdx, class: "vertical"};
                     });
                 });
+                field.labels = _.map(_.range(0, 10), function(rIdx){
+                    return "" + rIdx;
+                });
             }
             if(field.type.match(/bub_word/)){
+                var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
                 });
                 _.each(field.segments, function(segment){
-                    var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
                     segment.items = _.map(alphabet, function(letter){
                         return { value: letter, label: letter, class: "vertical" };
                     });
+                });
+                field.labels = _.map(alphabet, function(letter){
+                    return letter;
                 });
             }
         });
@@ -368,7 +370,7 @@ var renderForm = function(formJSON){
         //Generate the form image from the html.
         html2canvas( [ $(".formImage").get(0) ], {
           onrendered: function(canvas) {
-            $('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
+            //$('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
           }
         });
         
@@ -465,13 +467,13 @@ var renderForm = function(formJSON){
 $.getJSON('test.json', renderForm);
    
 });
-
 </script>
 
 <script id="field-row-template" type="text/x-handlebars-template">
     <table class="fieldRowTable"><tbody><tr class="fieldRow">
     {{#each prompts}}
-        <td class="field {{#unless prompts}}scanField{{/unless}}" data-name="{{name}}">
+        <td class="field {{#unless prompts}}scanField{{/unless}}"
+            data-name="{{name}}">
         
         {{#if label}}<label>{{{label}}}</label>{{/if}}
         
@@ -491,7 +493,8 @@ $.getJSON('test.json', renderForm);
 <script id="field-column-template" type="text/x-handlebars-template">
     <div class="fieldColumn">
     {{#each prompts}}
-        <div class="field {{#unless prompts}}scanField{{/unless}}" data-name="{{name}}">
+        <div class="field {{#unless prompts}}scanField{{/unless}}"
+            data-name="{{name}}">
         
         {{#if label}}<label>{{{label}}}</label>{{/if}}
         
@@ -509,20 +512,47 @@ $.getJSON('test.json', renderForm);
 </script>
 
 <script id="segments-template" type="text/x-handlebars-template">
-    <table class="segments"><tbody><tr>
-    {{#each segments}}
-        <td class="segment">
-        {{#each items}}
-            <span class="item {{class}}" data-value="{{value}}">
-                {{#if label}}
-                    <label>{{{label}}}</label>
+    <table class="segment-container {{#if segments.[1]}}segments{{/if}}"><tbody>
+        <tr>
+            {{#if segments.[1]}}
+            
+                {{#if labels}}
+                    <td class="labels">
+                        <div class="writein"></div>
+                        {{#each labels}}
+                            <label>{{this}}</label>
+                        {{/each}}
+                    </td>
                 {{/if}}
-                <span class="bubble"></span>
-            </span>
-        {{/each}}
-        </td>
+                
+                {{#each segments}}
+                    <td class="segment">
+                        <div class="writein"></div>
+                        {{> segment}}
+                    </td>
+                {{/each}}
+        
+            {{else}}
+                {{#with segments.[0]}}
+                    <td class="segment">
+                        {{> segment}}
+                    </td>
+                {{/with}}
+            {{/if}}
+        </tr>
+    </tbody></table>
+</script>
+
+<script id="segment-template" type="text/x-handlebars-template">
+    {{#each items}}
+        <span class="item {{class}}" data-value="{{value}}">
+            {{#if label}}
+                <label>{{{label}}}</label>
+            {{/if}}
+            <span class="bubble"></span>
+        </span>
     {{/each}}
-    </tr></tbody></table>
+    </td>
 </script>
 
     </body>
