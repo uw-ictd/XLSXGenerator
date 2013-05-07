@@ -15,7 +15,6 @@
     <style>
     body {
         margin: 0;
-        font-size: 15pt;
         padding-top: 0;
     	min-width: 832px;
     }
@@ -78,6 +77,12 @@
         margin-bottom: 1em;
         padding: .5em;
     }
+    #download div {
+        background-color: lightgreen;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: .5em;
+    }
     .panel {
         background-color: #f5f5f5;
         border: 1px solid lightgray;
@@ -99,6 +104,33 @@
     @media print {
         .main { display: none; }
     }
+    .help {
+        float: right;
+    }
+    #myModal {
+        width:800px;
+        margin-left:-400px;
+    }
+.docs table {
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.docs td {
+    border: 1px solid lightgray;
+    padding: 3px;
+}
+.docs h2 {
+    border-bottom: 2px solid gray;
+    margin-top: 1em;
+    margin-bottom: .5em;
+}
+.docs h3 {
+    border-bottom: 1px solid lightgray;
+    margin-top: 1em;
+    margin-bottom: .5em;
+}
+    
     </style>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -114,11 +146,10 @@
             <div class="panel">
                 <label>Upload an XLSX file here:</label>
                 <input class="xlsxfile" type="file"></input>
-                |
-                <a class="btn btn-success download">Download</a>
                 <a class="btn btn-info help" href="#myModal" role="button" data-toggle="modal">Help</a>
             </div>
             
+            <div id="download"></div>
             <div id="errors"></div>
             <div id="warnings"></div>
             
@@ -144,12 +175,11 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Scan XLS Form generator documentation</h3>
           </div>
-          <div class="modal-body">
+          <div class="modal-body docs">
             <p>Not loaded…</p>
           </div>
           <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary">Save changes</button>
           </div>
         </div>
 
@@ -209,48 +239,24 @@ function to_json(workbook) {
 	return result;
 }
 
-function print_output(output) {
-    $('#out').text(output);
-    $('#out').trigger("input");
-}
-
-function handleSave(e) {
-    var uriContent = "data:application/octet-stream," + encodeURIComponent(document.getElementById("out").value);
-    var downloader = document.createElement("iframe");
-    downloader.style.display = "none";
-    downloader.src = uriContent;
-    document.body.appendChild(downloader);
-}
-
-var drop = document.getElementById('drop');
-//TODO: Test multiple forms
 function handleDrop(evt) {
-    var e = evt.originalEvent;
-	e.stopPropagation();
-	e.preventDefault();
-	var files = e.target.files;
+	evt.stopPropagation();
+	evt.preventDefault();
+	var files = evt.target.files;
 	var f = files[0];
 
 	var reader = new FileReader();
 	var name = f.name;
     
     //Clear the warnings and errors:
-    var errorsEl = document.getElementById('errors');
-    while (errorsEl.hasChildNodes()) {
-        errorsEl.removeChild(errorsEl.lastChild);
-    }
-    var warnings = document.getElementById('warnings');
-    while (warnings.hasChildNodes()) {
-        warnings.removeChild(warnings.lastChild);
-    }
+    $('#errors').empty();
+    $('#warnings').empty();
+    $('#download').empty();
 
     reader.onload = function(e) {
 		var data = e.target.result;
-        var errorEl = document.createElement("p");
         if(f.name.slice(-3) === "xls"){
-            errorEl.innerHTML = "Sorry, XLS files are not supported.<br />";
-            errorEl.innerHTML += "You can convert your XLS file to XLSX using libreOffice or Google Docs.";
-            errorsEl.appendChild(errorEl);
+            $("#errors").append("<p>Sorry, XLS files are not supported.<br />You can convert your XLS file to XLSX using libreOffice or Google Docs.</p>");
         } else {
              try {
                 var xlsx = XLSX.read(data, {type: 'binary'});
@@ -260,24 +266,23 @@ function handleDrop(evt) {
                 
                 renderForm(processedWorkbook);
                 
-                print_output(JSON.stringify(processedWorkbook, 2, 2));
                 _.each(XLSXConverter.getWarnings(), function(warning){
-                    var warningEl = document.createElement("p");
-                    warningEl.innerHTML = warning;
-                    console.log(warning);
-                    warnings.appendChild(warningEl);
+                    var $warningEl = $("<p>");
+                    $warningEl.text(warning);
+                    $("#warnings").append($warningEl);
                 });
             } catch(e) {
-                errorEl.innerHTML = String(e);
-                errorsEl.appendChild(errorEl);
+                var $errorEl = $("<p>");
+                $errorEl.text(String(e));
+                $("#errors").append($errorEl);
                 throw e;
             }
         }
 	};
     try {
-	    reader.readAsBinaryString(f);
+        reader.readAsBinaryString(f);
     } catch(e) {
-        errorEl.innerHTML = "Could not read file.";
+        $("#errors").append("<p>Could not read file.</p>");
         throw e;
     }
 }
@@ -449,6 +454,11 @@ var renderForm = function(formJSON){
             return out;
         }).toArray();
         console.log(JSON.stringify(formDef));
+        $('#download').html('<div><a class="btn btn-success download">Download</a></div>');
+        $('#download').find('.download').click(function(){
+            alert("Not yet implemented.");
+        });
+                
     };
 
     attachItems(formJSON.survey);
