@@ -101,9 +101,6 @@
         margin-right: auto;
         margin-left: auto;
     }
-    @media print {
-        .main { display: none; }
-    }
     .help {
         float: right;
     }
@@ -111,26 +108,39 @@
         width:800px;
         margin-left:-400px;
     }
-.docs table {
-    margin: 5px;
-    margin-left: auto;
-    margin-right: auto;
-}
-.docs td {
-    border: 1px solid lightgray;
-    padding: 3px;
-}
-.docs h2 {
-    border-bottom: 2px solid gray;
-    margin-top: 1em;
-    margin-bottom: .5em;
-}
-.docs h3 {
-    border-bottom: 1px solid lightgray;
-    margin-top: 1em;
-    margin-bottom: .5em;
-}
     
+    .docs table {
+        margin: 5px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .docs td {
+        border: 1px solid lightgray;
+        padding: 3px;
+    }
+    .docs h2 {
+        border-bottom: 2px solid gray;
+        margin-top: 1em;
+        margin-bottom: .5em;
+    }
+    .docs h3 {
+        border-bottom: 1px solid lightgray;
+        margin-top: 1em;
+        margin-bottom: .5em;
+    }
+    
+    .outImg {
+        display: none;
+    }
+    @media print {
+        .main {
+            display: none;
+        }
+        .outImg {
+            display: block;
+            height: 100%;
+        }
+    }
     </style>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -140,6 +150,7 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50" style="background-color:black;">
 
+        <img class="outImg"></img>
     
         <div class="main">
         
@@ -155,8 +166,6 @@
             
             <p class="instructions">You can drag & drop custom images onto the corners of the from.</p>
             <p class="instructions">These images affect alignment, so it is adivsable to use unique, high contrast pictures.</p>
-            
-            <img class="outImg"></img>
             
             <div class="fContainer">
                 <div class="formImage">
@@ -393,20 +402,20 @@ var renderForm = function(formJSON){
         //Set some of the dimensions using the default values in the formDef:
         $(".formImage").height(formDef.height);
         $(".formImage").width(formDef.width);
-        $(".bubble").height(formDef.classifier.classifier_height * .7);
-        $(".bubble").width(formDef.classifier.classifier_width  * .7);
-        $(".heading").text(_.where(formJSON.settings, {setting: "form_title"})[0].value);
+        $(".bubble").height(Math.round(formDef.classifier.classifier_height * .7));
+        $(".bubble").width(Math.round(formDef.classifier.classifier_width  * .7));
+        $(".bubble").css('borderRadius', Math.round((formDef.classifier.classifier_width  * .7) / 2));
     
         //Generate the form image from the html.
         html2canvas( [ $(".formImage").get(0) ], {
           onrendered: function(canvas) {
-            //$('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
+            $('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
           }
         });
         
         //Generate the formDef json using the HTML.
-        var baseOffset = $(".fContainer").offset();
-        formDef.fields = $(".fContainer").find('.scanField').map(function(idx, fieldEl){
+        var baseOffset = $(".formImage").offset();
+        formDef.fields = $(".formImage").find('.scanField').map(function(idx, fieldEl){
             var $field = $(fieldEl);
             
             var segments = $field.find('.segment').map(function(idx, segmentEl){
@@ -457,9 +466,21 @@ var renderForm = function(formJSON){
         console.log(JSON.stringify(formDef));
         $('#download').html($('#download-notice').html());
         $('#download').find('.download').click(function(){
+            /*
+            var zip = new JSZip();
+            
+            zip.file("Hello.txt", "Hello World\n");
+            
+            var img = zip.folder("images");
+            img.file("smile.gif", imgData, {base64: true});
+            
+            var content = zip.generate();
+            
+            location.href = "data:application/zip;base64," + content;
+            */
+            
             alert("Not yet implemented.");
         });
-                
     };
 
     attachItems(formJSON.survey);
@@ -474,13 +495,13 @@ var renderForm = function(formJSON){
     generateFormDef();
     
     //Fiducal replacement functionality
-    $(".fContainer").find('img').on('dragover', function(e){
+    var $fiducials = $(".fContainer").find('img');
+    $fiducials.on('dragover', function(e){
         e.stopPropagation();
     	e.preventDefault();
     	e.originalEvent.dataTransfer.dropEffect = 'copy';
     });
-    
-    $(".fContainer").find('img').on('drop', function(e){
+    $fiducials.on('drop', function(e){
         e.stopPropagation();
         e.preventDefault();
     	var files = e.originalEvent.dataTransfer.files;
@@ -502,12 +523,13 @@ var renderForm = function(formJSON){
 $.getJSON('test.json', renderForm);
 
 $.get('documentation.textile', function ( txt ) {
-    
     $( '.modal-body' ).html( textile( txt ) );
 });
    
 });
 </script>
+
+<!-- Templates below here: -->
 
 <script id="download-notice" type="text/x-handlebars-template">
 <div>

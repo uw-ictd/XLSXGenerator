@@ -1,10 +1,22 @@
+h1. Getting started.
 
-h1. XLSX Format documentation
+There is an example spreadsheet available "here ":scanExample.xlsx which you can use a starting point.
+To add a question create a row like this:
+
+| *type* | *name*   | *label*            |
+| text   | user_name| What is your name? |
+
+(Below in the XLSX Format section many other types, columns and settings are described.)
+
+When your spreadsheet is ready upload it and you will see a preview of the generated form.
+You will also see a download link appear for the ODK Scan form definition.
+You can print your form by printing the webpage (only tested in chrome), or by printing the jpegs included in the form definition folder.
+
+h1. XLSX Format
 
 The form converter expects workbooks with 3 sheets: survey, choices and settings.
 They are individually described in the sections below.
 Most spreadsheet programs have controls in the bottom-left corner where you can create them.
-There is an example spreadsheet available "here ":scanExample.xlsx which you can use a starting point.
 
 h2. survey
 
@@ -38,6 +50,8 @@ h4. Scan specific types:
 | markup             | A label that only appears on the printed form. |
 | bub_num `digits`   | (in development) Create a field for inputing numbers by filling in numeric bubbles |
 | bub_word `letters` | (in development) Create a field for writing in words by filling in alphabetic bubbles. |
+| qrcode `data`      | A QR code containing the given data. Used for keeping track of variations of a form that share a template. |
+| pagebreak          | Pagebreaks allow you to create multi-page forms. |
 
 h4. Groups:
 
@@ -59,27 +73,16 @@ The name sets the variable the answer is stored under.
 
 h4. label
 
-The label is typically the question you want to ask. Labels can contain line-breaks (most spreadsheet software allows you to create line breaks using ctrl or alt + enter).
-
-h4. min_height
-
-Form segments are not automatically re-sized to fit text. If the text content is overflowing you can set the min_height to some number of pixels to make the segment larger.
+The label is typically the question you want to ask.
+Labels can contain HTML for formatting, however this formatting will be removed when it is viewed in Collect.
 
 h4. default/constraint
 
 When scanned forms are exported to Collect the default and constraint columns can be used to set default values to be entered as answers, as well as xpath constraints on the answers. [http://opendatakit.org/help/form-design/xlsform/ For more information see the XLSForm documentation.]
 
-h4. font
+h4. style
 
-Using the font column it is possible to customize the font of individual labels.
-
-h4. itemProperties.items_per_row
-
-Limits the number of bubble items in a row. If there is no limit they will fill whatever space is available.
-
-h4. itemProperties.y_offset
-
-If a question's label overlaps its bubbles, it may be necessary to manually set the pixel distance from the top of the segment where the bubbles begin using this property.
+css styles to be applied to the label. (e.g. `font: 10px times;`)
 
 h2. choices
 
@@ -114,8 +117,9 @@ h2. settings
 
 Example settings sheet:
 
-| *form_title* | *font*                   |
-| Example Form | 12pt Verdana, sans-serif |
+| *setting*    | *value*                         |
+| form_title   | Example Form                    |
+| font         | 12pt Verdana, sans-serif        |
 
 h3. settings sheet columns:
 
@@ -123,14 +127,12 @@ h4. form_title
 
 This sets the form title displayed at the top of the form.
 
-h4. title_font
-
-This sets the form title's font.
-
 h4. font
 
-This sets the font of all text used in the form.
+This sets the form's overall font.
 
-h4. qrcode_data
+h1. Extra notes:
 
-The data to include in the form's qr code. By default it will be the form title.
+The formImage.css file can be altered to apply custom styles to the form images generated.
+If you need to condense yor form this could be an effective way to do it.
+
