@@ -290,6 +290,11 @@
     {{#if qrcodeData}}
         {{qrcode qrcodeData}}
     {{/if}}
+    
+    {{#each rows}}
+        <div class="text-line"></div>
+    {{/each}}
+    
     {{#each items}}
         <span class="item {{class}}" data-value="{{value}}">
             {{#if label}}

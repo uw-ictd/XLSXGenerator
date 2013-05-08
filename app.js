@@ -149,7 +149,9 @@ var renderForm = function(formJSON){
             } 
             
             if(field.type.match(/string|int/)){
-                field.segments = [{}];
+                field.segments = [{
+                    rows: _.range(field.rows ? field.rows : 0)
+                }];
             }
             if(field.type.match(/select/)){
                 field.segments = [{
