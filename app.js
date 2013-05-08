@@ -27,7 +27,7 @@ function removeEmptyStrings(rObjArr){
 function to_json(workbook) {
     var result = {};
     _.each(workbook.SheetNames, function(sheetName) {
-    	var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
         rObjArr = removeEmptyStrings(rObjArr);
 		if(rObjArr.length > 0){
 			result[sheetName] =  rObjArr;
@@ -148,13 +148,21 @@ var renderForm = function(formJSON){
             }
             if(field.type.match(/select/)){
                 field.segments = [{
-                    items : formJSON.choices[field.param], class: "checkbox"
+                    items : _.map(formJSON.choices[field.param], function(item){
+                        if(field.type === "select1") {
+                            item.objectClass = "bubble";
+                        }
+                        return item;
+                    })
                 }];
             }
             if(field.type.match(/tally/)){
                 field.segments = [{
                     items :  _.map(_.range(parseInt(field.param, 10)), function(rIdx){
-                        return { value: rIdx };
+                        return {
+                            value: rIdx,
+                            objectClass: "bubble"
+                        };
                     })
                 }];
                 console.log(field);
@@ -165,7 +173,12 @@ var renderForm = function(formJSON){
                 });
                 _.each(field.segments, function(segment){
                     segment.items = _.map(_.range(0, 10), function(rIdx){
-                        return { value: rIdx, label: "" + rIdx, class: "vertical"};
+                        return {
+                            value: rIdx,
+                            label: "" + rIdx,
+                            class: "vertical",
+                            objectClass: "bubble"
+                        };
                     });
                 });
                 field.labels = _.map(_.range(0, 10), function(rIdx){
@@ -179,7 +192,12 @@ var renderForm = function(formJSON){
                 });
                 _.each(field.segments, function(segment){
                     segment.items = _.map(alphabet, function(letter){
-                        return { value: letter, label: letter, class: "vertical" };
+                        return {
+                            value: letter,
+                            label: letter,
+                            class: "vertical",
+                            objectClass: "bubble"
+                        };
                     });
                 });
                 field.labels = _.map(alphabet, function(letter){
@@ -233,7 +251,7 @@ var renderForm = function(formJSON){
                     left: segAbsOffset.left - baseOffset.left
                         //(parseInt($segment.css("border-left-width"), 10) / 2)
                 };
-                var items = $segment.find('.bubble').map(function(idx, itemEl){
+                var items = $segment.find('.classifiableObject').map(function(idx, itemEl){
                     var $item = $(itemEl);
                     var itemAbsOffset = $item.offset();
                     var itemOffset = {
@@ -309,13 +327,13 @@ var renderForm = function(formJSON){
         //Set some of the dimensions using the defaultScanJSON:
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
-        var bubbleHeight = Math.round(
+        var coHeight = Math.round(
             defaultScanJSON.classifier.classifier_height * 0.7);
-        var bubbleWidth = Math.round(
+        var coWidth = Math.round(
             defaultScanJSON.classifier.classifier_width * 0.7);
-        $el.find(".bubble").height(bubbleHeight);
-        $el.find(".bubble").width(bubbleWidth);
-        $el.find(".bubble").css('borderRadius', bubbleWidth / 2);
+        $el.find(".classifiableObject").height(coHeight);
+        $el.find(".classifiableObject").width(coWidth);
+        $el.find(".bubble").css('borderRadius', coWidth / 2);
         return $el;
     };
     

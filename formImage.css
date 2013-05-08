@@ -84,13 +84,17 @@
 .item label {
     display: inline;
 }
-.bubble {
+.classifiableObject {
     display: inline-block;
     width: .6em;
     height: .6em;
     border: 1px solid black;
-    /* border-radius: 50%; */
 }
+/* 
+.bubble {
+    border-radius: 50%;
+}
+ */
 .vertical {
     display: block;
     margin-left: auto;
