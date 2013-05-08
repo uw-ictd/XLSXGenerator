@@ -1,3 +1,5 @@
+//TODO: This is getting pretty divergent from the orignal XLSX converter, consider renaming.
+
 (function(){
     
     // Establish the root object, `window` in the browser, or `global` on the server.
