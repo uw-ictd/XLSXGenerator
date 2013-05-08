@@ -272,7 +272,7 @@ var renderForm = function(formJSON){
         
             reader.onload = function(e) {
         		$targetEl.attr('src', e.target.result);
-                generateScanJSON($el);//TODO:
+                generateZip();
         	};
             reader.readAsDataURL(f);
         });
@@ -287,7 +287,6 @@ var renderForm = function(formJSON){
     };
     
     attachItems(formJSON.survey);
-    
     //partition the formJSON into multiple objects
     //by pagebreaks
     var pages = _.reduce(formJSON.survey, function(memo, row){
@@ -299,56 +298,65 @@ var renderForm = function(formJSON){
         return memo;
     }, [[]]);
     
-    $('.fContainer').empty();
-    $('.outImgs').empty();
+    pages = _.filter(pages, function(page){
+        return page.length !== 0;
+    })
 
-    $('#download').html("<div>Genenrating template...</div>");
+    $('.fContainer').empty();
     
-    var zip=new MyJSZip();
-    $.when.apply(null, _.map(pages, function(page, pageIdx){
-        if(page.length === 0) return;
-        var promise = $.Deferred();
+    var generatedHTMLPages = _.map(pages, function(page, pageIdx){
         var $pageHTML = $('<div class="formImage">');
         $('.fContainer').append($pageHTML);
         generateFormPageHTML($pageHTML, _.extend({}, formJSON, {
             survey: page
         }));
-        
-        var formDef = generateScanJSON($pageHTML);
-        
-        //outImgs are used for printing...
-        //This is kept separate from the src setting below
-        //so its inserted in page order.
-        var $img = $('<img>');
-        $('.outImgs').append($img);
-        
-        //Generate the form image from the html.
-        html2canvas([$pageHTML.get(0)], {
-            onrendered: function(canvas) {
-                var dataURL=canvas.toDataURL('image/jpeg');
-                var prefix = _.reduce(_.range(pageIdx), function(memo){
-                    return memo + "nextPage/";
-                }, "");
-                
-                $img.attr('src', dataURL);
-                
-                zip.file(prefix + "template.json", JSON.stringify(formDef));
-                zip.file(prefix + "form.jpg", dataURL.substr("data:image/jpeg;base64,".length), { base64: true });
-                
-                promise.resolve();
-            }
-        });
-        return promise;
-    })).then(function(){
-        var zipped=zip.generate({
-            type:'blob'
-        });
-        $('#download').html($('#download-notice').html());
-        var $downloadBtn=$('#download').find('.download');
-        $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
-        $downloadBtn.attr('download', "template.zip");
+        return $pageHTML;
     });
     
+    var generateZip = function(){
+        $('#download').html("<div>Genenrating template...</div>");
+        $('.outImgs').empty();
+        var zip=new MyJSZip();
+        $.when.apply(null, _.map(generatedHTMLPages, function($pageHTML, pageIdx){
+            var promise = $.Deferred();
+            
+            var formDef = generateScanJSON($pageHTML);
+            
+            //outImgs are used for printing...
+            //This is kept separate from the src setting below
+            //so its inserted in page order.
+            var $img = $('<img>');
+            $('.outImgs').append($img);
+            
+            //Generate the form image from the html.
+            html2canvas([$pageHTML.get(0)], {
+                onrendered: function(canvas) {
+                    var dataURL=canvas.toDataURL('image/jpeg');
+                    var prefix = _.reduce(_.range(pageIdx), function(memo){
+                        return memo + "nextPage/";
+                    }, "");
+                    
+                    $img.attr('src', dataURL);
+                    
+                    zip.file(prefix + "template.json", JSON.stringify(formDef,null,2));
+                    zip.file(prefix + "form.jpg", dataURL.substr("data:image/jpeg;base64,".length), { base64: true });
+                    
+                    promise.resolve();
+                }
+            });
+            return promise;
+        })).then(function(){
+            var zipped=zip.generate({
+                type:'blob'
+            });
+            $('#download').html($('#download-notice').html());
+            var $downloadBtn=$('#download').find('.download');
+            $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
+            $downloadBtn.attr('download', "template.zip");
+        });
+    }
+    generateZip();
+
 };
    
 $.getJSON('test.json', renderForm);
