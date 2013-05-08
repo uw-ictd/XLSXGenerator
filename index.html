@@ -201,6 +201,7 @@
     <img class="tr fiducial" src="fiducials/villagereach.png">
     <img class="bl fiducial" src="fiducials/cs.jpg">
     <img class="br fiducial" src="fiducials/change.jpg">
+    
     <h2 class="heading">
         {{{title}}}
     </h1>
@@ -286,6 +287,9 @@
 </script>
 
 <script id="segment-template" type="text/x-handlebars-template">
+    {{#if qrcodeData}}
+        {{qrcode qrcodeData}}
+    {{/if}}
     {{#each items}}
         <span class="item {{class}}" data-value="{{value}}">
             {{#if label}}

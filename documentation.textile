@@ -144,6 +144,10 @@ This sets the form's overall font.
 
 h1. Extra notes
 
-    The formImage.css file can be altered to apply custom styles to the form images generated.
-    If you need to condense yor form this could be an effective way to do it.
+    "The Form Generator site can be downloaded here for offline conversion.":https://github.com/nathanathan/ODKScan_XLSForm/archive/gh-pages.zip
+    The offline version has one limitation if you view it from your filesystem:
+    Due to a security restriction the default fiducials will not appear in the template file,
+    so it is necessairy to replace them all with custom fiducials.
+
+p. If you use the offline version, the formImage.css file can be altered to apply custom styles to the form images generated. If you need to condense yor form this could be an effective way to do it.
 

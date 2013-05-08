@@ -103,6 +103,16 @@ Handlebars.registerPartial("segments", segmentsTemplate);
 var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
+Handlebars.registerHelper("qrcode", function(data) {
+    var size = (1 + Math.floor(data.length / 40)) * 80;
+    return new Handlebars.SafeString('<img src="' +
+        $('<canvas width=' + size + ' height=' + size + '>').qrcode({
+            width: size,
+            height: size,
+            text: data
+        }).get(0).toDataURL('image/jpeg') + '"></img>');
+});
+
 var typeAliases = {
     "text" : "string",
     "select_one" : "select1",
@@ -172,6 +182,11 @@ var renderForm = function(formJSON){
                 field.labels = _.map(alphabet, function(letter){
                     return letter;
                 });
+            }
+            if(field.type.match(/qrcode/)){
+                field.segments = [{
+                    qrcodeData : field.param
+                }];
             }
             fieldMap[field.name] = _.omit(field, ['segments', 'labels']);
         });
