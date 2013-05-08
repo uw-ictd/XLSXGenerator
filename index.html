@@ -204,6 +204,10 @@
         <script src="assets/js/textile.js"></script>
         
         <script src="XLSXConverter/js-xlsx/jszip.js"></script>
+        <!--
+        <script src="assets/js/jszip/jszip.js"></script>
+        <script src="assets/js/jszip/jszip-load.js"></script>
+        -->
         <script src="XLSXConverter/js-xlsx/xlsx.js"></script>
         <script src="XLSXConverter/underscore.js"></script>
         <script src="XLSXConverter/XLSXConverter.js"></script>
@@ -406,11 +410,45 @@ var renderForm = function(formJSON){
         $(".bubble").width(Math.round(formDef.classifier.classifier_width  * .7));
         $(".bubble").css('borderRadius', Math.round((formDef.classifier.classifier_width  * .7) / 2));
     
+            
+        $('#download').html("<div>Genenrating template...</div>");
+        
+        _.defer(function(){
+            
+        });
+    
         //Generate the form image from the html.
-        html2canvas( [ $(".formImage").get(0) ], {
-          onrendered: function(canvas) {
-            $('.outImg').attr('src', canvas.toDataURL('image/jpeg'));
-          }
+        html2canvas([$(".formImage").get(0)], {
+            onrendered: function(canvas) {
+                //TODO: Fix this hack
+                //Basically, there are two JSZips, one that generates blobs
+                //and one that is used by js-xlsx. If I use the new one that generates
+                //blobs the js-xlsx breaks, and if I can't generate blobs,
+                //well that's just a pain to work around.
+                //So, I switch between which one is in the global namespace
+                //every time a zip is generated.
+                var oldJSZip=JSZip;
+                JSZip=undefined;
+                $.getScript('assets/js/jszip/jszip.js', function() {
+                    $.getScript('assets/js/jszip/jszip-load.js', function() {
+                        var dataURL=canvas.toDataURL('image/jpeg');
+                        var zip=new JSZip();
+                        zip.file("template.json", JSON.stringify(formDef));
+                        zip.file("form.jpg", dataURL.substr("data:image/jpeg;base64,".length), { base64: true });
+                        var zipped=zip.generate({
+                            type:'blob'
+                        });
+                        $('#download').html($('#download-notice').html());
+                        var $downloadBtn=$('#download').find('.download');
+                        $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
+                        $downloadBtn.attr('download', "template.zip");
+                        //For printing...
+                        $('.outImg').attr('src', dataURL);
+                        console.log(dataURL);
+                        JSZip=oldJSZip;
+                    });
+                });
+            }
         });
         
         //Generate the formDef json using the HTML.
@@ -464,23 +502,7 @@ var renderForm = function(formJSON){
             return out;
         }).toArray();
         console.log(JSON.stringify(formDef));
-        $('#download').html($('#download-notice').html());
-        $('#download').find('.download').click(function(){
-            /*
-            var zip = new JSZip();
-            
-            zip.file("Hello.txt", "Hello World\n");
-            
-            var img = zip.folder("images");
-            img.file("smile.gif", imgData, {base64: true});
-            
-            var content = zip.generate();
-            
-            location.href = "data:application/zip;base64," + content;
-            */
-            
-            alert("Not yet implemented.");
-        });
+        
     };
 
     attachItems(formJSON.survey);
