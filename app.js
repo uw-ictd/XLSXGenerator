@@ -147,10 +147,13 @@ var renderForm = function(formJSON){
                 field.segments = [{}];
             }
             if(field.type.match(/select/)){
-                field.segments = [{ items : formJSON.choices[field.param] }];
+                field.segments = [{
+                    items : formJSON.choices[field.param], class: "checkbox"
+                }];
             }
             if(field.type.match(/tally/)){
-                field.segments = [{ items :  _.map(_.range(parseInt(field.param, 10)), function(rIdx){
+                field.segments = [{
+                    items :  _.map(_.range(parseInt(field.param, 10)), function(rIdx){
                         return { value: rIdx };
                     })
                 }];
@@ -306,9 +309,13 @@ var renderForm = function(formJSON){
         //Set some of the dimensions using the defaultScanJSON:
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
-        $el.find(".bubble").height(Math.round(defaultScanJSON.classifier.classifier_height * 0.7));
-        $el.find(".bubble").width(Math.round(defaultScanJSON.classifier.classifier_width  * 0.7));
-        $el.find(".bubble").css('borderRadius', Math.round((defaultScanJSON.classifier.classifier_width  * 0.7) / 2));
+        var bubbleHeight = Math.round(
+            defaultScanJSON.classifier.classifier_height * 0.7);
+        var bubbleWidth = Math.round(
+            defaultScanJSON.classifier.classifier_width * 0.7);
+        $el.find(".bubble").height(bubbleHeight);
+        $el.find(".bubble").width(bubbleWidth);
+        $el.find(".bubble").css('borderRadius', bubbleWidth / 2);
         return $el;
     };
     
@@ -364,8 +371,11 @@ var renderForm = function(formJSON){
                     
                     $img.attr('src', dataURL);
                     
-                    zip.file(prefix + "template.json", JSON.stringify(formDef,null,2));
-                    zip.file(prefix + "form.jpg", dataURL.substr("data:image/jpeg;base64,".length), { base64: true });
+                    zip.file(prefix + "template.json",
+                        JSON.stringify(formDef,null,2));
+                    zip.file(prefix + "form.jpg",
+                        dataURL.substr("data:image/jpeg;base64,".length),
+                        { base64: true });
                     
                     promise.resolve();
                 }
