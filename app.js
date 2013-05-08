@@ -87,7 +87,7 @@ function handleDrop(evt) {
 
 $('.xlsxfile').change(handleDrop);
 
-//Handlebars compilation:
+//Handlebars compilation of the templates at the bottom of index.html:
 var formTemplate = Handlebars.compile($("#form-template").html());
 
 // compile and register the "element" partial template
@@ -112,10 +112,17 @@ var typeAliases = {
 var renderForm = function(formJSON){
     console.log("Rendering...", formJSON);
     
-    var attachItems = function(fields) {
+    //The field map will be populated by preprocess
+    //provide an easy way to reference the augmented JSON for each field
+    //for use in the Scan JSON output.
+    var fieldMap = {};
+    
+    //Attach items
+    //set the prompt types
+    var preprocess = function(fields) {
         _.each(fields, function(field) {
             if('prompts' in field){
-                attachItems(field.prompts);
+                preprocess(field.prompts);
                 return;
             }
             field.type = field.type.toLowerCase();
@@ -166,6 +173,7 @@ var renderForm = function(formJSON){
                     return letter;
                 });
             }
+            fieldMap[field.name] = _.omit(field, ['segments', 'labels']);
         });
     };
     
@@ -178,8 +186,8 @@ var renderForm = function(formJSON){
             },
             "default_classification": true,
             "training_data_uri": "bubbles",
-            "classifier_height": 14,
-            "classifier_width": 12,
+            "classifier_height": 16,
+            "classifier_width": 14,
             "advanced": {
                  "flip_training_data": true
             }
@@ -193,6 +201,10 @@ var renderForm = function(formJSON){
         var baseOffset = $formImage.offset();
         formDef.fields = $(".formImage").find('.scanField').map(function(idx, fieldEl){
             var $field = $(fieldEl);
+            var fieldName = $field.data('name');
+            if(!fieldName){
+                return null;
+            }
             
             var segments = $field.find('.segment').map(function(idx, segmentEl){
                 var $segment = $(segmentEl);
@@ -207,13 +219,13 @@ var renderForm = function(formJSON){
                     var $item = $(itemEl);
                     var itemAbsOffset = $item.offset();
                     var itemOffset = {
-                        top: itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4,
-                        left: itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4,
+                        top: Math.round(itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4),
+                        left: Math.round(itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4),
                     };
                     return {
                         //In theory this should remove any html markup.
-                        label: $item.children('label').text(),
-                        value: $item.data('value'),
+                        label: $item.parent().children('label').text(),
+                        value: $item.parent().data('value'),
                         item_x: itemOffset.left,
                         item_y: itemOffset.top
                     };
@@ -229,11 +241,10 @@ var renderForm = function(formJSON){
                 }
                 return segment;
             }).toArray();
-            var out = {
-                name: $field.data('name'),
-                type: "text",//TODO
-                label: $field.find('label').first().text()
-            };
+
+            var out = fieldMap[fieldName];
+            //We use this label to strip html formatting.
+            out.label = $field.find('label').first().text();
             if(segments.length > 0) {
                 out.segments = segments;
             }
@@ -286,7 +297,7 @@ var renderForm = function(formJSON){
         return $el;
     };
     
-    attachItems(formJSON.survey);
+    preprocess(formJSON.survey);
     //partition the formJSON into multiple objects
     //by pagebreaks
     var pages = _.reduce(formJSON.survey, function(memo, row){
