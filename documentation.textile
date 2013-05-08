@@ -81,6 +81,13 @@ h4. label
 
     The label is typically the question you want to ask.
     Labels can contain HTML for formatting, however this formatting will be removed when it is viewed in Collect.
+    For example, if you want to set the label to use a custom font, you could do something like this:
+
+<pre>
+<code>
+<span style="font:12px times;">I'm a stylish label.</span>
+</code>
+</pre>
 
 h4. default/constraint
 
@@ -88,10 +95,6 @@ h4. default/constraint
     constraint columns can be used to set default values to be entered as answers,
     as well as xpath constraints on the answers.
     "For more information see the XLSForm documentation.":http://opendatakit.org/help/form-design/xlsform/
-
-h4. style
-
-css styles to be applied to the label. (e.g. `font: 10px times;`)
 
 h2. choices
 
@@ -139,6 +142,10 @@ This sets the form title displayed at the top of the form.
 h4. font
 
 This sets the form's overall font.
+
+h4. title_font
+
+This sets the font of the form's title
 
 --------------------------------------------------------------------------------
 

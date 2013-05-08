@@ -83,6 +83,8 @@ function handleDrop(evt) {
         $("#errors").append("<p>Could not read file.</p>");
         throw e;
     }
+    //Clear the file input so the form can be updated:
+    $('.xlsxfile').val("");
 }
 
 $('.xlsxfile').change(handleDrop);
@@ -127,8 +129,11 @@ var renderForm = function(formJSON){
     //for use in the Scan JSON output.
     var fieldMap = {};
     
+    //Preprocess does the following:
     //Attach items
+    //annotate json with other data
     //set the prompt types
+    //generate field map
     var preprocess = function(fields) {
         _.each(fields, function(field) {
             if('prompts' in field){
@@ -255,8 +260,10 @@ var renderForm = function(formJSON){
                     var $item = $(itemEl);
                     var itemAbsOffset = $item.offset();
                     var itemOffset = {
-                        top: Math.round(itemAbsOffset.top - segAbsOffset.top + ($item.innerHeight() + $item.outerHeight()) / 4),
-                        left: Math.round(itemAbsOffset.left - segAbsOffset.left + ($item.innerWidth() + $item.outerWidth()) / 4),
+                        top: Math.round(itemAbsOffset.top - segAbsOffset.top +
+                            ($item.innerHeight() + $item.outerHeight()) / 4),
+                        left: Math.round(itemAbsOffset.left - segAbsOffset.left +
+                            ($item.innerWidth() + $item.outerWidth()) / 4),
                     };
                     return {
                         //In theory this should remove any html markup.
@@ -292,12 +299,18 @@ var renderForm = function(formJSON){
     var generateFormPageHTML = function($el, formJSON){
         //Generate the form image as HTML.
         console.log("test");
-        var title =  _.where(formJSON.settings, {setting: 'form_title'});
-        title = title ? title[0].value : "";
+        var title =  _.findWhere(formJSON.settings, {setting: 'form_title'});
+        title = title ? title.value : "";
+        var font =  _.findWhere(formJSON.settings, {setting: 'font'});
+        font = font ? font.value : "";
+        var title_font =  _.findWhere(formJSON.settings, {setting: 'title_font'});
+        title_font = title_font ? title_font.value : "";
         
         $el.html(formTemplate({
             prompts: formJSON.survey,
-            title: title
+            title: title,
+            font: font,
+            title_font: title_font
         }));
         
         //Fiducal replacement functionality
@@ -334,6 +347,8 @@ var renderForm = function(formJSON){
         $el.find(".classifiableObject").height(coHeight);
         $el.find(".classifiableObject").width(coWidth);
         $el.find(".bubble").css('borderRadius', coWidth / 2);
+        //Hacky way to ensure the bub_num and bub_work widgets line up:
+        $el.find(".labels > label").height($el.find(".classifiableObject").parent().height());
         return $el;
     };
     
