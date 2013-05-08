@@ -1,16 +1,19 @@
-h1. Getting started.
+h1. Getting Started
 
-There is an example spreadsheet available "here ":scanExample.xlsx which you can use a starting point.
-To add a question create a row like this:
+    There is an example spreadsheet available "here":scanExample.xlsx which you can use a starting point.
+    To add a question create a row like this:
 
 | *type* | *name*   | *label*            |
 | text   | user_name| What is your name? |
 
 (Below in the XLSX Format section many other types, columns and settings are described.)
 
-When your spreadsheet is ready upload it and you will see a preview of the generated form.
-You will also see a download link appear for the ODK Scan form definition.
-You can print your form by printing the webpage (only tested in chrome), or by printing the jpegs included in the form definition folder.
+p.
+    When your spreadsheet is ready upload it and you will see a preview of the generated form.
+    You will also see a download link appear for the ODK Scan form definition.
+    You can print your form by printing the webpage (only tested in chrome), or by printing the jpegs included in the form definition folder.
+
+--------------------------------------------------------------------------------
 
 h1. XLSX Format
 
@@ -20,7 +23,10 @@ Most spreadsheet programs have controls in the bottom-left corner where you can 
 
 h2. survey
 
-All XLSForms require a survey sheet. The survey worksheet contains the structure and most of the content of the form. It contains the full list of questions and information about how they should be presented. Most rows represent a question; the rest of the rows specify control structures such as groups.
+    All XLSForms require a survey sheet.
+    The survey worksheet contains the structure and most of the content of the form.
+    It contains the full list of questions and information about how they should be presented.
+    Most rows represent a question; the rest of the rows specify control structures such as groups.
 
 Example survey sheet:
 
@@ -73,12 +79,15 @@ The name sets the variable the answer is stored under.
 
 h4. label
 
-The label is typically the question you want to ask.
-Labels can contain HTML for formatting, however this formatting will be removed when it is viewed in Collect.
+    The label is typically the question you want to ask.
+    Labels can contain HTML for formatting, however this formatting will be removed when it is viewed in Collect.
 
 h4. default/constraint
 
-When scanned forms are exported to Collect the default and constraint columns can be used to set default values to be entered as answers, as well as xpath constraints on the answers. [http://opendatakit.org/help/form-design/xlsform/ For more information see the XLSForm documentation.]
+    When scanned forms are exported to Collect the default and
+    constraint columns can be used to set default values to be entered as answers,
+    as well as xpath constraints on the answers.
+    "For more information see the XLSForm documentation.":http://opendatakit.org/help/form-design/xlsform/
 
 h4. style
 
@@ -131,8 +140,10 @@ h4. font
 
 This sets the form's overall font.
 
-h1. Extra notes:
+--------------------------------------------------------------------------------
 
-The formImage.css file can be altered to apply custom styles to the form images generated.
-If you need to condense yor form this could be an effective way to do it.
+h1. Extra notes
+
+    The formImage.css file can be altered to apply custom styles to the form images generated.
+    If you need to condense yor form this could be an effective way to do it.
 
