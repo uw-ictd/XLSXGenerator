@@ -364,8 +364,8 @@ var renderForm = function(formJSON){
         $el.find(".classifiableObject").height(coHeight);
         $el.find(".classifiableObject").width(coWidth);
         $el.find(".bubble").css('borderRadius', coWidth / 2);
-        //Hacky way to ensure the bub_num and bub_work widgets line up:
-        $el.find(".labels > label").height($el.find(".classifiableObject").parent().height());
+        //Ensure the bub_num and bub_work widgets line up:
+        $el.find(".vertical").height(defaultScanJSON.classifier.classifier_height + 2);
         return $el;
     };
     
@@ -415,7 +415,7 @@ var renderForm = function(formJSON){
             html2canvas([$pageHTML.get(0)], {
                 onrendered: function(canvas) {
                     var dataURL=canvas.toDataURL('image/jpeg');
-                    var formName = formJSON.filename ? formJSON.filename.slice(0,-4) : "template";
+                    var formName = formJSON.filename ? formJSON.filename.slice(0,-5) : "template";
                     var prefix = _.reduce(_.range(pageIdx), function(memo){
                         return memo + "nextPage/";
                     }, formName + "/");
