@@ -192,6 +192,9 @@ var renderForm = function(formJSON){
                 field.labels = _.map(_.range(0, 10), function(rIdx){
                     return "" + rIdx;
                 });
+                //Makes scan combine all the values
+                //rather than putting a space between them.
+                field.delimiter = "";
                 field.type = "int";
             }
             if(field.type.match(/bub_word/)){
@@ -212,6 +215,9 @@ var renderForm = function(formJSON){
                 field.labels = _.map(alphabet, function(letter){
                     return letter;
                 });
+                //Makes scan combine all the values
+                //rather than putting a space between them.
+                field.delimiter = "";
                 field.type = "string";
             }
             if(field.type.match(/qrcode/)){
@@ -234,6 +240,7 @@ var renderForm = function(formJSON){
             "training_data_uri": "bubbles",
             "classifier_height": 16,
             "classifier_width": 14,
+            "alignment_radius": 2,
             "advanced": {
                  "flip_training_data": true
             }
@@ -282,6 +289,8 @@ var renderForm = function(formJSON){
                     };
                 }).toArray();
                 var segment = {
+                    //Need to fix this...
+                    align_segment: true,
                     segment_x: segOffset.left,
                     segment_y: segOffset.top,
                     segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
@@ -433,8 +442,11 @@ var renderForm = function(formJSON){
             $downloadBtn.attr('download', "template.zip");
         });
     }
-    window.setTimeout(generateZip, 1000)
-    //generateZip();
+    
+    $('#download').html("<div>Genenrating template...</div>");
+    //TODO: Fix this hack.
+    //Wait for the DOM stuff before generating the JSON
+    window.setTimeout(generateZip, 500)
 
 };
    
