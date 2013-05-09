@@ -60,8 +60,9 @@ function handleDrop(evt) {
                 var jsonWorkbook = to_json(xlsx);
                 //console.log(jsonWorkbook);
                 var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
+                processedWorkbook.filename = f.name;
                 
-                console.log(JSON.stringify(processedWorkbook, 0, 2))
+                console.log(JSON.stringify(processedWorkbook, 0, 2));
                 renderForm(processedWorkbook);
                 
                 _.each(XLSXConverter.getWarnings(), function(warning){
@@ -191,6 +192,7 @@ var renderForm = function(formJSON){
                 field.labels = _.map(_.range(0, 10), function(rIdx){
                     return "" + rIdx;
                 });
+                field.type = "int";
             }
             if(field.type.match(/bub_word/)){
                 var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
@@ -210,6 +212,7 @@ var renderForm = function(formJSON){
                 field.labels = _.map(alphabet, function(letter){
                     return letter;
                 });
+                field.type = "string";
             }
             if(field.type.match(/qrcode/)){
                 field.segments = [{
@@ -261,11 +264,14 @@ var renderForm = function(formJSON){
                 var items = $segment.find('.classifiableObject').map(function(idx, itemEl){
                     var $item = $(itemEl);
                     var itemAbsOffset = $item.offset();
+                    //I think an ideal solution would be to use floats throughout the pipeline.
+                    //Text dimensions (e.g. em/pt) cause issues because they
+                    //lead to partial pixel measurements that lead to rounding errors.
                     var itemOffset = {
-                        top: Math.round(itemAbsOffset.top - segAbsOffset.top +
-                            ($item.innerHeight() + $item.outerHeight()) / 4),
-                        left: Math.round(itemAbsOffset.left - segAbsOffset.left +
-                            ($item.innerWidth() + $item.outerWidth()) / 4),
+                        top: itemAbsOffset.top - segAbsOffset.top +
+                            ($item.innerHeight() + $item.outerHeight()) / 4,
+                        left: itemAbsOffset.left - segAbsOffset.left +
+                            ($item.innerWidth() + $item.outerWidth()) / 4,
                     };
                     return {
                         //In theory this should remove any html markup.
@@ -400,9 +406,10 @@ var renderForm = function(formJSON){
             html2canvas([$pageHTML.get(0)], {
                 onrendered: function(canvas) {
                     var dataURL=canvas.toDataURL('image/jpeg');
+                    var formName = formJSON.filename ? formJSON.filename.slice(0,-4) : "template";
                     var prefix = _.reduce(_.range(pageIdx), function(memo){
                         return memo + "nextPage/";
-                    }, "");
+                    }, formName + "/");
                     
                     $img.attr('src', dataURL);
                     
@@ -426,7 +433,8 @@ var renderForm = function(formJSON){
             $downloadBtn.attr('download', "template.zip");
         });
     }
-    generateZip();
+    window.setTimeout(generateZip, 1000)
+    //generateZip();
 
 };
    
