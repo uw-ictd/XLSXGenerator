@@ -1,0 +1,114 @@
+.formImage {
+    background-color: white;
+    padding: 2%;
+    position: relative;
+    padding: 0;
+}
+.formImage .heading {
+    text-align: center;
+    padding-top: 20px;
+}
+.formImage .fiducial {
+    position:absolute;
+    margin: 5px;
+}
+.formImage .tl {
+    top:0;
+    left:0;
+}
+.formImage .tr {
+    top:0;
+    right:0;
+}
+.formImage .bl {
+    bottom:0;
+    left:0;
+}
+.formImage .br {
+    bottom:0;
+    right:0;
+}
+
+.formFields {
+    width: 96%;
+    margin: 2%;
+    border: 1px solid gray;
+}
+.fieldRowTable {
+    width: 100%;
+}
+.fieldRow >  .field {
+    border-right: 1px solid gray;
+}
+.fieldRow >  .field:last-child {
+    border-right: 0 solid gray;
+}
+.fieldColumn > .field {
+    border-bottom: 1px solid gray;
+}
+.fieldColumn > .field:last-child {
+    border-bottom: 0 solid gray;
+}
+.field {
+    vertical-align: top;
+    margin: 0;
+    padding: 5px;
+    height: 100%;
+    min-height: 100%;
+}
+.segment-container {
+    width: 100%;
+    min-height: 30px;
+    margin-bottom: 2px;
+}
+.segments {
+    width: 0;
+}
+.segment {
+    border: 1px solid black;
+    padding: 5px;
+}
+.labels {
+    border: 1px solid black;
+    padding: 5px;
+}
+.labels > label {
+    margin-bottom: 0;
+}
+.item {
+    display: inline-block;
+}
+.item > * {
+    vertical-align: middle;
+}
+.item label {
+    display: inline;
+}
+.classifiableObject {
+    display: inline-block;
+    width: .6em;
+    height: .6em;
+    border: 1px solid black;
+}
+/* 
+.bubble {
+    border-radius: 50%;
+}
+ */
+.vertical {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
+}
+.vertical > label {
+    display: none;
+}
+.writein {
+    height: 1.2em;
+    border-bottom: 1px solid black;
+}
+.text-line {
+    height: 1.2em;
+    border-bottom: 1px solid black;
+}
