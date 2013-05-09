@@ -242,7 +242,7 @@ var renderForm = function(formJSON){
 
         //Generate the formDef json using the HTML.
         var baseOffset = $formImage.offset();
-        formDef.fields = $(".formImage").find('.scanField').map(function(idx, fieldEl){
+        formDef.fields = $formImage.find('.scanField').map(function(idx, fieldEl){
             var $field = $(fieldEl);
             var fieldName = $field.data('name');
             if(!fieldName){
