@@ -43,7 +43,6 @@ function handleDrop(evt) {
 	var f = files[0];
 
 	var reader = new FileReader();
-	var name = f.name;
     
     //Clear the warnings and errors:
     $('#errors').empty();
@@ -107,7 +106,7 @@ var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
 Handlebars.registerHelper("qrcode", function(data) {
-    var size = (1 + Math.floor(data.length / 40)) * 80;
+    var size = (1 + Math.floor(data.length / 40)) * 96;
     return new Handlebars.SafeString('<img src="' +
         $('<canvas width=' + size + ' height=' + size + '>').qrcode({
             width: size,
@@ -229,6 +228,11 @@ var renderForm = function(formJSON){
         });
     };
     
+    var alignment_radius =  _.findWhere(formJSON.settings, {
+        setting: 'alignment_radius'
+    });
+    alignment_radius = alignment_radius ? alignment_radius.value : 0;
+    
     var defaultScanJSON = {
         height: 1088,
         width: 832,
@@ -240,7 +244,7 @@ var renderForm = function(formJSON){
             "training_data_uri": "bubbles",
             "classifier_height": 16,
             "classifier_width": 14,
-            "alignment_radius": 2,
+            "alignment_radius": alignment_radius,
             "advanced": {
                  "flip_training_data": true
             }
@@ -358,9 +362,9 @@ var renderForm = function(formJSON){
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
         var coHeight = Math.round(
-            defaultScanJSON.classifier.classifier_height * 0.7);
+            defaultScanJSON.classifier.classifier_height * 0.64);
         var coWidth = Math.round(
-            defaultScanJSON.classifier.classifier_width * 0.7);
+            defaultScanJSON.classifier.classifier_width * 0.64);
         $el.find(".classifiableObject").height(coHeight);
         $el.find(".classifiableObject").width(coWidth);
         $el.find(".bubble").css('borderRadius', coWidth / 2);
