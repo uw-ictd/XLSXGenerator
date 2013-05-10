@@ -53,11 +53,11 @@ h4. Scan specific types:
 
 
 | tally `number`     | Print the specified number of bubbles, and count up how many are filled in. |
-| markup             | A label that only appears on the printed form. |
-| bub_num `digits`   | (in development) Create a field for inputing numbers by filling in numeric bubbles |
-| bub_word `letters` | (in development) Create a field for writing in words by filling in alphabetic bubbles. |
+| markup             | A label that only appears on the printed form.                       |
+| bub_num `digits`   | Create a field for inputting numbers by filling in numeric bubbles   |
+| bub_word `letters` | Create a field for inputting words by filling in alphabetic bubbles. |
 | qrcode `data`      | A QR code containing the given data. Used for keeping track of variations of a form that share a template. |
-| pagebreak          | Pagebreaks allow you to create multi-page forms. |
+| pagebreak          | Pagebreaks allow you to create multi-page forms.                     |
 
 h4. Groups:
 

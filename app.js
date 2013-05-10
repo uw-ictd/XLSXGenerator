@@ -5,6 +5,8 @@ The JSON is fed into a handlebars template that generates the HTML.
 A number of helpers are defined to help render certain items.
 After the HTML is rendered, jQuery is used to construct the formdef json from it.
 */
+//TODO: Rather than having a multiple segments template,
+//make one for bub_* widgets
 $(document).ready(function () {
 
 function removeEmptyStrings(rObjArr){
@@ -284,12 +286,15 @@ var renderForm = function(formJSON){
                     left: segAbsOffset.left - baseOffset.left
                         //(parseInt($segment.css("border-left-width"), 10) / 2)
                 };
-                var items = $segment.find('.classifiableObject').map(function(idx, itemEl){
+                var items = $segment
+                    .find('.classifiableObject')
+                    .map(function(idx, itemEl){
                     var $item = $(itemEl);
                     var itemAbsOffset = $item.offset();
-                    //I think an ideal solution would be to use floats throughout the pipeline.
-                    //Text dimensions (e.g. em/pt) cause issues because they
-                    //lead to partial pixel measurements that lead to rounding errors.
+                    //I think an ideal solution would be to use floats
+                    //throughout the pipeline.
+                    //Text dimensions (em/pt) cause issues because they lead to
+                    //partial pixel measurements that cause rounding errors.
                     var itemOffset = {
                         top: itemAbsOffset.top - segAbsOffset.top +
                             ($item.innerHeight() + $item.outerHeight()) / 4,
@@ -309,8 +314,10 @@ var renderForm = function(formJSON){
                     align_segment: true,
                     segment_x: segOffset.left,
                     segment_y: segOffset.top,
-                    segment_width: ($segment.innerWidth() + $segment.outerWidth()) / 2,
-                    segment_height: ($segment.innerHeight() + $segment.outerHeight()) / 2
+                    segment_width: ($segment.innerWidth() +
+                        $segment.outerWidth()) / 2,
+                    segment_height: ($segment.innerHeight() +
+                        $segment.outerHeight()) / 2
                 };
                 if(items.length > 0) {
                     segment.items = items;
@@ -353,7 +360,6 @@ var renderForm = function(formJSON){
             e.stopPropagation();
             e.preventDefault();
         	var files = e.originalEvent.dataTransfer.files;
-        	var f = files[0];
         
         	var reader = new FileReader();
             
@@ -363,7 +369,7 @@ var renderForm = function(formJSON){
         		$targetEl.attr('src', e.target.result);
                 generateZip();
         	};
-            reader.readAsDataURL(f);
+            reader.readAsDataURL(files[0]);
         });
         
         //Set some of the dimensions using the defaultScanJSON:
@@ -462,10 +468,10 @@ var renderForm = function(formJSON){
 
 };
    
-$.getJSON('test.json', renderForm);
-
+//$.getJSON('test.json', renderForm);
+/*
 $.get('documentation.textile', function ( txt ) {
     $( '.modal-body' ).html( textile( txt ) );
 });
-   
+*/ 
 });
