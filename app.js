@@ -118,7 +118,7 @@ Handlebars.registerHelper("qrcode", function(data) {
 var typeAliases = {
     "text" : "string",
     "select_one" : "select1",
-    "select_mulitple" : "select"
+    "select_multiple" : "select"
 };
 
 var renderForm = function(formJSON){
@@ -150,7 +150,7 @@ var renderForm = function(formJSON){
                 field.type = typeAliases[field.type];
             } 
             
-            if(field.type.match(/string|int/)){
+            if(field.type.match(/string|int|decimal/)){
                 field.segments = [{
                     rows: _.range(field.rows ? field.rows : 0)
                 }];
@@ -195,7 +195,7 @@ var renderForm = function(formJSON){
                 field.delimiter = "";
                 field.type = "int";
             } else if(field.type.match(/bub_word/)){
-                var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');
+                var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');//TODO: Space
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
                 });
