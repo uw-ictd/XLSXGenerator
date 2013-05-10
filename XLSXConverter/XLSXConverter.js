@@ -151,13 +151,33 @@
         return outRow;
     };
     
+    var validateNames = function(fields){
+        var nameMap = {};
+        (function recurse(fields){
+            _.each(fields, function(field) {
+                if('prompts' in field){
+                    recurse(field.prompts);
+                    return;
+                }
+                if(!field.name){
+                    warnings.warn(field.__rowNum__, "Field without a name.");
+                    return;
+                }
+                if(field.name in nameMap) {
+                    throw XLSXError(field.__rowNum__, "Duplicate name: " + field.name);
+                }
+                nameMap[field.name] = field;
+            });
+        }(fields));
+    }
+
+    
     root.XLSXConverter = {
         processJSONWorkbook : function(wbJson){
             warnings.clear();
             _.each(wbJson, function(sheet, sheetName){
                 _.each(sheet, function(row, rowIdx){
                     var reRow = groupColumnHeaders(cleanValues(row));
-                    reRow._rowNum = reRow.__rowNum__ + 1;
                     sheet[rowIdx] = reRow;
                 });
             });
@@ -177,6 +197,8 @@
             }
 
             wbJson['survey'] = parsePrompts(wbJson['survey']);
+            
+            validateNames(wbJson['survey']);
             
             if('choices' in wbJson){
                 wbJson['choices'] = _.groupBy(wbJson['choices'], 'list_name');

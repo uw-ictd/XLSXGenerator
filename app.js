@@ -117,6 +117,7 @@ Handlebars.registerHelper("qrcode", function(data) {
 
 var typeAliases = {
     "text" : "string",
+    "integer" : "int",
     "select_one" : "select1",
     "select_multiple" : "select"
 };
