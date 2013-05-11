@@ -126,7 +126,34 @@ var typeAliases = {
 
 var renderForm = function(formJSON){
     console.log("Rendering...", formJSON);
+
+    var alignment_radius =  _.findWhere(formJSON.settings, {
+        setting: 'alignment_radius'
+    });
+    alignment_radius = alignment_radius ? alignment_radius.value : 0;
     
+    var bubbleClassifier = {
+        "classification_map": {
+             "empty": false
+        },
+        "default_classification": true,
+        "training_data_uri": "bubbles",
+        "classifier_height": 16,
+        "classifier_width": 14,
+        "alignment_radius": alignment_radius,
+        "advanced": {
+             "flip_training_data": true
+        }
+    };
+    var checkboxClassifier = _.extend({}, bubbleClassifier, {
+        "training_data_uri": "square_checkboxes",
+    });
+    var defaultScanJSON = {
+        height: 1088,
+        width: 832,
+        classifier : bubbleClassifier
+    };
+
     var globalCounter = 0;
     
     //The field map will be populated by preprocess
@@ -158,6 +185,9 @@ var renderForm = function(formJSON){
                     rows: _.range(field.rows ? field.rows : 0)
                 }];
             } else if(field.type.match(/select/)){
+                if(field.type === "select") {
+                    field.classifier = checkboxClassifier;
+                }
                 field.segments = [{
                     items : _.map(formJSON.choices[field.param], function(item){
                         if(field.type === "select1") {
@@ -198,7 +228,7 @@ var renderForm = function(formJSON){
                 field.delimiter = "";
                 field.type = "int";
             } else if(field.type.match(/bub_word/)){
-                var alphabet = ('abcdefghijklmnopqrstuvwxyz').split('');//TODO: Space
+                var alphabet = (' abcdefghijklmnopqrstuvwxyz').split('');
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
                 });
@@ -232,29 +262,6 @@ var renderForm = function(formJSON){
             
             fieldMap[field.name] = _.omit(field, ['segments', 'labels']);
         });
-    };
-    
-    var alignment_radius =  _.findWhere(formJSON.settings, {
-        setting: 'alignment_radius'
-    });
-    alignment_radius = alignment_radius ? alignment_radius.value : 0;
-    
-    var defaultScanJSON = {
-        height: 1088,
-        width: 832,
-        classifier : {
-            "classification_map": {
-                 "empty": false
-            },
-            "default_classification": true,
-            "training_data_uri": "bubbles",
-            "classifier_height": 16,
-            "classifier_width": 14,
-            "alignment_radius": alignment_radius,
-            "advanced": {
-                 "flip_training_data": true
-            }
-        }
     };
         
     var generateScanJSON = function($formImage){
@@ -376,14 +383,14 @@ var renderForm = function(formJSON){
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
         var coHeight = Math.round(
-            defaultScanJSON.classifier.classifier_height * 0.64);
+            bubbleClassifier.classifier_height * 0.64);
         var coWidth = Math.round(
-            defaultScanJSON.classifier.classifier_width * 0.64);
+            bubbleClassifier.classifier_width * 0.64);
         $el.find(".classifiableObject").height(coHeight);
         $el.find(".classifiableObject").width(coWidth);
         $el.find(".bubble").css('borderRadius', coWidth / 2);
         //Ensure the bub_num and bub_work widgets line up:
-        $el.find(".vertical").height(defaultScanJSON.classifier.classifier_height + 2);
+        $el.find(".vertical").height(bubbleClassifier.classifier_height + 2);
         return $el;
     };
     
