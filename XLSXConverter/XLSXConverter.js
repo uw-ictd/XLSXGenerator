@@ -159,6 +159,10 @@
                     recurse(field.prompts);
                     return;
                 }
+                if(field.type.match(/markup|note/)) {
+                    //Don't need to validate these...
+                    return;
+                }
                 if(!field.name){
                     warnings.warn(field.__rowNum__, "Field without a name.");
                     return;
@@ -169,7 +173,7 @@
                 nameMap[field.name] = field;
             });
         }(fields));
-    }
+    };
 
     
     root.XLSXConverter = {

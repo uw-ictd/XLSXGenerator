@@ -6,9 +6,13 @@ fed into handlebars templates (in index.html) that generate the HTML.
 After the HTML is rendered, jQuery is used to construct the template.json from it,
 and html2canvas is used to create the form.jpg,
 and it all gets zipped made available for download.
+
+Notes:
+Multiple segments per field in the JSON output appears to be unnecessairy.
+
+TODOs:
+Make a test.
 */
-//TODO: Rather than having a multiple segments template,
-//make one for bub_* widgets
 $(document).ready(function () {
 
 function removeEmptyStrings(rObjArr){
@@ -33,7 +37,7 @@ function to_json(workbook) {
     _.each(workbook.SheetNames, function(sheetName) {
         var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
         rObjArr = removeEmptyStrings(rObjArr);
-		if(rObjArr.length > 0){
+        if(rObjArr.length > 0){
 			result[sheetName] =  rObjArr;
 		}
 	});
@@ -225,6 +229,7 @@ var renderForm = function(formJSON){
                 field.labels = _.map(_.range(0, 10), function(rIdx){
                     return "" + rIdx;
                 });
+                field.__combineSegments__ = true;
                 //Makes scan combine all the values
                 //rather than putting a space between them.
                 field.delimiter = "";
@@ -247,6 +252,7 @@ var renderForm = function(formJSON){
                 field.labels = _.map(alphabet, function(letter){
                     return letter;
                 });
+                field.__combineSegments__ = true;
                 //Makes scan combine all the values
                 //rather than putting a space between them.
                 field.delimiter = "";
@@ -272,21 +278,7 @@ var renderForm = function(formJSON){
         //Generate the formDef json using the HTML.
         var baseOffset = $formImage.offset();
         formDef.fields = $formImage.find('.scanField').map(function(idx, fieldEl){
-            var $field = $(fieldEl);
-            var fieldName = $field.data('name');
-            if(!fieldName){
-                console.error("Skipping field with no name.", $field);
-                return null;
-            }
-            var out = fieldMap[fieldName];
-            if(out.type === "markup"){
-                return null;
-            }
-            
-            //We use this label to strip html formatting.
-            out.label = $field.find('label').first().text();
-            
-            var segments = $field.find('.segment').map(function(idx, segmentEl){
+            var generateSegmentJSON = function(idx, segmentEl){
                 var $segment = $(segmentEl);
                 var segAbsOffset = $segment.offset();
                 var segOffset = {
@@ -332,12 +324,45 @@ var renderForm = function(formJSON){
                     segment.items = items;
                 }
                 return segment;
-            }).toArray();
+            };
+            var segments;
+            var $field = $(fieldEl);
+            var fieldName = $field.data('name');
+            if(!fieldName){
+                console.error("Skipping field with no name.", $field);
+                return null;
+            }
+            var out = fieldMap[fieldName];
+            
+            if(out.type === "markup"){
+                return null;
+            } else if(out.__combineSegments__) {
+                //All the segments of bub_num/bub_word prompts are
+                //combined into one because it shows up better when transcribing
+                //and because segment alignment is bad at skinny segments.
+                segments = [ generateSegmentJSON(0,
+                    $field.find('.segment-container').find('tr').get(0)) ];
+            } else {
+                segments = $field
+                    .find('.segment')
+                    .map(generateSegmentJSON)
+                    .toArray();
+            }
+            
             if(segments.length > 0) {
                 out.segments = segments;
             }
+            
+            //The label value from the HTML is used for two reasons:
+            //1. It allows the label to be edited on the page.
+            //2. It strips any html fomating used.
+            out.label = $field.find('label').first().text();
+
             return out;
         }).toArray();
+                    
+        //remove nulls
+        formDef.fields = _.compact(formDef.fields);
         return formDef;
     };
 
@@ -382,7 +407,9 @@ var renderForm = function(formJSON){
         });
         
         $el.find('label').on('click', function(e) {
-            $(e.target).html(prompt("Enter new label:"));
+            var newLabel = prompt("Enter new label:");
+            if(!newLabel) return;
+            $(e.target).html(newLabel);
             generateZip();
         });
 
