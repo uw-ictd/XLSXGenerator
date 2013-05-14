@@ -359,7 +359,7 @@ var renderForm = function(formJSON){
         }));
         
         //Fiducal replacement functionality
-        var $fiducials = $(".fContainer").find('img');
+        var $fiducials = $el.find('img');
         $fiducials.on('dragover', function(e){
             e.stopPropagation();
             e.preventDefault();
@@ -381,6 +381,11 @@ var renderForm = function(formJSON){
             reader.readAsDataURL(files[0]);
         });
         
+        $el.find('label').on('click', function(e) {
+            $(e.target).html(prompt("Enter new label:"));
+            generateZip();
+        });
+
         //Set some of the dimensions using the defaultScanJSON:
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
@@ -410,7 +415,7 @@ var renderForm = function(formJSON){
     
     pages = _.filter(pages, function(page){
         return page.length !== 0;
-    })
+    });
 
     $('.fContainer').empty();
     
@@ -460,27 +465,23 @@ var renderForm = function(formJSON){
             });
             return promise;
         })).then(function(){
-            var zipped=zip.generate({
+            var zipped = zip.generate({
                 type:'blob'
             });
             $('#download').html($('#download-notice').html());
-            var $downloadBtn=$('#download').find('.download');
+            var $downloadBtn = $('#download').find('.download');
             $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
             $downloadBtn.attr('download', "template.zip");
         });
-    }
+    };
     
     $('#download').html("<div>Genenrating template...</div>");
     //TODO: Fix this hack.
     //Wait for the DOM stuff before generating the JSON
-    window.setTimeout(generateZip, 500)
+    window.setTimeout(generateZip, 500);
 
 };
    
 //$.getJSON('test.json', renderForm);
-/*
-$.get('documentation.textile', function ( txt ) {
-    $( '.modal-body' ).html( textile( txt ) );
-});
-*/ 
+
 });
