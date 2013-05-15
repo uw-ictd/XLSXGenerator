@@ -288,7 +288,9 @@
 
 <script id="segment-template" type="text/x-handlebars-template">
     {{#if qrcodeData}}
+        <div class="qrcode">
         {{qrcode qrcodeData}}
+        </div>
     {{/if}}
     
     {{#each rows}}

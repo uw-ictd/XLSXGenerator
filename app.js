@@ -113,14 +113,17 @@ Handlebars.registerPartial("segments", segmentsTemplate);
 var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
-Handlebars.registerHelper("qrcode", function(data) {
+var makeQRCodeImg = function(data) {
     var size = (1 + Math.floor(data.length / 40)) * 96;
-    return new Handlebars.SafeString('<img src="' +
+    return '<img src="' +
         $('<canvas width=' + size + ' height=' + size + '>').qrcode({
             width: size,
             height: size,
             text: data
-        }).get(0).toDataURL('image/jpeg') + '"></img>');
+        }).get(0).toDataURL('image/jpeg') + '"></img>';
+};
+Handlebars.registerHelper("qrcode", function(data) {
+    return new Handlebars.SafeString(makeQRCodeImg(data));
 });
 
 var typeAliases = {
@@ -413,6 +416,13 @@ var renderForm = function(formJSON){
             generateZip();
         });
 
+        $el.find('.qrcode').on('click', function(e) {
+            var newData = prompt("Enter new data to encode:");
+            if(!newData) return;
+            $(e.target).closest('.qrcode').html(makeQRCodeImg(newData));
+            generateZip();
+        });
+
         //Set some of the dimensions using the defaultScanJSON:
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
@@ -458,7 +468,7 @@ var renderForm = function(formJSON){
     var generateZip = function(){
         $('#download').html("<div>Genenrating template...</div>");
         $('.outImgs').empty();
-        var zip=new MyJSZip();
+        var zip = new MyJSZip();
         $.when.apply(null, _.map(generatedHTMLPages, function($pageHTML, pageIdx){
             var promise = $.Deferred();
             
