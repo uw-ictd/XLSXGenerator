@@ -74,19 +74,20 @@ p.
     When your spreadsheet is ready upload it and you will see a preview of the generated form.
     You will also see a download link appear for the ODK Scan form definition.
     You can print your form by printing the webpage (only tested in chrome),
-    or by printing the jpgs included in the template folder.
+    or by printing the jpgs included in the template folder. Black and white or color printing works.
 
 --------------------------------------------------------------------------------
 
 h1. XLSX Format
 
-The form converter expects workbooks with 3 sheets: survey, choices and settings.
-They are individually described in the sections below.
-Most spreadsheet programs have controls in the bottom-left corner where you can create them.
+    The XLSX Format is based on "XLSForm":http://opendatakit.org/help/form-design/xlsform/
+    The form generator expects workbooks with 3 sheets: survey, choices and settings.
+    They are individually described in the sections below.
+    Most spreadsheet programs have controls in the bottom-left corner where you can create them.
 
 h2. survey
 
-    All XLSForms require a survey sheet.
+    All forms require a survey sheet.
     The survey worksheet contains the structure and most of the content of the form.
     It contains the full list of questions and information about how they should be presented.
     Most rows represent a question; the rest of the rows specify control structures such as groups.
@@ -100,6 +101,9 @@ Example survey sheet:
 h3. survey sheet columns:
 
 h4. type
+
+    The type colum indications what type of question you are asking.
+    These are the available types taken from XLSForm: 
 
 | text   | Write-in text input. |
 | integer| Integer (i.e. whole number) input.|
@@ -152,7 +156,7 @@ h4. label
 </code>
 </pre>
 
-h4. default/constraint
+h4. default/constraint/required
 
     When scanned forms are exported to Collect the default and
     constraint columns can be used to set default values to be entered as answers,
@@ -227,7 +231,7 @@ h3. custom css
     custom styles to the form images generated. If you need to condense yor form
     this could be an effective way to do it.
 
-h3. post conversion editing
+h3. post-editing
 
     This application allows you to edit the labels, fiducials and possibly other aspects
     of the generated html form.
