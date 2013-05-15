@@ -70,7 +70,7 @@
 }
 .labels {
     border-left: 1px solid black;
-    border-right: 1px solid gray;
+    border-right: 0;
 }
 /* 
 This is only for bub_x widgets

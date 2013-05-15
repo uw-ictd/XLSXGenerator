@@ -136,7 +136,7 @@ var renderForm = function(formJSON){
     var alignment_radius =  _.findWhere(formJSON.settings, {
         setting: 'alignment_radius'
     });
-    alignment_radius = alignment_radius ? alignment_radius.value : 0;
+    alignment_radius = alignment_radius ? alignment_radius.value : 2.0;
     
     var bubbleClassifier = {
         "classification_map": {
