@@ -64,13 +64,31 @@
 .segments {
     width: 0;
 }
-.segment {
+.segment, .labels {
     border: 1px solid black;
     padding: 5px;
 }
 .labels {
-    border: 1px solid black;
-    padding: 5px;
+    border-left: 1px solid black;
+    border-right: 1px solid gray;
+}
+/* 
+This is only for bub_x widgets
+Making the inner borders ligher
+makes it less likely they will be
+used instead of the outerborder
+during alignment.
+*/
+.labels + .segment {
+    border-left: 1px solid gray;
+    border-right: 0;
+}
+.segment + .segment {
+    border-left: 1px solid gray;
+    border-right: 0;
+}
+.segment:last-child {
+    border-right: 1px solid black;
 }
 .labels > label {
     margin-bottom: 0;
