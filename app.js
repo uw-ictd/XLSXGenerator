@@ -65,11 +65,9 @@ function handleDrop(evt) {
              try {
                 var xlsx = XLSX.read(data, {type: 'binary'});
                 var jsonWorkbook = to_json(xlsx);
-                //console.log(jsonWorkbook);
                 var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
                 processedWorkbook.filename = f.name;
                 
-                console.log(JSON.stringify(processedWorkbook, 0, 2));
                 renderForm(processedWorkbook);
                 
                 _.each(XLSXConverter.getWarnings(), function(warning){
@@ -113,7 +111,7 @@ Handlebars.registerPartial("segments", segmentsTemplate);
 var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
-var makeQRCodeImg = function(data, size) { console.log('test');
+var makeQRCodeImg = function(data, size) {
     var defaultSize = (1 + Math.floor(data.length / 40)) * 96;
     size = size ? size : defaultSize;
     if(size < defaultSize) {
@@ -223,7 +221,6 @@ var renderForm = function(formJSON){
                         };
                     })
                 }];
-                console.log(field);
             } else if(field.type.match(/bub_num/)){
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
@@ -329,10 +326,11 @@ var renderForm = function(formJSON){
                     //This should remove any html markup.
                     var label = $item.parent().children('label').text();
                     var value = $item.parent().data('value');
-                    if(label) {
+                    //Ignore falsy values except 0.
+                    if(!_.isUndefined(label) && label !== "") {
                         output.label = label;
                     }
-                    if(value) {
+                    if(!_.isUndefined(value) && value !== "") {
                         output.value = value;
                     }
                     return output;
@@ -395,7 +393,6 @@ var renderForm = function(formJSON){
 
     var generateFormPageHTML = function($el, formJSON){
         //Generate the form image as HTML.
-        console.log("test");
         var title =  _.findWhere(formJSON.settings, {setting: 'form_title'});
         title = title ? title.value : "";
         var font =  _.findWhere(formJSON.settings, {setting: 'font'});
