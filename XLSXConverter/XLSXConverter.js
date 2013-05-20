@@ -159,7 +159,7 @@
                     recurse(field.prompts);
                     return;
                 }
-                if(field.type.match(/markup|note/)) {
+                if(field.type.match(/markup|note|pagebreak/)) {
                     //Don't need to validate these...
                     return;
                 }

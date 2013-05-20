@@ -203,6 +203,10 @@ var renderForm = function(formJSON){
                 if(field.type === "select") {
                     field.classifier = checkboxClassifier;
                 }
+                if(!(field.param in formJSON.choices)) {
+                    $("#errors").append("<p>Missing choices: " + field.param + "</p>");
+                    return;
+                }
                 field.segments = [{
                     items : _.map(formJSON.choices[field.param], function(item){
                         if(field.type === "select1") {
