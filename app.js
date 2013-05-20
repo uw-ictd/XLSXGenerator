@@ -219,7 +219,6 @@ var renderForm = function(formJSON){
                 field.segments = [{
                     items :  _.map(_.range(parseInt(field.param, 10)), function(rIdx){
                         return {
-                            value: rIdx,
                             objectClass: "bubble"
                         };
                     })
@@ -323,13 +322,20 @@ var renderForm = function(formJSON){
                         left: itemAbsOffset.left - segAbsOffset.left +
                             ($item.innerWidth() + $item.outerWidth()) / 4,
                     };
-                    return {
-                        //In theory this should remove any html markup.
-                        label: $item.parent().children('label').text(),
-                        value: $item.parent().data('value'),
+                    var output = {
                         item_x: itemOffset.left,
                         item_y: itemOffset.top
                     };
+                    //This should remove any html markup.
+                    var label = $item.parent().children('label').text();
+                    var value = $item.parent().data('value');
+                    if(label) {
+                        output.label = label;
+                    }
+                    if(value) {
+                        output.value = value;
+                    }
+                    return output;
                 }).toArray();
                 var segment = {
                     //Need to fix this...
