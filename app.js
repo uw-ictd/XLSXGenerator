@@ -113,8 +113,13 @@ Handlebars.registerPartial("segments", segmentsTemplate);
 var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
-var makeQRCodeImg = function(data) {
-    var size = (1 + Math.floor(data.length / 40)) * 96;
+var makeQRCodeImg = function(data, size) { console.log('test');
+    var defaultSize = (1 + Math.floor(data.length / 40)) * 96;
+    size = size ? size : defaultSize;
+    if(size < defaultSize) {
+        alert("Warning, there is a qrcode constrained to a size smaller " +
+            "than recommended for the amount of data it contains.");
+    }
     return '<img src="' +
         $('<canvas width=' + size + ' height=' + size + '>').qrcode({
             width: size,
@@ -122,8 +127,8 @@ var makeQRCodeImg = function(data) {
             text: data
         }).get(0).toDataURL('image/jpeg') + '"></img>';
 };
-Handlebars.registerHelper("qrcode", function(data) {
-    return new Handlebars.SafeString(makeQRCodeImg(data));
+Handlebars.registerHelper("qrcodeImg", function(qrcodeSpec) {
+    return new Handlebars.SafeString(makeQRCodeImg(qrcodeSpec.data, qrcodeSpec.size));
 });
 
 var typeAliases = {
@@ -163,18 +168,19 @@ var renderForm = function(formJSON){
         classifier : bubbleClassifier
     };
 
+    //globalCounter is used to generate unique names for unnamed elements.
     var globalCounter = 0;
     
-    //The field map will be populated by preprocess
+    //The field map will be populated by preprocess in order to
     //provide an easy way to reference the augmented JSON for each field
     //for use in the Scan JSON output.
     var fieldMap = {};
     
     //Preprocess does the following:
-    //Attach items
-    //annotate json with other data
-    //set the prompt types
-    //generate field map
+    //-Attach items.
+    //-Annotate JSON with other data needed further down the pipeline.
+    //-Rename some the types to the types Scan uses.
+    //-Generate a field map for retrieving a field's JSON by it's name.
     var preprocess = function(fields) {
         _.each(fields, function(field) {
             if('prompts' in field){
@@ -262,7 +268,10 @@ var renderForm = function(formJSON){
                 field.type = "string";
             } else if(field.type.match(/qrcode/)){
                 field.segments = [{
-                    qrcodeData : field.param
+                    qrcode : {
+                        data : field.param,
+                        size : field.qrcode_size
+                    }
                 }];
             }
             
@@ -274,7 +283,12 @@ var renderForm = function(formJSON){
             fieldMap[field.name] = _.omit(field, ['segments', 'labels']);
         });
     };
-        
+    
+    /**
+     * Create a Scan JSON form definition based on the contents of the passed
+     * in HTML form image element.
+     * The HTML layout is used to determine the coordinates of form elements.
+     **/
     var generateScanJSON = function($formImage){
         var formDef = _.clone(defaultScanJSON);
 
@@ -417,9 +431,11 @@ var renderForm = function(formJSON){
         });
 
         $el.find('.qrcode').on('click', function(e) {
+            //Size is preserved so the layout doesn't change.
+            var currentImgSize = $(e.target).closest('img').width();
             var newData = prompt("Enter new data to encode:");
             if(!newData) return;
-            $(e.target).closest('.qrcode').html(makeQRCodeImg(newData));
+            $(e.target).closest('.qrcode').html(makeQRCodeImg(newData, currentImgSize));
             generateZip();
         });
 
@@ -465,6 +481,10 @@ var renderForm = function(formJSON){
         return $pageHTML;
     });
     
+    /**
+     * Generate a zip including the Scan JSON form def and freshly created jpg images
+     * based on the current state of the HTML form pages.
+     **/
     var generateZip = function(){
         $('#download').html("<div>Genenrating template...</div>");
         $('.outImgs').empty();
@@ -483,7 +503,7 @@ var renderForm = function(formJSON){
             //Generate the form image from the html.
             html2canvas([$pageHTML.get(0)], {
                 onrendered: function(canvas) {
-                    var dataURL=canvas.toDataURL('image/jpeg');
+                    var dataURL = canvas.toDataURL('image/jpeg');
                     var formName = formJSON.filename ? formJSON.filename.slice(0,-5) : "template";
                     var prefix = _.reduce(_.range(pageIdx), function(memo){
                         return memo + "nextPage/";
