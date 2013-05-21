@@ -1,3 +1,11 @@
+/* Bootstrap resets */
+label {
+    font-size: inherit;
+    line-height: initial;
+    font-weight: inherit;
+    margin-bottom: 0;
+}
+/* Main stuff */
 .formImage {
     background-color: white;
     padding: 2%;
@@ -123,16 +131,14 @@ during alignment.
 .vertical > label {
     display: none;
 }
-.vertical .classifiableObject {
-    /*vertical-align: baseline;*/
-}
+
 
 /* For writing in values above bub_x prompts */
 .writein {
     height: 1.2em;
     border-bottom: 1px solid black;
-    margin-left: -5px;
-    margin-right: -5px;
+    margin-left: -3px;
+    margin-right: -3px;
 }
 /* the lines for text prompts */
 .text-line {
@@ -149,4 +155,3 @@ label .inv {
     color: white;
     background-color: black;
 }
-
