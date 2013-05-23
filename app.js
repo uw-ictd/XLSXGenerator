@@ -144,7 +144,9 @@ var renderForm = function(formJSON){
     });
     alignment_radius = alignment_radius ? alignment_radius.value : 2.0;
     
-    var bubbleClassifier = {
+    
+    var classifierSpecs = {};
+    classifierSpecs.bubble = {
         "classification_map": {
              "empty": false
         },
@@ -157,13 +159,37 @@ var renderForm = function(formJSON){
              "flip_training_data": true
         }
     };
-    var checkboxClassifier = _.extend({}, bubbleClassifier, {
+    classifierSpecs.checkbox = _.extend({}, classifierSpecs.bubble, {
         "training_data_uri": "square_checkboxes",
     });
+    //Experimental
+    classifierSpecs.number = {
+        "classification_map": {
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7",
+          "8": "8",
+          "9": "9",
+          "0": "0"
+        },
+        "default_classification": true,
+        "training_data_uri": "numbers",
+        "classifier_height": 28,
+        "classifier_width": 20,
+        "alignment_radius": 5.0,
+        "advanced": {
+             "flip_training_data": false
+        }
+    };
+    
     var defaultScanJSON = {
         height: 1088,
         width: 832,
-        classifier : bubbleClassifier
+        classifier : classifierSpecs.bubble
     };
 
     //globalCounter is used to generate unique names for unnamed elements.
@@ -199,7 +225,7 @@ var renderForm = function(formJSON){
                 }];
             } else if(field.type.match(/select/)){
                 if(field.type === "select") {
-                    field.classifier = checkboxClassifier;
+                    field.classifier = classifierSpecs.checkbox;
                 }
                 if(!(field.param in formJSON.choices)) {
                     $("#errors").append("<p>Missing choices: " + field.param + "</p>");
@@ -209,6 +235,8 @@ var renderForm = function(formJSON){
                     items : _.map(formJSON.choices[field.param], function(item){
                         if(field.type === "select1") {
                             item.objectClass = "bubble";
+                        } else {
+                            item.objectClass = "checkbox";
                         }
                         return item;
                     })
@@ -273,6 +301,16 @@ var renderForm = function(formJSON){
                         size : field.qrcode_size
                     }
                 }];
+            } else if(field.type.match(/writein_num/)){
+                //Experimental
+                field.segments = [{
+                    items: _.map(_.range(field.param), function(){
+                        return { objectClass: "number" };
+                    })
+                }];
+                field.delimiter = "";
+                field.classifier = classifierSpecs.number;
+                field.type = "int";
             }
             
             if(!('name' in field)){
@@ -449,15 +487,32 @@ var renderForm = function(formJSON){
         //Set some of the dimensions using the defaultScanJSON:
         $el.height(defaultScanJSON.height);
         $el.width(defaultScanJSON.width);
-        var coHeight = Math.round(
-            bubbleClassifier.classifier_height * 0.64);
-        var coWidth = Math.round(
-            bubbleClassifier.classifier_width * 0.64);
-        $el.find(".classifiableObject").height(coHeight);
-        $el.find(".classifiableObject").width(coWidth);
-        $el.find(".bubble").css('borderRadius', coWidth / 2);
+        
+        //Set the classified object sizes based on the specs
+        _.each(['bubble', 'checkbox'], function(name){
+            var classifier = classifierSpecs[name];
+            var coHeight = Math.round(
+                classifier.classifier_height * 0.64);
+            var coWidth = Math.round(
+                classifier.classifier_width * 0.64);
+            $el.find(".classifiableObject." + name).height(coHeight);
+            $el.find(".classifiableObject." + name).width(coWidth);
+        });
+        (function(classifer){
+            var coHeight = Math.round(
+                classifer.classifier_height * 1.05);
+            var coWidth = Math.round(
+                classifer.classifier_width * 1.05); console.log(classifer);
+            $el.find(".classifiableObject.number").height(coHeight);
+            $el.find(".classifiableObject.number").width(coWidth);
+        }(classifierSpecs.number));
+        
+        //round the bubbles
+        $el.find(".bubble").css('borderRadius', Math.round(
+                classifierSpecs.bubble.classifier_width * 0.64) / 2);
+        
         //Ensure the bub_num and bub_work widgets line up:
-        $el.find(".vertical").height(bubbleClassifier.classifier_height + 2);
+        $el.find(".vertical").height(classifierSpecs.bubble.classifier_height + 2);
         return $el;
     };
     

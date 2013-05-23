@@ -5,6 +5,10 @@ label {
     font-weight: inherit;
     margin-bottom: 0;
 }
+.checkbox {
+    min-height: initial;
+    padding-left: initial;
+}
 /* Main stuff */
 .formImage {
     background-color: white;
@@ -72,6 +76,9 @@ label {
 .segments {
     width: 0;
 }
+.segment {
+    line-height: 0;
+}
 .segment, .labels {
     border: 1px solid black;
     padding: 5px;
@@ -113,8 +120,6 @@ during alignment.
 }
 .classifiableObject {
     display: inline-block;
-    width: .6em;
-    height: .6em;
     border: 1px solid black;
 }
 /* 
@@ -122,11 +127,18 @@ during alignment.
     border-radius: 50%;
 }
  */
+.classifiableObject.number {
+    border: 0;
+    display: inline-block;
+    border: 1px solid black;
+}
+
 .vertical {
     display: block;
     margin-left: auto;
     margin-right: auto;
     text-align: right;
+    line-height: initial;
 }
 .vertical > label {
     display: none;
