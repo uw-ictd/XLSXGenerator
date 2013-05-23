@@ -128,11 +128,40 @@ during alignment.
 }
  */
 .classifiableObject.number {
-    border: 0;
     display: inline-block;
     border: 1px solid black;
+    position: relative;
 }
-
+.guide-dot {
+    position: absolute;
+    display: inline-block;
+    border: 1px solid blue;
+    margin: 25%;
+}
+.guide-dot:nth-of-type(1){
+    top: 0;
+    right: 0;
+}
+.guide-dot:nth-of-type(2){
+    top: 0;
+    left: 0;
+}
+.guide-dot:nth-of-type(3){
+    bottom: 28%;
+    right: 0;
+}
+.guide-dot:nth-of-type(4){
+    bottom: 28%;
+    left: 0;
+}
+.guide-dot:nth-of-type(5){
+    bottom: 0;
+    right: 0;
+}
+.guide-dot:nth-of-type(6){
+    bottom: 0;
+    left: 0;
+}
 .vertical {
     display: block;
     margin-left: auto;

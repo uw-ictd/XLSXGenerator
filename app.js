@@ -42,7 +42,7 @@ var to_json = function(workbook) {
         var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
         rObjArr = removeEmptyStrings(rObjArr);
         if(rObjArr.length > 0){
-			result[sheetName] =  rObjArr;
+    		result[sheetName] =  rObjArr;
 		}
 	});
 	return result;
@@ -218,6 +218,11 @@ var renderForm = function(formJSON, callback){
                 return;
             }
             field.type = field.type.toLowerCase();
+            
+            if("label" in field) {
+                //ensure the label is a string rather than a number
+                field.label = "" + field.label;
+            }
             
             //Map from XLSForm types to internal type names that are closer
             //to XForm types.
@@ -397,7 +402,7 @@ var renderForm = function(formJSON, callback){
             var segments;
             var $field = $(fieldEl);
             var fieldName = $field.data('name');
-            if(!fieldName){
+            if(_.isUndefined(fieldName)){
                 console.error("Skipping field with no name.", $field);
                 return null;
             }
@@ -509,8 +514,12 @@ var renderForm = function(formJSON, callback){
                 classifer.classifier_height * 1.15);
             var coWidth = Math.round(
                 classifer.classifier_width * 1.15); console.log(classifer);
-            $el.find(".classifiableObject.number").height(coHeight);
-            $el.find(".classifiableObject.number").width(coWidth);
+            var $numObjects = $el.find(".classifiableObject.number");
+            $numObjects.height(coHeight);
+            $numObjects.width(coWidth);
+            _.each(_.range(6), function(idx){
+                $numObjects.append('<div class="guide-dot">');
+            });
         }(classifierSpecs.number));
         
         //round the bubbles
@@ -522,7 +531,7 @@ var renderForm = function(formJSON, callback){
         return $el;
     };
     
-    preprocess(formJSON.survey);
+    preprocess(formJSON.survey);console.log(fieldMap);
     //partition the formJSON into multiple objects
     //by pagebreaks
     var pages = _.reduce(formJSON.survey, function(memo, row){
@@ -601,7 +610,9 @@ var renderForm = function(formJSON, callback){
             var $downloadBtn = $('#download').find('.download');
             $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
             $downloadBtn.attr('download', "template.zip");
-            callback(pathMap);
+            if(!_.isUndefined(callback)){
+                callback(pathMap);
+            }
         });
     };
     

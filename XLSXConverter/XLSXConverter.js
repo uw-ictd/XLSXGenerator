@@ -163,7 +163,7 @@
                     //Don't need to validate these...
                     return;
                 }
-                if(!field.name){
+                if(!('name' in field)){
                     warnings.warn(field.__rowNum__, "Field without a name.");
                     return;
                 }
