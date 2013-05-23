@@ -15,7 +15,14 @@ Make a test.
 */
 $(document).ready(function () {
 
-function removeEmptyStrings(rObjArr){
+var _ = window._;
+var XLSX = window.XLSX;
+var XLSXConverter = window.XLSXConverter;
+var Handlebars = window.Handlebars;
+var MyJSZip = window.MyJSZip;
+var html2canvas = window.html2canvas;
+
+var removeEmptyStrings = function(rObjArr){
     var outArr = [];
     _.each(rObjArr, function(row){
         var outRow = Object.create(row.__proto__);
@@ -30,9 +37,9 @@ function removeEmptyStrings(rObjArr){
         }
     });
     return outArr;
-}
+};
 
-function to_json(workbook) {
+var to_json = function(workbook) {
     var result = {};
     _.each(workbook.SheetNames, function(sheetName) {
         var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
@@ -42,58 +49,60 @@ function to_json(workbook) {
 		}
 	});
 	return result;
-}
+};
 
-function handleDrop(evt) {
+var processXLSX = function(data, filename, callback){
+    try {
+        var xlsx = XLSX.read(data, {type: 'binary'});
+        var jsonWorkbook = to_json(xlsx);
+        var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
+        processedWorkbook.filename = filename;
+        
+        renderForm(processedWorkbook, callback);
+        
+        _.each(XLSXConverter.getWarnings(), function(warning){
+            var $warningEl = $("<p>");
+            $warningEl.text(warning);
+            $("#warnings").append($warningEl);
+        });
+    } catch(e) {
+        var $errorEl = $("<p>");
+        $errorEl.text(String(e));
+        $("#errors").append($errorEl);
+        throw e;
+    }
+};
+
+$('.xlsxfile').change(function(evt) {
 	evt.stopPropagation();
 	evt.preventDefault();
-	var files = evt.target.files;
-	var f = files[0];
-
-	var reader = new FileReader();
     
     //Clear the warnings and errors:
     $('#errors').empty();
     $('#warnings').empty();
     $('#download').empty();
-
+    
+	var files = evt.target.files;
+	var file = files[0];
+    if(file.name.slice(-3) === "xls"){
+        $("#errors").append("<p>Sorry, XLS files are not supported.<br />You can convert your XLS file to XLSX using libreOffice or Google Docs.</p>");
+        return;
+    }
+    
+	var reader = new FileReader();
     reader.onload = function(e) {
 		var data = e.target.result;
-        if(f.name.slice(-3) === "xls"){
-            $("#errors").append("<p>Sorry, XLS files are not supported.<br />You can convert your XLS file to XLSX using libreOffice or Google Docs.</p>");
-        } else {
-             try {
-                var xlsx = XLSX.read(data, {type: 'binary'});
-                var jsonWorkbook = to_json(xlsx);
-                var processedWorkbook = XLSXConverter.processJSONWorkbook(jsonWorkbook);
-                processedWorkbook.filename = f.name;
-                
-                renderForm(processedWorkbook);
-                
-                _.each(XLSXConverter.getWarnings(), function(warning){
-                    var $warningEl = $("<p>");
-                    $warningEl.text(warning);
-                    $("#warnings").append($warningEl);
-                });
-            } catch(e) {
-                var $errorEl = $("<p>");
-                $errorEl.text(String(e));
-                $("#errors").append($errorEl);
-                throw e;
-            }
-        }
+        processXLSX(data, file.name);
 	};
     try {
-        reader.readAsBinaryString(f);
+        reader.readAsBinaryString(file);
     } catch(e) {
         $("#errors").append("<p>Could not read file.</p>");
         throw e;
     }
     //Clear the file input so the form can be updated:
     $('.xlsxfile').val("");
-}
-
-$('.xlsxfile').change(handleDrop);
+});
 
 //Handlebars compilation of the templates at the bottom of index.html:
 var formTemplate = Handlebars.compile($("#form-template").html());
@@ -136,7 +145,7 @@ var typeAliases = {
     "select_multiple" : "select"
 };
 
-var renderForm = function(formJSON){
+var renderForm = function(formJSON, callback){
     console.log("Rendering...", formJSON);
 
     var alignment_radius =  _.findWhere(formJSON.settings, {
@@ -450,21 +459,21 @@ var renderForm = function(formJSON){
         $fiducials.on('dragover', function(e){
             e.stopPropagation();
             e.preventDefault();
-        	e.originalEvent.dataTransfer.dropEffect = 'copy';
+            e.originalEvent.dataTransfer.dropEffect = 'copy';
         });
         $fiducials.on('drop', function(e){
             e.stopPropagation();
             e.preventDefault();
-        	var files = e.originalEvent.dataTransfer.files;
-        
-        	var reader = new FileReader();
+            var files = e.originalEvent.dataTransfer.files;
+            
+            var reader = new FileReader();
             
             var $targetEl = $(e.target);
-        
+            
             reader.onload = function(e) {
-        		$targetEl.attr('src', e.target.result);
+                $targetEl.attr('src', e.target.result);
                 generateZip();
-        	};
+            };
             reader.readAsDataURL(files[0]);
         });
         
@@ -500,9 +509,9 @@ var renderForm = function(formJSON){
         });
         (function(classifer){
             var coHeight = Math.round(
-                classifer.classifier_height * 1.05);
+                classifer.classifier_height * 1.15);
             var coWidth = Math.round(
-                classifer.classifier_width * 1.05); console.log(classifer);
+                classifer.classifier_width * 1.15); console.log(classifer);
             $el.find(".classifiableObject.number").height(coHeight);
             $el.find(".classifiableObject.number").width(coWidth);
         }(classifierSpecs.number));
@@ -511,7 +520,7 @@ var renderForm = function(formJSON){
         $el.find(".bubble").css('borderRadius', Math.round(
                 classifierSpecs.bubble.classifier_width * 0.64) / 2);
         
-        //Ensure the bub_num and bub_work widgets line up:
+        //Ensure the bub_num and bub_word widgets line up:
         $el.find(".vertical").height(classifierSpecs.bubble.classifier_height + 2);
         return $el;
     };
@@ -551,6 +560,7 @@ var renderForm = function(formJSON){
         $('#download').html("<div>Genenrating template...</div>");
         $('.outImgs').empty();
         var zip = new MyJSZip();
+        var pathMap = {};
         $.when.apply(null, _.map(generatedHTMLPages, function($pageHTML, pageIdx){
             var promise = $.Deferred();
             
@@ -573,6 +583,9 @@ var renderForm = function(formJSON){
                     
                     $img.attr('src', dataURL);
                     
+                    pathMap[prefix + "template.json"] = formDef;
+                    pathMap[prefix + "form.jpg"] = dataURL;
+                    
                     zip.file(prefix + "template.json",
                         JSON.stringify(formDef,null,2));
                     zip.file(prefix + "form.jpg",
@@ -591,6 +604,7 @@ var renderForm = function(formJSON){
             var $downloadBtn = $('#download').find('.download');
             $downloadBtn.attr('href', window.URL.createObjectURL(zipped));
             $downloadBtn.attr('download', "template.zip");
+            callback(pathMap);
         });
     };
     
@@ -598,9 +612,12 @@ var renderForm = function(formJSON){
     //TODO: Fix this hack.
     //Wait for the DOM stuff before generating the JSON
     window.setTimeout(generateZip, 500);
-
 };
    
 //$.getJSON('test.json', renderForm);
+window.app = {
+    renderForm : renderForm,
+    processXLSX : processXLSX
+};
 
 });
