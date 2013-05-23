@@ -9,9 +9,6 @@ and it all gets zipped made available for download.
 
 Notes:
 Multiple segments per field in the JSON output appears to be unnecessairy.
-
-TODOs:
-Make a test.
 */
 $(document).ready(function () {
 
@@ -609,7 +606,7 @@ var renderForm = function(formJSON, callback){
     };
     
     $('#download').html("<div>Genenrating template...</div>");
-    //TODO: Fix this hack.
+    
     //Wait for the DOM stuff before generating the JSON
     window.setTimeout(generateZip, 500);
 };
