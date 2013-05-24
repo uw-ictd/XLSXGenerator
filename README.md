@@ -16,13 +16,16 @@ Developer info
 XLSX Generator is all client side JavaScript. There is no server component,
 so you can download and open it from your filesystem.
 
-XLSX file is converted to json with some basic processing to nest
+The pipeline is as followes.
+The XLSX file is converted to JSON with some basic processing to nest
 groups and parse type parameters (in XLSXConverter).
-Next JSON is preprocessed in app.js script then
-fed into handlebars templates (in index.html) that generate the HTML.
-After the HTML is rendered, jQuery is used to construct the template.json from it,
-and html2canvas is used to create the form.jpg,
-and it all gets zipped made available for download.
+Next, that JSON is preprocessed in app.js script then
+fed into Handlebars templates (in index.html) to generate the form's HTML structure.
+After the HTML is rendered,
+jQuery is used to construct the template.json based on it's layout,
+and html2canvas is used to draw the form.jpg.
+Finally, all the json and jpgs for all the pages
+gets zipped into a single file that is made available for download.
 
 ## Testing:
 
