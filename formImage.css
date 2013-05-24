@@ -44,22 +44,22 @@ label {
 .formFields {
     width: 96%;
     margin: 2%;
-    border: 1px solid gray;
+    border: 1px solid rgb(160, 159, 153);
 }
 .fieldRowTable {
     width: 100%;
 }
 .fieldRow >  .field {
-    border-right: 1px solid gray;
+    border-right: 1px solid rgb(160, 159, 153);
 }
 .fieldRow >  .field:last-child {
-    border-right: 0 solid gray;
+    border-right: 0;
 }
 .fieldColumn > .field {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgb(160, 159, 153);
 }
 .fieldColumn > .field:last-child {
-    border-bottom: 0 solid gray;
+    border-bottom: 0;
 }
 .field {
     vertical-align: top;
@@ -68,10 +68,15 @@ label {
     height: 100%;
     min-height: 100%;
 }
+.scanField {
+    padding: 8px;
+}
 .segment-container {
     width: 100%;
     min-height: 30px;
-    margin-bottom: 2px;
+    /* the height 30px is only necessairy for firefox */
+    height: 30px;
+    margin-bottom: 4px;
 }
 .segments {
     width: 0;
@@ -104,6 +109,9 @@ during alignment.
 }
 .segment:last-child {
     border-right: 1px solid black;
+}
+label {
+    margin-bottom: 5px;
 }
 .labels > label {
     margin-bottom: 0;

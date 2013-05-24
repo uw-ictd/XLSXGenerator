@@ -23,10 +23,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 32,
-          "segment_y": 88,
-          "segment_width": 106,
-          "segment_height": 106
+          "segment_x": 36,
+          "segment_y": 91,
+          "segment_width": 103,
+          "segment_height": 103
         }
       ],
       "label": ""
@@ -40,9 +40,9 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 32,
-          "segment_y": 241,
-          "segment_width": 106,
+          "segment_x": 36,
+          "segment_y": 254,
+          "segment_width": 103,
           "segment_height": 28
         }
       ]
@@ -58,8 +58,8 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 156,
-          "segment_y": 99,
+          "segment_x": 163,
+          "segment_y": 107,
           "segment_width": 328,
           "segment_height": 513,
           "items": [
@@ -2346,8 +2346,8 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 501,
-          "segment_y": 147,
+          "segment_x": 514,
+          "segment_y": 166,
           "segment_width": 61,
           "segment_height": 207,
           "items": [
@@ -2484,9 +2484,9 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 501,
-          "segment_y": 384,
-          "segment_width": 297,
+          "segment_x": 514,
+          "segment_y": 416,
+          "segment_width": 282,
           "segment_height": 76
         }
       ]
@@ -2515,10 +2515,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 27,
-          "segment_y": 652,
-          "segment_width": 100,
-          "segment_height": 122,
+          "segment_x": 31,
+          "segment_y": 673,
+          "segment_width": 94,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2540,7 +2540,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2572,10 +2572,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 140,
-          "segment_y": 652,
-          "segment_width": 99,
-          "segment_height": 122,
+          "segment_x": 144,
+          "segment_y": 673,
+          "segment_width": 93,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2597,7 +2597,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2629,10 +2629,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 252,
-          "segment_y": 652,
-          "segment_width": 99,
-          "segment_height": 122,
+          "segment_x": 256,
+          "segment_y": 673,
+          "segment_width": 93,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2654,7 +2654,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2686,10 +2686,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 364,
-          "segment_y": 652,
-          "segment_width": 100,
-          "segment_height": 122,
+          "segment_x": 368,
+          "segment_y": 673,
+          "segment_width": 94,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2711,7 +2711,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2743,10 +2743,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 477,
-          "segment_y": 652,
-          "segment_width": 100,
-          "segment_height": 122,
+          "segment_x": 481,
+          "segment_y": 673,
+          "segment_width": 94,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2768,7 +2768,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2800,10 +2800,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 590,
-          "segment_y": 652,
-          "segment_width": 100,
-          "segment_height": 122,
+          "segment_x": 594,
+          "segment_y": 673,
+          "segment_width": 94,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2825,7 +2825,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2857,10 +2857,10 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 703,
-          "segment_y": 652,
-          "segment_width": 100,
-          "segment_height": 122,
+          "segment_x": 707,
+          "segment_y": 673,
+          "segment_width": 94,
+          "segment_height": 138,
           "items": [
             {
               "item_x": 11,
@@ -2882,7 +2882,7 @@
             },
             {
               "item_x": 11,
-              "item_y": 111.5,
+              "item_y": 127.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2898,9 +2898,9 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 22,
-          "segment_y": 810,
-          "segment_width": 786,
+          "segment_x": 26,
+          "segment_y": 860,
+          "segment_width": 780,
           "segment_height": 28
         }
       ]

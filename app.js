@@ -186,9 +186,10 @@ var renderForm = function(formJSON, callback){
         "training_data_uri": "numbers",
         "classifier_height": 28,
         "classifier_width": 20,
-        "alignment_radius": 5.0,
+        "alignment_radius": alignment_radius,
         "advanced": {
-             "flip_training_data": false
+             "flip_training_data": false,
+             "eigenvalues" : 11
         }
     };
     
@@ -343,6 +344,11 @@ var renderForm = function(formJSON, callback){
 
         //Generate the formDef json using the HTML.
         var baseOffset = $formImage.offset();
+        
+        //Hack to get non-rounded value of partial pixel offsets:
+        //Nevermind, doesn't work in FF
+        //baseOffset.left = parseFloat($('.formImage').css("margin-left"), 10);
+        
         formDef.fields = $formImage.find('.scanField').map(function(idx, fieldEl){
             var generateSegmentJSON = function(idx, segmentEl){
                 var $segment = $(segmentEl);

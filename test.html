@@ -389,9 +389,7 @@ $(document).ready(function(){
 
 <script id="segment-template" type="text/x-handlebars-template">
     {{#if qrcode}}
-        <div class="qrcode">
-        {{qrcodeImg qrcode}}
-        </div>
+        <div class="qrcode">{{qrcodeImg qrcode}}</div>
     {{/if}}
     
     {{#each rows}}
