@@ -44,19 +44,19 @@ label {
 .formFields {
     width: 96%;
     margin: 2%;
-    border: 1px solid rgb(160, 159, 153);
+    border: 1px solid rgb(170, 169, 164);
 }
 .fieldRowTable {
     width: 100%;
 }
 .fieldRow >  .field {
-    border-right: 1px solid rgb(160, 159, 153);
+    border-right: 1px solid rgb(170, 169, 164);
 }
 .fieldRow >  .field:last-child {
     border-right: 0;
 }
 .fieldColumn > .field {
-    border-bottom: 1px solid rgb(160, 159, 153);
+    border-bottom: 1px solid rgb(170, 169, 164);
 }
 .fieldColumn > .field:last-child {
     border-bottom: 0;

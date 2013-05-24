@@ -223,8 +223,9 @@ var renderForm = function(formJSON, callback){
             //Map from XLSForm types to internal type names that are closer
             //to XForm types.
             if(field.type in typeAliases) {
+                field.__originalType__ = field.type;
                 field.type = typeAliases[field.type];
-            } 
+            }
             
             if(field.type.match(/string|int|decimal/)){
                 field.segments = [{
@@ -279,6 +280,9 @@ var renderForm = function(formJSON, callback){
                 field.delimiter = "";
                 field.type = "int";
             } else if(field.type.match(/bub_word/)){
+                //Note the space bubble.
+                //It seems like it would be better to have an empty
+                //column be a space but the logic for that would be messier.
                 var alphabet = (' abcdefghijklmnopqrstuvwxyz').split('');
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
@@ -317,7 +321,8 @@ var renderForm = function(formJSON, callback){
                 }];
                 field.delimiter = "";
                 field.classifier = classifierSpecs.number;
-                field.type = "int";
+                //This is a string to get around the digit limit.
+                field.type = "string";
             }
             
             fieldMap[field.name] = _.omit(field, ['segments', 'labels']);
