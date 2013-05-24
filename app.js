@@ -1,15 +1,3 @@
-/*
-XLS file is converted to json with some basic processing to nest
-groups and parse type parameters (in XLSXConverter).
-Next JSON is preprocessed in this script then
-fed into handlebars templates (in index.html) that generate the HTML.
-After the HTML is rendered, jQuery is used to construct the template.json from it,
-and html2canvas is used to create the form.jpg,
-and it all gets zipped made available for download.
-
-Notes:
-Multiple segments per field in the JSON output appears to be unnecessairy.
-*/
 $(document).ready(function () {
 
 var _ = window._;
