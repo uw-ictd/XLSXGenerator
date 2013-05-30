@@ -115,16 +115,26 @@ h4. type
 
 
 
-h4. Scan specific types:
+h5. Scan specific types:
 
 
 
-| tally `number`     | Print the specified number of bubbles, and count up how many are filled in. |
-| markup             | A label that only appears on the printed form.                       |
-| bub_num `digits`   | Create a field for inputting numbers by filling in numeric bubbles   |
-| bub_word `letters` | Create a field for inputting words by filling in alphabetic bubbles. |
-| qrcode `data`      | A QR code containing the given data. Used for keeping track of variations of a form that share a template. |
-| pagebreak          | Pagebreaks allow you to create multi-page forms.                     |
+| tally `number`
+| Print the specified number of bubbles, and count up how many are filled in. |
+| markup
+| A label that only appears on the printed form.                       |
+| bub_num `digits`
+| Create a field for inputting numbers by filling in numeric bubbles   |
+| bub_word `letters`
+| Create a field for inputting words by filling in alphabetic bubbles. |
+| qrcode `data`
+| A QR code containing the given data. Used for keeping track of variations of a form that share a template. |
+| pagebreak
+| Pagebreaks allow you to create multi-page forms.                     |
+| writein_num `digits`
+| With writein_num prompts you can use scannable "connect-the-dots" numbers in your form.
+  However, these are experimental and may not perform as well as bub_num prompts.
+  !assets/img/writein_num.jpg! |
 
 h4. Groups:
 

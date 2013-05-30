@@ -177,7 +177,7 @@ var renderForm = function(formJSON, callback){
         "alignment_radius": alignment_radius,
         "advanced": {
              "flip_training_data": false,
-             "eigenvalues" : 11
+             "eigenvalues" : 13
         }
     };
     
