@@ -1,3 +1,22 @@
+body {
+    padding: 1em;
+}
+.docs {
+    margin: auto;
+    width: 800px;
+}
+.title {
+    display: block;
+}
+@media screen and (max-width:800px) {
+    .docs {
+        margin: auto;
+        width: 600px;
+    }
+    .title {
+        display: none;
+    }
+}
 .docs table {
     margin: 5px;
     margin-left: auto;

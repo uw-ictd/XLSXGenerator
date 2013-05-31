@@ -107,12 +107,12 @@ Handlebars.registerPartial("segment", segmentTemplate);
 
 var makeQRCodeImg = function(data, size) {
     var defaultSize = (1 + Math.floor(data.length / 40)) * 96;
-    size = size ? size : defaultSize;
+    size = size ? size : defaultSize;console.log(size, defaultSize);
     if(size < defaultSize) {
         alert("Warning, there is a qrcode constrained to a size smaller " +
             "than recommended for the amount of data it contains.");
     }
-    return '<img src="' +
+    return '<img width=' + size + ' height=' + size + ' src="' +
         $('<canvas width=' + size + ' height=' + size + '>').qrcode({
             width: size,
             height: size,
@@ -492,7 +492,9 @@ var renderForm = function(formJSON, callback){
             var currentImgSize = $(e.target).closest('img').width();
             var newData = prompt("Enter new data to encode:");
             if(!newData) return;
-            $(e.target).closest('.qrcode').html(makeQRCodeImg(newData, currentImgSize));
+            $(e.target)
+                .closest('.qrcode')
+                .html(makeQRCodeImg(newData, currentImgSize));
             generateZip();
         });
 
@@ -528,7 +530,8 @@ var renderForm = function(formJSON, callback){
                 classifierSpecs.bubble.classifier_width * 0.64) / 2);
         
         //Ensure the bub_num and bub_word widgets line up:
-        $el.find(".vertical").height(classifierSpecs.bubble.classifier_height + 2);
+        $el.find(".vertical")
+            .height(classifierSpecs.bubble.classifier_height + 2);
         return $el;
     };
     

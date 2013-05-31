@@ -9,6 +9,9 @@ label {
     min-height: initial;
     padding-left: initial;
 }
+img {
+    max-width: initial;
+}
 /* Main stuff */
 .formImage {
     background-color: white;
