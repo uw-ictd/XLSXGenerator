@@ -170,12 +170,16 @@
                 if(field.name in nameMap) {
                     throw XLSXError(field.__rowNum__, "Duplicate name: " + field.name);
                 }
+                if(!("" + field.name).match(/^[a-zA-Z][a-zA-Z_0-9]*/)){
+                    warnings.warn(field.__rowNum__, "Bad XML Name: " +
+                        field.name +
+                        ". You will not be able to export to ODK Collect.");
+                }
                 nameMap[field.name] = field;
             });
         }(fields));
     };
 
-    
     root.XLSXConverter = {
         processJSONWorkbook : function(wbJson){
             warnings.clear();
