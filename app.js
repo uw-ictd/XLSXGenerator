@@ -337,6 +337,10 @@ var renderForm = function(formJSON, callback){
     var generateScanJSON = function($formImage){
         var formDef = _.clone(defaultScanJSON);
 
+	var title =  _.findWhere(formJSON.settings, {setting: 'form_title'});
+	title = title ? title.value : "";
+	formDef['form_title'] = title;
+	
         //Generate the formDef json using the HTML.
         var baseOffset = $formImage.offset();
         
