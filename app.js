@@ -106,8 +106,8 @@ var segmentTemplate = Handlebars.compile($("#segment-template").html());
 Handlebars.registerPartial("segment", segmentTemplate);
 
 var makeQRCodeImg = function(data, size) {
-    var defaultSize = (1 + Math.floor(data.length / 40)) * 96;
-    size = size ? size : defaultSize;console.log(size, defaultSize);
+    var defaultSize = (1 + Math.floor(data.length / 40)) * 128;
+    size = size ? size : defaultSize;
     if(size < defaultSize) {
         alert("Warning, there is a qrcode constrained to a size smaller " +
             "than recommended for the amount of data it contains.");
@@ -156,7 +156,7 @@ var renderForm = function(formJSON, callback){
     classifierSpecs.checkbox = _.extend({}, classifierSpecs.bubble, {
         "training_data_uri": "square_checkboxes",
     });
-    //Experimental
+    //Number classifier is experimental
     classifierSpecs.number = {
         "classification_map": {
           "1": "1",
@@ -257,6 +257,7 @@ var renderForm = function(formJSON, callback){
                         };
                     })
                 }];
+                field.type = "int";
             } else if(field.type.match(/bub_num/)){
                 field.segments = _.map(_.range(parseInt(field.param, 10)), function(){
                     return { };
@@ -512,6 +513,7 @@ var renderForm = function(formJSON, callback){
             $el.find(".classifiableObject." + name).height(coHeight);
             $el.find(".classifiableObject." + name).width(coWidth);
         });
+        //Draw guide dots for number classifier
         (function(classifer){
             var coHeight = Math.round(
                 classifer.classifier_height * 1.15);

@@ -39,3 +39,5 @@ because the expected output was generated in Chrome. Furthermore, you may see mi
 ### Additional Notes:
 
 * Multiple segments per field in the JSON output appears to be unnecessairy.
+* It might be a good idea to make forms denser.
+* Making the QR codes bigger might make them scan more reliably.

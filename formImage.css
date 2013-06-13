@@ -84,9 +84,6 @@ img {
 .segments {
     width: 0;
 }
-.segment {
-    line-height: 0;
-}
 .segment, .labels {
     border: 1px solid black;
     padding: 5px;
