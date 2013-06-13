@@ -14,6 +14,7 @@
       "flip_training_data": true
     }
   },
+  "form_title": "Chore chart",
   "fields": [
     {
       "type": "qrcode",
@@ -25,8 +26,8 @@
           "align_segment": true,
           "segment_x": 35.625,
           "segment_y": 90.625,
-          "segment_width": 106,
-          "segment_height": 106
+          "segment_width": 138,
+          "segment_height": 138
         }
       ],
       "label": ""
@@ -42,8 +43,8 @@
         {
           "align_segment": true,
           "segment_x": 35.625,
-          "segment_y": 256.625,
-          "segment_width": 106,
+          "segment_y": 272.625,
+          "segment_width": 138,
           "segment_height": 28
         }
       ]
@@ -59,7 +60,7 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 165.625,
+          "segment_x": 197.625,
           "segment_y": 106.625,
           "segment_width": 328,
           "segment_height": 514,
@@ -2347,7 +2348,7 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 516.625,
+          "segment_x": 548.625,
           "segment_y": 165.625,
           "segment_width": 61,
           "segment_height": 208,
@@ -2486,9 +2487,9 @@
       "segments": [
         {
           "align_segment": true,
-          "segment_x": 516.625,
+          "segment_x": 548.625,
           "segment_y": 416.625,
-          "segment_width": 279,
+          "segment_width": 247,
           "segment_height": 76
         }
       ]
@@ -2521,29 +2522,29 @@
           "segment_x": 30.625,
           "segment_y": 673.625,
           "segment_width": 94,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2579,29 +2580,29 @@
           "segment_x": 143.625,
           "segment_y": 673.625,
           "segment_width": 93,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2637,29 +2638,29 @@
           "segment_x": 255.625,
           "segment_y": 673.625,
           "segment_width": 93,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2695,29 +2696,29 @@
           "segment_x": 367.625,
           "segment_y": 673.625,
           "segment_width": 94,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2753,29 +2754,29 @@
           "segment_x": 480.625,
           "segment_y": 673.625,
           "segment_width": 94,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2811,29 +2812,29 @@
           "segment_x": 593.625,
           "segment_y": 673.625,
           "segment_width": 94,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2869,29 +2870,29 @@
           "segment_x": 706.625,
           "segment_y": 673.625,
           "segment_width": 94,
-          "segment_height": 138,
+          "segment_height": 159,
           "items": [
             {
               "item_x": 11,
-              "item_y": 27.5,
+              "item_y": 31.5,
               "label": "Wash dishes",
               "value": "dishes"
             },
             {
               "item_x": 11,
-              "item_y": 55.5,
+              "item_y": 64.5,
               "label": "Sweep patio",
               "value": "sweep"
             },
             {
               "item_x": 11,
-              "item_y": 83.5,
+              "item_y": 97.5,
               "label": "Cook dinner",
               "value": "cook"
             },
             {
               "item_x": 11,
-              "item_y": 127.5,
+              "item_y": 147.5,
               "label": "Program roomba",
               "value": "roomba"
             }
@@ -2909,7 +2910,7 @@
         {
           "align_segment": true,
           "segment_x": 25.625,
-          "segment_y": 860.625,
+          "segment_y": 881.625,
           "segment_width": 780,
           "segment_height": 28
         }
