@@ -6,7 +6,8 @@ from XLSX spreadsheets. Scannable in the sense that the app generates a template
 that can be used with ODK Scan to automatically read which bubbles are filled in
 like a scantron test.
 
-There is some documentation [here](http://uw-ictd.github.io/XLSXGenerator/documentation.html)
+There is some documentation
+[here](http://uw-ictd.github.io/XLSXGenerator/documentation.html)
 
 Developer info
 --------------------------------------------------------------------------------
@@ -32,11 +33,13 @@ gets zipped into a single file that is made available for download.
 The test.html page will generate a form from the scanExample.xlsx file in this
 repo and compare it with the output in the testExpectedOutput folder.
 It will print a json diff and a visual form image diff at the bottom of the page.
-*However*, if you run the test in FireFox, you will see some differences,
+*However*, if you run the test in Firefox, you will see some differences,
 because the expected output was generated in Chrome.
+
+The [TemplateMaker tool](https://github.com/UW-ICTD/TemplateMaker)
+can be useful for verifying that the JSON template lines up with the image.
 
 ### Additional Notes:
 
 * Multiple segments per field in the JSON output appears to be unnecessairy.
 * It might be a good idea to make forms denser.
-* Making the QR codes bigger might make them scan more reliably.
